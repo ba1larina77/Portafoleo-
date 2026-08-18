@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Systems Engineer — Study Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root{--bg:#0f0f11;--bg2:#17171a;--bg3:#1e1e22;--bg4:#26262c;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8e8ea;--text2:#8a8a92;--text3:#55555f;--accent:#7c6ef5;--accent-soft:rgba(124,110,245,0.12);--accent-border:rgba(124,110,245,0.3);--green:#3ecf8e;--green-soft:rgba(62,207,142,0.1);--yellow:#f5c547;--yellow-soft:rgba(245,197,71,0.1);--red:#f26060;--red-soft:rgba(242,96,96,0.08);--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--radius:10px;--radius-sm:6px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+  .sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+  .sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+  .sidebar-logo .label{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .sidebar-logo .title{font-size:15px;font-weight:600;}
+  .nav-section{padding:0 12px;margin-bottom:6px;}
+  .nav-section-label{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:4px 8px 6px;}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;border:none;background:none;width:100%;text-align:left;}
+  .nav-item:hover{background:var(--bg3);color:var(--text);}
+  .nav-item.active{background:var(--accent-soft);color:var(--accent);font-weight:500;}
+  .nav-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .nav-item .count{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text3);}
+  .sidebar-footer{margin-top:auto;padding:16px 20px 0;border-top:1px solid var(--border);}
+  .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:6px;}
+  .progress-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;}
+  .main{padding:32px 40px;max-width:900px;}
+  .page{display:none;}.page.active{display:block;}
+  .page-header{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+  .page-header h1{font-size:22px;font-weight:600;margin-bottom:4px;}
+  .page-header p{font-size:13px;color:var(--text2);}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+  .stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+  .stat-value{font-family:var(--mono);font-size:22px;font-weight:500;}
+  .stat-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+  .section-title{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;margin-top:24px;}
+  .section-title:first-child{margin-top:0;}
+  .topic-block{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:8px;}
+  .topic-header{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;background:var(--bg2);transition:background .15s;user-select:none;}
+  .topic-header:hover{background:var(--bg3);}
+  .topic-header-left{flex:1;display:flex;align-items:center;gap:10px;}
+  .topic-title{font-size:14px;font-weight:500;color:var(--text);}
+  .topic-title.all-done{color:var(--text3);text-decoration:line-through;}
+  .topic-chevron{font-size:11px;color:var(--text3);transition:transform .2s;flex-shrink:0;}
+  .topic-block.open .topic-chevron{transform:rotate(180deg);}
+  .topic-progress-mini{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .mini-bar{width:60px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+  .mini-bar-fill{height:100%;background:var(--green);border-radius:2px;transition:width .3s;}
+  .mini-pct{font-family:var(--mono);font-size:10px;color:var(--text3);min-width:28px;text-align:right;}
+  .topic-body{display:none;border-top:1px solid var(--border);}
+  .topic-block.open .topic-body{display:block;}
+  .guide-panel{background:var(--bg3);border-bottom:1px solid var(--border);padding:14px 18px 16px;}
+  .guide-panel p{font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:8px;}
+  .guide-panel p:last-of-type{margin-bottom:0;}
+  .guide-label{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
+  .guide-resources{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .guide-resource{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:4px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-border);cursor:pointer;transition:background .15s;}
+  .guide-resource:hover{background:rgba(124,110,245,.22);}
+  .subitems{padding:4px 0;}
+  .subitem-row{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 42px;transition:background .12s;}
+  .subitem-row:hover{background:var(--bg3);}
+  .subitem-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:10px;color:transparent;user-select:none;}
+  .subitem-check:hover{border-color:var(--green);}
+  .subitem-check.checked{background:var(--green-soft);border-color:rgba(62,207,142,.35);color:var(--green);}
+  .subitem-name{font-size:13px;color:var(--text);flex:1;}
+  .subitem-name.done{color:var(--text3);text-decoration:line-through;}
+  .subitem-diff{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;flex-shrink:0;}
+  .diff-must{background:var(--red-soft);color:var(--red);}
+  .diff-important{background:var(--yellow-soft);color:var(--yellow);}
+  .diff-bonus{background:var(--accent-soft);color:var(--accent);}
+  .phase-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;}
+  .phase-1{background:rgba(242,96,96,.12);color:#f26060;}
+  .phase-2{background:rgba(245,197,71,.1);color:#f5c547;}
+  .phase-3{background:rgba(62,207,142,.1);color:#3ecf8e;}
+  .phase-4{background:rgba(124,110,245,.12);color:#7c6ef5;}
+  .projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .project-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:border-color .15s;}
+  .project-card:hover{border-color:var(--border2);}
+  .project-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+  .project-card-title{font-size:14px;font-weight:500;flex:1;padding-right:8px;}
+  .difficulty-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+  .diff-beginner{background:var(--green-soft);color:var(--green);}
+  .diff-intermediate{background:var(--yellow-soft);color:var(--yellow);}
+  .diff-advanced{background:var(--red-soft);color:var(--red);}
+  .project-desc{font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5;}
+  .project-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+  .tag{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg4);color:var(--text3);}
+  .project-footer{display:flex;align-items:center;gap:8px;padding-top:10px;border-top:1px solid var(--border);}
+  .project-status-select,.github-input{font-family:var(--mono);font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;transition:all .15s;}
+  .project-status-select{flex:1;}.github-input{flex:2;}
+  .project-status-select.s-done{background:var(--green-soft);color:var(--green);border-color:rgba(62,207,142,.3);}
+  .project-status-select.s-progress{background:var(--yellow-soft);color:var(--yellow);}
+  .github-input:focus{border-color:var(--accent);}
+  .github-input::placeholder{color:var(--text3);}
+  .filter-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .filter-btn{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;}
+  .filter-btn:hover{color:var(--text);}
+  .filter-btn.active{background:var(--accent-soft);border-color:var(--accent-border);color:var(--accent);}
+  .empty-state{text-align:center;padding:40px;color:var(--text3);font-size:13px;}
+  .leet-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+  .leet-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .leet-row:last-child{margin-bottom:0;}
+  .leet-label{font-size:12px;color:var(--text2);width:80px;flex-shrink:0;}
+  .leet-count{font-family:var(--mono);font-size:13px;font-weight:500;width:40px;text-align:right;flex-shrink:0;}
+  .leet-easy{color:var(--green);}.leet-medium{color:var(--yellow);}.leet-hard{color:var(--red);}
+  .leet-bar{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+  .leet-bar-fill{height:100%;border-radius:2px;transition:width .4s ease;}
+  .number-input{font-family:var(--mono);font-size:13px;width:60px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text);outline:none;text-align:center;transition:border-color .15s;}
+  .number-input:focus{border-color:var(--accent);}
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:24px;}
+  .day-cell{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 6px;text-align:center;cursor:pointer;transition:all .15s;}
+  .day-cell:hover{border-color:var(--border2);}
+  .day-cell.has-activity{background:var(--accent-soft);border-color:var(--accent-border);}
+  .day-label{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px;}
+  .day-num{font-family:var(--mono);font-size:13px;color:var(--text2);}
+  .day-cell.has-activity .day-num{color:var(--accent);}
+  .notes-area{width:100%;min-height:180px;font-family:var(--mono);font-size:12px;padding:14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;outline:none;line-height:1.7;transition:border-color .15s;}
+  .notes-area:focus{border-color:var(--accent);}
+  .notes-area::placeholder{color:var(--text3);}
+  .save-btn{margin-top:10px;font-family:var(--mono);font-size:11px;padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);cursor:pointer;transition:all .15s;}
+  .save-btn:hover{background:rgba(124,110,245,.22);}
+  .save-indicator{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--green);margin-left:10px;opacity:0;transition:opacity .3s;}
+  .save-indicator.show{opacity:1;}
+  .legend{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3);}
+  .legend-dot{width:8px;height:8px;border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="label">9th semester</div>
+      <div class="title">Eng. Tracker</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" onclick="showPage('dashboard',this)"><span style="font-size:14px">◈</span> Dashboard</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Roadmap</div>
+      <button class="nav-item" onclick="showPage('phase1',this)"><span class="dot" style="background:#f26060"></span> Phase 1 — Core <span class="count" id="nav-count-1">0/0</span></button>
+      <button class="nav-item" onclick="showPage('phase2',this)"><span class="dot" style="background:#f5c547"></span> Phase 2 — Design <span class="count" id="nav-count-2">0/0</span></button>
+      <button class="nav-item" onclick="showPage('phase3',this)"><span class="dot" style="background:#3ecf8e"></span> Phase 3 — DevOps <span class="count" id="nav-count-3">0/0</span></button>
+      <button class="nav-item" onclick="showPage('phase4',this)"><span class="dot" style="background:#7c6ef5"></span> Phase 4 — Security <span class="count" id="nav-count-4">0/0</span></button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Practice</div>
+      <button class="nav-item" onclick="showPage('portfolio',this)"><span style="font-size:14px">◻</span> Portfolio</button>
+      <button class="nav-item" onclick="showPage('leetcode',this)"><span style="font-size:14px">◎</span> LeetCode log</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Extras</div>
+      <button class="nav-item" onclick="showPage('notes',this)"><span style="font-size:14px">▤</span> Notes</button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="progress-label"><span>Overall progress</span><span id="progress-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div id="page-dashboard" class="page active">
+      <div class="page-header"><h1>Dashboard</h1><p>Your real-time progress across all phases and projects.</p></div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Sub-topics done</div><div class="stat-value" id="stat-done">0</div><div class="stat-sub" id="stat-done-of">out of 0</div></div>
+        <div class="stat-card"><div class="stat-label">In progress</div><div class="stat-value" id="stat-progress" style="color:var(--yellow)">0</div><div class="stat-sub">topics active</div></div>
+        <div class="stat-card"><div class="stat-label">Projects live</div><div class="stat-value" id="stat-projects" style="color:var(--green)">0</div><div class="stat-sub">out of 11</div></div>
+        <div class="stat-card"><div class="stat-label">LeetCode</div><div class="stat-value" id="stat-leet" style="color:var(--accent)">0</div><div class="stat-sub">solved total</div></div>
+      </div>
+      <div class="section-title">Phase breakdown</div>
+      <div id="dashboard-phases"></div>
+      <div class="section-title" style="margin-top:24px">Suggested next steps</div>
+      <div id="next-steps" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <div id="page-phase1" class="page">
+      <div class="page-header"><h1>Phase 1 — Core foundations</h1><p>Do these now. Click any topic to read the guide and check off sub-items.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-1"></div>
+    </div>
+    <div id="page-phase2" class="page">
+      <div class="page-header"><h1>Phase 2 — System design</h1><p>The #1 differentiator at top company interviews.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-2"></div>
+    </div>
+    <div id="page-phase3" class="page">
+      <div class="page-header"><h1>Phase 3 — DevOps & cloud</h1><p>Table stakes at every company hiring systems engineers.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-3"></div>
+    </div>
+    <div id="page-phase4" class="page">
+      <div class="page-header"><h1>Phase 4 — Security & reliability</h1><p>Polish these before sending applications.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-4"></div>
+    </div>
+
+    <div id="page-portfolio" class="page">
+      <div class="page-header"><h1>Portfolio projects</h1><p>Track build status and link your repos. Aim for 3 strong projects before applying.</p></div>
+      <div class="filter-row" id="filter-portfolio">
+        <button class="filter-btn active" onclick="filterPortfolio('all',this)">All</button>
+        <button class="filter-btn" onclick="filterPortfolio('todo',this)">Not started</button>
+        <button class="filter-btn" onclick="filterPortfolio('progress',this)">Building</button>
+        <button class="filter-btn" onclick="filterPortfolio('done',this)">Live</button>
+      </div>
+      <div class="projects-grid" id="projects-grid"></div>
+    </div>
+
+    <div id="page-leetcode" class="page">
+      <div class="page-header"><h1>LeetCode log</h1><p>Track your count and mark days you practiced. Target: 2 problems/day.</p></div>
+      <div class="leet-section">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;">Problems solved</div>
+        <div class="leet-row"><span class="leet-label">Easy</span><input type="number" class="number-input" id="leet-easy" value="0" min="0" onchange="saveLeet()"><div class="leet-bar"><div class="leet-bar-fill" id="bar-easy" style="background:var(--green);width:0%"></div></div><span class="leet-count leet-easy" id="count-easy">0</span></div>
+        <div class="leet-row"><span class="leet-label">Medium</span><input type="number" class="number-input" id="leet-medium" value="0" min="0" onchange="saveLeet()"><div class="leet-bar"><div class="leet-bar-fill" id="bar-medium" style="background:var(--yellow);width:0%"></div></div><span class="leet-count leet-medium" id="count-medium">0</span></div>
+        <div class="leet-row"><span class="leet-label">Hard</span><input type="number" class="number-input" id="leet-hard" value="0" min="0" onchange="saveLeet()"><div class="leet-bar"><div class="leet-bar-fill" id="bar-hard" style="background:var(--red);width:0%"></div></div><span class="leet-count leet-hard" id="count-hard">0</span></div>
+      </div>
+      <div class="section-title">Activity calendar — <span id="cal-month"></span></div>
+      <div class="week-grid" id="cal-grid"></div>
+    </div>
+
+    <div id="page-notes" class="page">
+      <div class="page-header"><h1>Notes</h1><p>Concepts, interview learnings, things to revisit.</p></div>
+      <textarea class="notes-area" id="notes-text" placeholder="Write anything here — key concepts, resources you found, interview reflections..."></textarea>
+      <div><button class="save-btn" onclick="saveNotes()">Save notes</button><span class="save-indicator" id="save-ind">Saved</span></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const TOPICS=[
+  {id:'t1',phase:1,name:'Data structures & algorithms',
+   guide:['DSA is the foundation of every technical interview at top companies. You need to recognize which data structure solves a problem and implement it without hesitation.','Focus on understanding the WHY — why a hash map gives O(1) lookup, why a heap gives O(log n) insertion. The goal is pattern recognition: when you see a problem, you instantly know which structure fits.','Start with arrays and strings, move to linked lists and stacks, then trees and graphs. Save dynamic programming for last — it builds on everything else.'],
+   resources:['NeetCode 150','LeetCode Explore','Visualgo.net'],
+   subitems:[
+     {id:'t1_1',name:'Arrays & strings — two pointers, sliding window',diff:'must'},
+     {id:'t1_2',name:'Hash maps & sets — frequency counting patterns',diff:'must'},
+     {id:'t1_3',name:'Stacks & queues — monotonic stack pattern',diff:'must'},
+     {id:'t1_4',name:'Linked lists — reverse, detect cycle, merge sorted',diff:'must'},
+     {id:'t1_5',name:'Binary search — on sorted arrays and on answer space',diff:'must'},
+     {id:'t1_6',name:'Trees — DFS, BFS, level-order traversal',diff:'must'},
+     {id:'t1_7',name:'Graphs — DFS, BFS, topological sort, union-find',diff:'must'},
+     {id:'t1_8',name:'Heaps / priority queues — top-K patterns',diff:'important'},
+     {id:'t1_9',name:'Dynamic programming — 1D and 2D DP patterns',diff:'important'},
+     {id:'t1_10',name:'Tries — prefix trees for string problems',diff:'bonus'},
+   ]},
+  {id:'t2',phase:1,name:'Databases — SQL & NoSQL',
+   guide:['Databases come up in almost every systems role interview — both in algorithm rounds (SQL queries) and in system design (choosing the right database).','For SQL: master JOINs, window functions (ROW_NUMBER, LAG, LEAD), CTEs, and query optimization with EXPLAIN. Know how indexes work internally (B-trees) and when a query will not use one.','For NoSQL: understand MongoDB (document model), Redis (key-value, caching), and Cassandra (wide-column, writes at scale). The key skill is knowing WHEN to use each — not just how.'],
+   resources:['SQLZoo','HackerRank SQL','Use The Index, Luke'],
+   subitems:[
+     {id:'t2_1',name:'Complex JOINs — inner, left, full outer, self-join',diff:'must'},
+     {id:'t2_2',name:'Window functions — ROW_NUMBER, RANK, LAG, LEAD',diff:'must'},
+     {id:'t2_3',name:'CTEs and subqueries — when to use each',diff:'must'},
+     {id:'t2_4',name:'Indexes — B-tree internals, composite indexes, when queries skip them',diff:'must'},
+     {id:'t2_5',name:'EXPLAIN / query execution plans — reading and acting on them',diff:'must'},
+     {id:'t2_6',name:'Schema design — normalization 1NF to 3NF, denormalization trade-offs',diff:'important'},
+     {id:'t2_7',name:'Transactions — ACID, isolation levels, deadlocks',diff:'important'},
+     {id:'t2_8',name:'Redis — caching patterns, pub/sub, data structures',diff:'important'},
+     {id:'t2_9',name:'MongoDB — document model, aggregation pipeline',diff:'bonus'},
+   ]},
+  {id:'t3',phase:1,name:'Networking basics',
+   guide:['You cannot design distributed systems without understanding how data moves between machines. This knowledge is assumed — not taught — in senior interviews.','The TCP/IP model is your mental map for where things can go wrong. HTTP is the language of the web — know headers, methods, status codes, and what makes HTTP/2 different from HTTP/1.1.','REST vs gRPC is a real trade-off question in system design: REST for public APIs and simplicity, gRPC for high-performance internal service communication.'],
+   resources:['MDN HTTP docs','Beej Guide to Network Programming','High Performance Browser Networking'],
+   subitems:[
+     {id:'t3_1',name:'TCP vs UDP — when to use each, 3-way handshake',diff:'must'},
+     {id:'t3_2',name:'HTTP/1.1 — methods, headers, status codes, cookies',diff:'must'},
+     {id:'t3_3',name:'HTTPS & TLS — handshake, certificates, CA chain',diff:'must'},
+     {id:'t3_4',name:'DNS — resolution chain, TTL, record types (A, CNAME, MX)',diff:'must'},
+     {id:'t3_5',name:'REST — statelessness, resource design, versioning',diff:'must'},
+     {id:'t3_6',name:'HTTP/2 & HTTP/3 — multiplexing, QUIC protocol',diff:'important'},
+     {id:'t3_7',name:'WebSockets — full-duplex, when vs HTTP polling',diff:'important'},
+     {id:'t3_8',name:'gRPC — protobuf, streaming, trade-offs vs REST',diff:'bonus'},
+   ]},
+  {id:'t4',phase:1,name:'Linux & CLI',
+   guide:['Every backend system runs on Linux. Fluency here signals that you can work in production environments — not just on your laptop.','The most important skill is not memorizing commands, it is being able to investigate a running system: check processes, read logs, find what is using memory or CPU, and understand file permissions.','Shell scripting is a practical multiplier — automating repetitive tasks, writing deployment helpers, processing log files.'],
+   resources:['The Linux Command Line (book)','OverTheWire Bandit wargame','explainshell.com'],
+   subitems:[
+     {id:'t4_1',name:'File system — navigation, permissions (chmod/chown), links',diff:'must'},
+     {id:'t4_2',name:'Process management — ps, top, kill, background jobs (&, nohup)',diff:'must'},
+     {id:'t4_3',name:'Text processing — grep, awk, sed, cut, sort, uniq',diff:'must'},
+     {id:'t4_4',name:'Shell scripting — variables, loops, conditionals, functions',diff:'must'},
+     {id:'t4_5',name:'SSH — key-based auth, port forwarding, scp',diff:'must'},
+     {id:'t4_6',name:'Networking tools — curl, netstat, ss, ping, traceroute',diff:'important'},
+     {id:'t4_7',name:'Cron jobs — scheduling syntax, crontab management',diff:'important'},
+     {id:'t4_8',name:'Disk & memory — df, du, free, lsof',diff:'bonus'},
+   ]},
+  {id:'t5',phase:1,name:'Python or Go — one language mastered',
+   guide:['Being good at one language is worth more than being mediocre at three. Python is the most versatile: scripting, data, APIs, automation. Go is the right choice for performance-critical systems or companies like Cloudflare, Uber, or Google.','The goal is not syntax — it is idiomatic usage. Write Python that a senior engineer would write: list comprehensions, context managers, generators, type hints. Write Go that uses goroutines and channels naturally.','Interviewers can tell in minutes whether you actually think in a language or just know its syntax.'],
+   resources:['Official Python docs','Effective Go','Exercism.io'],
+   subitems:[
+     {id:'t5_1',name:'Core syntax — data types, control flow, functions, error handling',diff:'must'},
+     {id:'t5_2',name:'OOP — classes, inheritance, dunder methods / structs & interfaces',diff:'must'},
+     {id:'t5_3',name:'Standard library — collections, os, sys, io (Python) / fmt, os, net (Go)',diff:'must'},
+     {id:'t5_4',name:'Concurrency — asyncio/threading (Python) / goroutines & channels (Go)',diff:'must'},
+     {id:'t5_5',name:'Testing — pytest / Go testing package',diff:'important'},
+     {id:'t5_6',name:'Package management — pip & venv / go modules',diff:'important'},
+     {id:'t5_7',name:'Type hints and mypy (Python) — static typing',diff:'bonus'},
+   ]},
+  {id:'t6',phase:1,name:'Git & version control',
+   guide:['Git is the collaboration tool you will use every single day. Being just a "commit and push" engineer is not enough — senior engineers use Git as a communication tool.','The most important skills beyond basics: branching strategies (GitFlow vs trunk-based), rebasing to keep history clean, and resolving merge conflicts without panic.','Understanding how Git works internally (objects, DAG of commits) helps you recover from mistakes confidently instead of doing git reset --hard and hoping for the best.'],
+   resources:['Pro Git (free book)','Oh Shit Git (ohshitgit.com)','Atlassian Git tutorials'],
+   subitems:[
+     {id:'t6_1',name:'Core workflow — init, add, commit, push, pull, clone',diff:'must'},
+     {id:'t6_2',name:'Branching — create, merge, delete, track remote branches',diff:'must'},
+     {id:'t6_3',name:'Rebasing — interactive rebase, squash commits, rebase vs merge',diff:'must'},
+     {id:'t6_4',name:'Resolving merge conflicts — tools and strategies',diff:'must'},
+     {id:'t6_5',name:'Git internals — blobs, trees, commits, refs, HEAD',diff:'important'},
+     {id:'t6_6',name:'GitFlow vs trunk-based development — trade-offs',diff:'important'},
+     {id:'t6_7',name:'Hooks — pre-commit, pre-push automation',diff:'bonus'},
+   ]},
+  {id:'t7',phase:2,name:'Scalability patterns',
+   guide:['Scalability is the core of system design interviews. The question is always: what happens when 10x more users show up? You need ready answers for each bottleneck.','Mental model: first scale vertically (bigger machine), then horizontally (more machines with load balancer). Add caching to reduce database load. Use a CDN to serve static content from the edge. Shard the database when a single node cannot handle write volume.','The real skill is knowing the trade-offs — caching adds complexity and consistency challenges, sharding makes cross-shard queries hard, horizontal scaling requires stateless services.'],
+   resources:['Designing Data-Intensive Applications','ByteByteGo newsletter','System Design Primer on GitHub'],
+   subitems:[
+     {id:'t7_1',name:'Vertical vs horizontal scaling — when and why',diff:'must'},
+     {id:'t7_2',name:'Load balancers — round robin, least connections, sticky sessions',diff:'must'},
+     {id:'t7_3',name:'Caching — cache aside, write-through, eviction policies (LRU)',diff:'must'},
+     {id:'t7_4',name:'CDNs — how they work, cache invalidation, edge computing',diff:'must'},
+     {id:'t7_5',name:'Database sharding — horizontal partitioning, consistent hashing',diff:'important'},
+     {id:'t7_6',name:'Read replicas — eventual consistency, lag trade-offs',diff:'important'},
+     {id:'t7_7',name:'Rate limiting — token bucket and sliding window algorithms',diff:'important'},
+     {id:'t7_8',name:'Message queues — Kafka vs RabbitMQ, backpressure, fan-out',diff:'bonus'},
+   ]},
+  {id:'t8',phase:2,name:'Microservices vs monolith',
+   guide:['This is a judgment question — there is no right answer, only justified trade-offs. Interviewers want to see that you understand WHY companies choose one over the other and what problems each creates.','Monoliths are simpler to develop, test, and deploy. Microservices allow independent scaling and deployment. The problem is that microservices introduce network latency, distributed transactions, and operational complexity.','Event-driven architecture is the pattern that makes microservices work at scale: services communicate through events rather than direct API calls, which decouples them and improves resilience.'],
+   resources:['Building Microservices — Sam Newman','Martin Fowler microservices article','Microservices.io patterns catalog'],
+   subitems:[
+     {id:'t8_1',name:'Monolith advantages — simplicity, single deployment, ACID transactions',diff:'must'},
+     {id:'t8_2',name:'Microservices advantages — independent scaling, team autonomy',diff:'must'},
+     {id:'t8_3',name:'Service communication — sync (REST/gRPC) vs async (events)',diff:'must'},
+     {id:'t8_4',name:'Event-driven architecture — producers, consumers, event schemas',diff:'must'},
+     {id:'t8_5',name:'Saga pattern — distributed transactions without 2PC',diff:'important'},
+     {id:'t8_6',name:'Service mesh — what it is, Istio basics',diff:'bonus'},
+   ]},
+  {id:'t9',phase:2,name:'API design',
+   guide:['A well-designed API is a product. It should be intuitive, consistent, and hard to misuse. This matters as a practical skill and as an interview topic.','REST best practices: use nouns not verbs in URLs, HTTP methods carry the action, return meaningful status codes, version your API from day one.','Authentication is always in scope. Know the difference between authentication (who are you?) and authorization (what can you do?). OAuth2 and JWT are the standard patterns — understand how token refresh flows work and the security implications of each.'],
+   resources:['REST API Design Rulebook','Auth0 docs — OAuth2 and JWT','Stripe API docs (example of great design)'],
+   subitems:[
+     {id:'t9_1',name:'REST principles — statelessness, resource naming, HTTP methods',diff:'must'},
+     {id:'t9_2',name:'Status codes — 2xx, 3xx, 4xx, 5xx and when to use each',diff:'must'},
+     {id:'t9_3',name:'Authentication — API keys, OAuth2 flows, JWT structure',diff:'must'},
+     {id:'t9_4',name:'API versioning strategies — URL path, headers, query params',diff:'must'},
+     {id:'t9_5',name:'Rate limiting — implementation and response headers',diff:'important'},
+     {id:'t9_6',name:'Pagination — cursor vs offset, performance implications',diff:'important'},
+     {id:'t9_7',name:'OpenAPI / Swagger — documenting APIs with schemas',diff:'bonus'},
+   ]},
+  {id:'t10',phase:2,name:'CAP theorem & consistency',
+   guide:['The CAP theorem states a distributed system can guarantee only two of three: Consistency, Availability, Partition tolerance. Since network partitions always happen, you are really choosing between CP (consistent, might be unavailable) and AP (always available, might be stale).','Banks choose CP — you cannot afford to show the wrong balance. Social feeds choose AP — showing a slightly stale list of posts is fine.','ACID vs BASE: relational databases are ACID (strong consistency). NoSQL databases are often BASE (eventually consistent). Knowing when eventual consistency is acceptable is senior-level thinking.'],
+   resources:['Designing Data-Intensive Applications Ch 5-9','CAP Theorem — Wikipedia deep dive','Google Spanner paper'],
+   subitems:[
+     {id:'t10_1',name:'CAP theorem — each property explained with real examples',diff:'must'},
+     {id:'t10_2',name:'ACID properties — Atomicity, Consistency, Isolation, Durability',diff:'must'},
+     {id:'t10_3',name:'Eventual consistency — how it works, conflict resolution strategies',diff:'must'},
+     {id:'t10_4',name:'Consistency levels — strong, causal, eventual — when to use each',diff:'important'},
+     {id:'t10_5',name:'Vector clocks & conflict detection in distributed systems',diff:'bonus'},
+   ]},
+  {id:'t11',phase:3,name:'Docker & containers',
+   guide:['Containers solve the "works on my machine" problem. Docker packages your application and all its dependencies into an image that runs identically everywhere — dev, CI, and production.','Key mental model: an image is a blueprint, a container is a running instance. Layers in a Dockerfile are cached — order them from least to most frequently changing to maximize cache hits.','Writing a production-quality Dockerfile (multi-stage builds, non-root users) signals real engineering maturity beyond basic usage.'],
+   resources:['Docker official docs','KodeKloud Docker course','Play with Docker (labs.play-with-docker.com)'],
+   subitems:[
+     {id:'t11_1',name:'Core concepts — images, containers, layers, registry',diff:'must'},
+     {id:'t11_2',name:'Writing Dockerfiles — FROM, COPY, RUN, CMD, ENTRYPOINT',diff:'must'},
+     {id:'t11_3',name:'Multi-stage builds — smaller production images',diff:'must'},
+     {id:'t11_4',name:'docker-compose — multi-container local development',diff:'must'},
+     {id:'t11_5',name:'Volumes & networking — persisting data, container communication',diff:'important'},
+     {id:'t11_6',name:'Security — non-root users, read-only filesystems, image scanning',diff:'important'},
+     {id:'t11_7',name:'Container registries — Docker Hub, ECR, pushing and pulling',diff:'important'},
+   ]},
+  {id:'t12',phase:3,name:'Kubernetes basics',
+   guide:['Kubernetes (k8s) is the operating system for distributed systems. It manages where containers run, ensures they stay running, scales them up/down, and exposes them to traffic.','You do not need to be a k8s administrator. You need to be a developer who can deploy and debug applications on a cluster. Key abstractions: Pods, Deployments, Services, ConfigMaps, Secrets, and Ingress.','The best way to learn is hands-on with minikube locally — start by deploying your own project to it.'],
+   resources:['Kubernetes official docs','KodeKloud Kubernetes course','killercoda.com (free k8s labs)'],
+   subitems:[
+     {id:'t12_1',name:'Core objects — Pod, Deployment, Service, Namespace',diff:'must'},
+     {id:'t12_2',name:'kubectl — get, describe, logs, exec, apply, delete',diff:'must'},
+     {id:'t12_3',name:'ConfigMaps & Secrets — injecting config into pods',diff:'must'},
+     {id:'t12_4',name:'Ingress — routing external HTTP traffic to services',diff:'must'},
+     {id:'t12_5',name:'Health checks — liveness and readiness probes',diff:'important'},
+     {id:'t12_6',name:'Resource limits — requests and limits, QoS classes',diff:'important'},
+     {id:'t12_7',name:'Horizontal Pod Autoscaler — scaling on metrics',diff:'bonus'},
+   ]},
+  {id:'t13',phase:3,name:'CI/CD pipelines',
+   guide:['Continuous Integration means every code push is automatically tested. Continuous Delivery means every passing build can be deployed. Together they remove the fear of deploying — small, frequent, verified releases.','GitHub Actions is the industry-standard entry point: define workflows in YAML, triggered by push or pull request events. Typical pipeline: checkout → install → test → build Docker image → push to registry → deploy.','Having a real CI/CD pipeline on your portfolio projects is a strong differentiator. Most students do not bother — you should.'],
+   resources:['GitHub Actions docs','GitLab CI/CD docs','CI/CD Explained — Fireship YouTube'],
+   subitems:[
+     {id:'t13_1',name:'GitHub Actions — workflow syntax, triggers, jobs, steps',diff:'must'},
+     {id:'t13_2',name:'Automated testing in CI — running unit and integration tests on push',diff:'must'},
+     {id:'t13_3',name:'Docker build and push in CI — build image, push to registry',diff:'must'},
+     {id:'t13_4',name:'Environment secrets — storing credentials safely in CI',diff:'must'},
+     {id:'t13_5',name:'Deploy stage — deploying to cloud or k8s from CI pipeline',diff:'important'},
+     {id:'t13_6',name:'Branch protection — require passing CI before merging',diff:'important'},
+     {id:'t13_7',name:'Caching dependencies in CI — speeding up pipeline runs',diff:'bonus'},
+   ]},
+  {id:'t14',phase:3,name:'Cloud — AWS / GCP / Azure',
+   guide:['Pick one cloud and go deep enough to be dangerous. AWS has the largest market share in Latin America, so it is the safest career bet.','Focus on core services that appear in every architecture: EC2 (compute), S3 (object storage), RDS (managed databases), VPC (private networking), IAM (permissions), Lambda (serverless), and API Gateway. These cover 80% of real-world systems.','Getting an AWS Cloud Practitioner or Solutions Architect Associate certification is achievable in 4-6 weeks and signals cloud fluency fast.'],
+   resources:['AWS Skill Builder (free tier)','A Cloud Guru','AWS Solutions Architect Associate guide'],
+   subitems:[
+     {id:'t14_1',name:'Core compute — EC2 instances, instance types, AMIs, key pairs',diff:'must'},
+     {id:'t14_2',name:'Storage — S3 (buckets, policies, static hosting), EBS, EFS',diff:'must'},
+     {id:'t14_3',name:'Networking — VPC, subnets, security groups, route tables',diff:'must'},
+     {id:'t14_4',name:'IAM — users, roles, policies, least-privilege principle',diff:'must'},
+     {id:'t14_5',name:'Managed databases — RDS, Aurora, DynamoDB basics',diff:'important'},
+     {id:'t14_6',name:'Serverless — Lambda, API Gateway, event triggers',diff:'important'},
+     {id:'t14_7',name:'Load balancing — ALB vs NLB, target groups, listeners',diff:'important'},
+     {id:'t14_8',name:'Container services — ECS vs EKS, when to use each',diff:'bonus'},
+   ]},
+  {id:'t15',phase:3,name:'Infrastructure as code — Terraform',
+   guide:['Infrastructure as Code means your servers, databases, and networks are defined in version-controlled files — not clicked together in a web console. This is how professional teams work: reproducible, reviewable, auditable infrastructure.','Terraform mental model: declare the desired state, and Terraform figures out what to create, change, or destroy to reach it. Three key commands: terraform init, terraform plan (preview), terraform apply.','Even basic Terraform experience is rare among students and will stand out. Start by provisioning an S3 bucket or EC2 instance.'],
+   resources:['Terraform official docs','HashiCorp Learn (free)','Terraform: Up and Running (book)'],
+   subitems:[
+     {id:'t15_1',name:'Core concepts — providers, resources, state, plan vs apply',diff:'must'},
+     {id:'t15_2',name:'HCL syntax — variables, outputs, data sources, locals',diff:'must'},
+     {id:'t15_3',name:'AWS resources — EC2, S3, VPC, security groups in Terraform',diff:'must'},
+     {id:'t15_4',name:'Modules — reusable infrastructure components',diff:'important'},
+     {id:'t15_5',name:'Remote state — storing state in S3 with locking via DynamoDB',diff:'important'},
+     {id:'t15_6',name:'Workspaces — managing multiple environments (dev/staging/prod)',diff:'bonus'},
+   ]},
+  {id:'t16',phase:3,name:'Observability — logs, metrics, tracing',
+   guide:['Observability is knowing what your system is doing without guessing. The three pillars: Logs (what happened), Metrics (how much / how fast), Traces (which path did a request take through your services).','Prometheus collects metrics, Grafana visualizes them. Structured logging (JSON format with consistent fields) makes logs searchable. Distributed tracing shows the full path of a slow request across multiple services.','Having a Grafana dashboard for one of your portfolio projects is better than knowing the theory — it shows you have operated something real.'],
+   resources:['Prometheus official docs','Grafana tutorials','Observability Engineering (free O\'Reilly book)'],
+   subitems:[
+     {id:'t16_1',name:'Structured logging — JSON logs, log levels, correlation IDs',diff:'must'},
+     {id:'t16_2',name:'Metrics — counters, gauges, histograms, what to instrument',diff:'must'},
+     {id:'t16_3',name:'Prometheus — scraping, PromQL queries, alerting rules',diff:'important'},
+     {id:'t16_4',name:'Grafana — dashboards, data sources, alerting panels',diff:'important'},
+     {id:'t16_5',name:'Distributed tracing — spans, trace context propagation',diff:'bonus'},
+     {id:'t16_6',name:'Alerting — on-call rotations, alert fatigue prevention',diff:'bonus'},
+   ]},
+  {id:'t17',phase:4,name:'Security basics',
+   guide:['Security knowledge separates engineers who just build features from engineers who build trustworthy systems. The OWASP Top 10 is the canonical list of the most critical web security risks.','The most important mental model: never trust input. Validate and sanitize everything from outside your system. Use parameterized queries — never string concatenation in SQL. Store passwords as bcrypt hashes, never plaintext.','Authentication vs authorization is a common interview distinction: authentication verifies identity (are you who you say you are?), authorization verifies permission (are you allowed to do this?).'],
+   resources:['OWASP Top 10','PortSwigger Web Security Academy (free)','Troy Hunt Web Security Fundamentals'],
+   subitems:[
+     {id:'t17_1',name:'OWASP Top 10 — injection, XSS, broken auth, IDOR and others',diff:'must'},
+     {id:'t17_2',name:'Authentication vs authorization — clear distinction with examples',diff:'must'},
+     {id:'t17_3',name:'Encryption — at rest vs in transit, TLS, symmetric vs asymmetric',diff:'must'},
+     {id:'t17_4',name:'Password storage — bcrypt hashing, salting, no plaintext',diff:'must'},
+     {id:'t17_5',name:'JWT security — algorithm confusion, expiry, revocation strategies',diff:'important'},
+     {id:'t17_6',name:'CORS — what it protects against, how to configure it correctly',diff:'important'},
+     {id:'t17_7',name:'Secret management — env vars vs vaults, never commit to git',diff:'important'},
+   ]},
+  {id:'t18',phase:4,name:'SLAs, SLOs, SLIs',
+   guide:['Reliability engineering is how top companies think about uptime. SLI is a metric you measure (e.g. request success rate). SLO is your internal target (e.g. 99.9% success rate over 30 days). SLA is the contract with customers — with financial penalties for breach.','Error budgets are the key concept: if your SLO is 99.9%, you have a budget of 0.1% (about 43 minutes/month) where things can fail. This budget drives decision-making — if you are burning through it, slow down releases and focus on reliability.','Understanding this shows you think like an engineer who operates systems at scale.'],
+   resources:['Google SRE Book (free online)','SRE Workbook (free online)','Increment magazine — On-call issue'],
+   subitems:[
+     {id:'t18_1',name:'SLI / SLO / SLA — definitions and real examples',diff:'must'},
+     {id:'t18_2',name:'Error budgets — calculation and how teams use them',diff:'must'},
+     {id:'t18_3',name:'Incident response — detection, mitigation, blameless postmortem',diff:'important'},
+     {id:'t18_4',name:'Chaos engineering — what it is, Netflix Chaos Monkey concept',diff:'bonus'},
+   ]},
+  {id:'t19',phase:4,name:'Testing strategies',
+   guide:['Tests are how you prove your code works — and how future engineers safely change it. The testing pyramid: many unit tests (fast, isolated), fewer integration tests (test real interactions), even fewer end-to-end tests (test the whole system).','For interviews: know the difference and when to use each. Know what test coverage measures and what it does not (100% coverage does not mean 100% correct).','For your portfolio: every project should have at least a basic test suite with CI running it on every push. This is one of the clearest signals that you write production-quality code.'],
+   resources:['pytest docs','Test Driven Development by Example — Kent Beck','Martin Fowler testing articles'],
+   subitems:[
+     {id:'t19_1',name:'Unit tests — isolation, mocking, fast feedback loop',diff:'must'},
+     {id:'t19_2',name:'Integration tests — testing real database and API interactions',diff:'must'},
+     {id:'t19_3',name:'Test coverage — what it measures and its limits',diff:'must'},
+     {id:'t19_4',name:'End-to-end tests — Playwright, Cypress, when to use them',diff:'important'},
+     {id:'t19_5',name:'Load testing — k6, Locust, finding bottlenecks under traffic',diff:'important'},
+     {id:'t19_6',name:'Test-driven development — red-green-refactor cycle',diff:'bonus'},
+   ]},
+];
+
+const PROJECTS=[
+  {id:'p1',title:'Distributed task queue',diff:'intermediate',desc:'Build a job queue from scratch using Redis. Workers, retries, status reporting.',tags:['Python/Go','Redis','Async','Distributed']},
+  {id:'p2',title:'REST API with observability',diff:'beginner',desc:'Full REST API with Prometheus metrics and a Grafana dashboard.',tags:['FastAPI','Prometheus','Grafana','Docker']},
+  {id:'p3',title:'Real-time chat backend',diff:'intermediate',desc:'WebSockets, rooms, presence, message history — no framework shortcuts.',tags:['WebSockets','Node/Go','Redis pub/sub']},
+  {id:'p4',title:'Kubernetes deploy pipeline',diff:'intermediate',desc:'Containerize an app, deploy to k8s (minikube), automate with GitHub Actions.',tags:['Docker','Kubernetes','GitHub Actions','CI/CD']},
+  {id:'p5',title:'Serverless data pipeline',diff:'intermediate',desc:'AWS Lambda + S3 trigger to process uploaded files on demand.',tags:['AWS Lambda','S3','Terraform','Event-driven']},
+  {id:'p6',title:'Infrastructure as code — 3-tier app',diff:'advanced',desc:'Terraform VPC, subnets, ECS cluster, RDS. Full cloud architecture.',tags:['Terraform','AWS','Networking','IaC']},
+  {id:'p7',title:'Personal finance dashboard',diff:'beginner',desc:'CSV parser, SQL storage, dashboard. Classic data pipeline thinking.',tags:['Python','SQL','Pandas','Dashboard']},
+  {id:'p8',title:'Log analysis tool',diff:'intermediate',desc:'Parse large logs, detect anomalies, generate a structured report.',tags:['Python','Regex','Data processing','CLI']},
+  {id:'p9',title:'Mini database engine',diff:'advanced',desc:'Key-value store with WAL, B-tree index, basic query parsing. Resume gold.',tags:['C/Go/Rust','B-trees','File I/O','Systems']},
+  {id:'p10',title:'HTTP server from scratch',diff:'intermediate',desc:'HTTP/1.1 via raw sockets. Request parsing, routing, concurrency.',tags:['Sockets','Go/Python','Concurrency','HTTP']},
+  {id:'p11',title:'Shell interpreter',diff:'advanced',desc:'Unix shell: pipes, redirects, env vars, background processes.',tags:['C/Go','Processes','Unix','Parsing']},
+];
+
+const ALL_SUBS=TOPICS.flatMap(t=>t.subitems);
+const TOTAL_SUBS=ALL_SUBS.length;
+let state={};
+
+function loadState(){try{state=JSON.parse(localStorage.getItem('eng-tracker-v2')||'{}');}catch(e){state={};}}
+function persist(){localStorage.setItem('eng-tracker-v2',JSON.stringify(state));}
+function saveState(){persist();updateAll();}
+function getSub(id){return state['sub_'+id]||false;}
+function setSub(id,val){state['sub_'+id]=val;saveState();}
+function getProjStatus(id){return state['proj_status_'+id]||'todo';}
+function setProjStatus(id,val){state['proj_status_'+id]=val;saveState();}
+function getProjRepo(id){return state['proj_repo_'+id]||'';}
+function setProjRepo(id,val){state['proj_repo_'+id]=val;persist();}
+
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+function toggleTopic(id){document.getElementById('block-'+id).classList.toggle('open');}
+
+function toggleSub(id){
+  const v=!getSub(id);
+  state['sub_'+id]=v;
+  persist();
+  const chk=document.getElementById('chk-'+id);
+  const nm=document.getElementById('snm-'+id);
+  if(chk){chk.className='subitem-check'+(v?' checked':'');chk.textContent=v?'✓':'';}
+  if(nm){nm.className='subitem-name'+(v?' done':'');}
+  refreshTopicBar(id);
+  updateAll();
+}
+
+function refreshTopicBar(subId){
+  const topic=TOPICS.find(t=>t.subitems.some(s=>s.id===subId));
+  if(!topic)return;
+  const done=topic.subitems.filter(s=>getSub(s.id)).length;
+  const total=topic.subitems.length;
+  const pct=Math.round((done/total)*100);
+  const f=document.getElementById('mf-'+topic.id);
+  const p=document.getElementById('mp-'+topic.id);
+  const tt=document.getElementById('tt-'+topic.id);
+  const ct=document.getElementById('mc-'+topic.id);
+  if(f)f.style.width=pct+'%';
+  if(p)p.textContent=pct+'%';
+  if(tt)tt.className='topic-title'+(done===total?' all-done':'');
+  if(ct)ct.textContent=done+'/'+total;
+}
+
+function diffBadge(d){
+  if(d==='must')return '<span class="subitem-diff diff-must">must know</span>';
+  if(d==='important')return '<span class="subitem-diff diff-important">important</span>';
+  return '<span class="subitem-diff diff-bonus">bonus</span>';
+}
+
+function renderPhase(phase){
+  const el=document.getElementById('topic-list-'+phase);
+  el.innerHTML=TOPICS.filter(t=>t.phase===phase).map(t=>{
+    const done=t.subitems.filter(s=>getSub(s.id)).length;
+    const total=t.subitems.length;
+    const pct=Math.round((done/total)*100);
+    const allDone=done===total;
+    const guideParagraphs=t.guide.map(g=>`<p>${g}</p>`).join('');
+    const resourcesHtml=t.resources.map(r=>`<span class="guide-resource">${r}</span>`).join('');
+    const subsHtml=t.subitems.map(s=>{
+      const checked=getSub(s.id);
+      return `<div class="subitem-row">
+        <div class="subitem-check${checked?' checked':''}" id="chk-${s.id}" onclick="toggleSub('${s.id}')">${checked?'✓':''}</div>
+        <span class="subitem-name${checked?' done':''}" id="snm-${s.id}">${s.name}</span>
+        ${diffBadge(s.diff)}
+      </div>`;
+    }).join('');
+    return `<div class="topic-block" id="block-${t.id}">
+      <div class="topic-header" onclick="toggleTopic('${t.id}')">
+        <div class="topic-header-left">
+          <span class="phase-badge phase-${phase}">Phase ${phase}</span>
+          <span class="topic-title${allDone?' all-done':''}" id="tt-${t.id}">${t.name}</span>
+        </div>
+        <div class="topic-progress-mini">
+          <span class="mini-pct" id="mp-${t.id}">${pct}%</span>
+          <div class="mini-bar"><div class="mini-bar-fill" id="mf-${t.id}" style="width:${pct}%"></div></div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text3)" id="mc-${t.id}">${done}/${total}</span>
+        </div>
+        <span class="topic-chevron">▼</span>
+      </div>
+      <div class="topic-body">
+        <div class="guide-panel">
+          <div class="guide-label">Guide</div>
+          ${guideParagraphs}
+          <div class="guide-resources">${resourcesHtml}</div>
+        </div>
+        <div class="subitems">${subsHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderProjects(filter){
+  const grid=document.getElementById('projects-grid');
+  const list=filter==='all'?PROJECTS:PROJECTS.filter(p=>getProjStatus(p.id)===filter);
+  if(!list.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1">No projects match this filter.</div>';return;}
+  grid.innerHTML=list.map(p=>{
+    const st=getProjStatus(p.id);
+    const repo=getProjRepo(p.id);
+    const sc=st==='done'?'s-done':st==='progress'?'s-progress':'';
+    return `<div class="project-card">
+      <div class="project-card-top"><div class="project-card-title">${p.title}</div><span class="difficulty-badge diff-${p.diff}">${p.diff}</span></div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="project-footer">
+        <select class="project-status-select ${sc}" onchange="changeProjSt('${p.id}',this.value,this)">
+          <option value="todo"${st==='todo'?' selected':''}>Not started</option>
+          <option value="progress"${st==='progress'?' selected':''}>Building</option>
+          <option value="done"${st==='done'?' selected':''}>Live</option>
+        </select>
+        <input class="github-input" type="text" placeholder="github.com/..." value="${repo}" onchange="setProjRepo('${p.id}',this.value)"/>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterPortfolio(f,btn){
+  document.querySelectorAll('#filter-portfolio .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProjects(f);
+}
+
+function changeProjSt(id,val,el){
+  el.className='project-status-select'+(val==='done'?' s-done':val==='progress'?' s-progress':'');
+  setProjStatus(id,val);
+}
+
+function renderCalendar(){
+  const now=new Date(),months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const y=now.getFullYear(),m=now.getMonth();
+  document.getElementById('cal-month').textContent=months[m]+' '+y;
+  const dim=new Date(y,m+1,0).getDate();
+  let html='';
+  for(let i=1;i<=Math.min(dim,28);i++){
+    const key=y+'-'+m+'-'+i;
+    const active=state['cal_'+key]||false;
+    const dow=days[(new Date(y,m,i).getDay()+6)%7];
+    html+=`<div class="day-cell${active?' has-activity':''}" onclick="toggleDay('${key}',this)"><div class="day-label">${dow}</div><div class="day-num">${i}</div></div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+}
+
+function toggleDay(key,el){state['cal_'+key]=!(state['cal_'+key]||false);el.classList.toggle('has-activity');persist();}
+
+function saveLeet(){
+  state.leet_easy=parseInt(document.getElementById('leet-easy').value)||0;
+  state.leet_medium=parseInt(document.getElementById('leet-medium').value)||0;
+  state.leet_hard=parseInt(document.getElementById('leet-hard').value)||0;
+  persist();updateLeetDisplay();
+  document.getElementById('stat-leet').textContent=(state.leet_easy||0)+(state.leet_medium||0)+(state.leet_hard||0);
+}
+
+function updateLeetDisplay(){
+  const e=state.leet_easy||0,m=state.leet_medium||0,h=state.leet_hard||0;
+  document.getElementById('count-easy').textContent=e;
+  document.getElementById('count-medium').textContent=m;
+  document.getElementById('count-hard').textContent=h;
+  document.getElementById('bar-easy').style.width=Math.min(100,(e/100)*100)+'%';
+  document.getElementById('bar-medium').style.width=Math.min(100,(m/150)*100)+'%';
+  document.getElementById('bar-hard').style.width=Math.min(100,(h/50)*100)+'%';
+  document.getElementById('leet-easy').value=e;
+  document.getElementById('leet-medium').value=m;
+  document.getElementById('leet-hard').value=h;
+}
+
+function saveNotes(){
+  state.notes=document.getElementById('notes-text').value;
+  persist();
+  const ind=document.getElementById('save-ind');
+  ind.classList.add('show');
+  setTimeout(()=>ind.classList.remove('show'),2000);
+}
+
+function updateAll(){
+  const doneSubs=ALL_SUBS.filter(s=>getSub(s.id)).length;
+  const projDone=PROJECTS.filter(p=>getProjStatus(p.id)==='done').length;
+  const pct=Math.round((doneSubs/TOTAL_SUBS)*100);
+  document.getElementById('stat-done').textContent=doneSubs;
+  document.getElementById('stat-done-of').textContent='out of '+TOTAL_SUBS;
+  document.getElementById('stat-projects').textContent=projDone;
+  document.getElementById('progress-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('stat-leet').textContent=(state.leet_easy||0)+(state.leet_medium||0)+(state.leet_hard||0);
+  let inProg=0;
+  [1,2,3,4].forEach(p=>{
+    const phTopics=TOPICS.filter(t=>t.phase===p);
+    const phSubs=phTopics.flatMap(t=>t.subitems);
+    const phDone=phSubs.filter(s=>getSub(s.id)).length;
+    const active=phTopics.filter(t=>{const d=t.subitems.filter(s=>getSub(s.id)).length;return d>0&&d<t.subitems.length;}).length;
+    inProg+=active;
+    document.getElementById('nav-count-'+p).textContent=phDone+'/'+phSubs.length;
+  });
+  document.getElementById('stat-progress').textContent=inProg;
+  renderDashboard(doneSubs,inProg,projDone);
+}
+
+function renderDashboard(doneSubs,inProg,projDone){
+  const colors=['#f26060','#f5c547','#3ecf8e','#7c6ef5'];
+  const names=['Core foundations','System design','DevOps & cloud','Security & reliability'];
+  document.getElementById('dashboard-phases').innerHTML=[1,2,3,4].map(p=>{
+    const phSubs=TOPICS.filter(t=>t.phase===p).flatMap(t=>t.subitems);
+    const phDone=phSubs.filter(s=>getSub(s.id)).length;
+    const pct=Math.round((phDone/phSubs.length)*100);
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px">
+      <span style="font-size:13px;font-weight:500;flex:1">${names[p-1]}</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">${phDone}/${phSubs.length}</span>
+      <div style="width:80px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden"><div style="height:100%;background:${colors[p-1]};border-radius:2px;width:${pct}%"></div></div>
+      <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:${colors[p-1]};min-width:32px;text-align:right">${pct}%</span>
+    </div>`;
+  }).join('');
+  const sugg=[];
+  const inProgressTopic=TOPICS.find(t=>{const d=t.subitems.filter(s=>getSub(s.id)).length;return d>0&&d<t.subitems.length;});
+  if(inProgressTopic){const rem=inProgressTopic.subitems.filter(s=>!getSub(s.id)).length;sugg.push({c:'#f5c547',t:'Continue: '+inProgressTopic.name+' — '+rem+' items left'});}
+  const notStarted=TOPICS.find(t=>t.subitems.every(s=>!getSub(s.id)));
+  if(notStarted) sugg.push({c:'var(--text3)',t:'Start next: '+notStarted.name});
+  if(projDone===0) sugg.push({c:'#7c6ef5',t:'Start your first portfolio project'});
+  if((state.leet_easy||0)+(state.leet_medium||0)+(state.leet_hard||0)<10) sugg.push({c:'#3ecf8e',t:'Log your first LeetCode problems'});
+  document.getElementById('next-steps').innerHTML=sugg.map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm)"><span style="width:6px;height:6px;border-radius:50%;background:${s.c};flex-shrink:0"></span><span style="font-size:13px;color:var(--text2)">${s.t}</span></div>`).join('');
+}
+
+function init(){
+  loadState();
+  for(let p=1;p<=4;p++) renderPhase(p);
+  renderProjects('all');
+  renderCalendar();
+  if(state.notes) document.getElementById('notes-text').value=state.notes;
+  updateLeetDisplay();
+  updateAll();
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Tracker — Life & Career Library</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root{--bg:#0f0f11;--bg2:#17171a;--bg3:#1e1e22;--bg4:#26262c;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8e8ea;--text2:#8a8a92;--text3:#55555f;--accent:#7c6ef5;--accent-soft:rgba(124,110,245,0.12);--accent-border:rgba(124,110,245,0.3);--green:#3ecf8e;--green-soft:rgba(62,207,142,0.1);--yellow:#f5c547;--yellow-soft:rgba(245,197,71,0.1);--red:#f26060;--red-soft:rgba(242,96,96,0.08);--orange:#f5834a;--orange-soft:rgba(245,131,74,0.1);--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--radius:10px;--radius-sm:6px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
+  .layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh;}
+  .sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+  .sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+  .sidebar-logo .label{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .sidebar-logo .title{font-size:15px;font-weight:600;}
+  .nav-section{padding:0 12px;margin-bottom:6px;}
+  .nav-section-label{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:4px 8px 6px;}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;border:none;background:none;width:100%;text-align:left;}
+  .nav-item:hover{background:var(--bg3);color:var(--text);}
+  .nav-item.active{background:var(--accent-soft);color:var(--accent);font-weight:500;}
+  .nav-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .nav-item .count{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text3);}
+  .sidebar-footer{margin-top:auto;padding:16px 20px 0;border-top:1px solid var(--border);}
+  .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:6px;}
+  .progress-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;}
+  .main{padding:32px 40px;max-width:980px;}
+  .page{display:none;}.page.active{display:block;}
+  .page-header{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+  .page-header h1{font-size:22px;font-weight:600;margin-bottom:4px;}
+  .page-header p{font-size:13px;color:var(--text2);}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+  .stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+  .stat-value{font-family:var(--mono);font-size:22px;font-weight:500;}
+  .stat-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+  .section-title{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;margin-top:24px;}
+  .section-title:first-child{margin-top:0;}
+
+  /* BOOK CARD */
+  .books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+  .book-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:0;transition:border-color .15s;display:flex;flex-direction:column;overflow:hidden;}
+  .book-card:hover{border-color:var(--border2);}
+
+  /* CARD HEADER — colored spine strip */
+  .book-card-header{padding:14px 16px 12px;display:flex;gap:12px;align-items:flex-start;}
+  .book-spine{width:40px;height:56px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;}
+  .book-meta{flex:1;min-width:0;}
+  .book-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;line-height:1.35;}
+  .book-author{font-size:11px;color:var(--text3);font-family:var(--mono);}
+
+  /* CARD BODY */
+  .book-card-body{padding:0 16px 12px;flex:1;display:flex;flex-direction:column;gap:10px;}
+  .book-desc{font-size:12px;color:var(--text2);line-height:1.65;}
+  .book-tags{display:flex;flex-wrap:wrap;gap:5px;}
+  .tag{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg4);color:var(--text3);}
+
+  /* PROGRESS SECTION */
+  .book-progress{background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;flex-direction:column;gap:8px;}
+  .progress-row{display:flex;align-items:center;gap:8px;}
+  .progress-row label{font-family:var(--mono);font-size:10px;color:var(--text3);width:80px;flex-shrink:0;}
+  .page-input{font-family:var(--mono);font-size:12px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg4);color:var(--text);outline:none;width:70px;text-align:center;transition:border-color .15s;}
+  .page-input:focus{border-color:var(--accent);}
+  .total-input{font-family:var(--mono);font-size:12px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg4);color:var(--text);outline:none;width:70px;text-align:center;transition:border-color .15s;}
+  .total-input:focus{border-color:var(--accent);}
+  .page-sep{font-family:var(--mono);font-size:11px;color:var(--text3);}
+  .reading-bar{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+  .reading-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;}
+  .reading-pct{font-family:var(--mono);font-size:10px;color:var(--text3);min-width:30px;text-align:right;}
+  .notes-row{display:flex;gap:6px;}
+  .inline-note{font-family:var(--mono);font-size:11px;padding:5px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg4);color:var(--text2);outline:none;flex:1;transition:border-color .15s;}
+  .inline-note:focus{border-color:var(--accent);}
+  .inline-note::placeholder{color:var(--text3);}
+  .save-inline-btn{font-family:var(--mono);font-size:10px;padding:5px 10px;border-radius:var(--radius-sm);border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .save-inline-btn:hover{background:rgba(124,110,245,.22);}
+  .saved-note{font-size:11px;color:var(--text2);padding:4px 0;line-height:1.5;font-style:italic;}
+
+  /* FILE SECTION */
+  .book-file{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  .upload-btn{font-family:var(--mono);font-size:10px;padding:5px 10px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text3);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .upload-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .file-name{font-family:var(--mono);font-size:10px;color:var(--text3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .open-btn{font-family:var(--mono);font-size:10px;padding:5px 10px;border-radius:var(--radius-sm);border:1px solid rgba(62,207,142,.3);background:var(--green-soft);color:var(--green);cursor:pointer;transition:all .15s;white-space:nowrap;text-decoration:none;display:inline-block;}
+  .open-btn:hover{background:rgba(62,207,142,.18);}
+  .hidden-input{display:none;}
+
+  /* CARD FOOTER */
+  .book-card-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  .book-status-select{font-family:var(--mono);font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;transition:all .15s;flex:1;}
+  .book-status-select.s-reading{background:var(--yellow-soft);color:var(--yellow);border-color:rgba(245,197,71,.2);}
+  .book-status-select.s-done{background:var(--green-soft);color:var(--green);border-color:rgba(62,207,142,.2);}
+  .book-status-select.s-next{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-border);}
+  .priority-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;flex-shrink:0;}
+  .p-essential{background:var(--red-soft);color:var(--red);}
+  .p-recommended{background:var(--yellow-soft);color:var(--yellow);}
+  .p-optional{background:var(--accent-soft);color:var(--accent);}
+
+  /* SPINE COLORS */
+  .cat-studies{background:rgba(124,110,245,.2);}
+  .cat-body{background:rgba(62,207,142,.2);}
+  .cat-mind{background:rgba(245,197,71,.2);}
+  .cat-social{background:rgba(242,96,96,.15);}
+  .cat-finances{background:rgba(62,207,142,.15);}
+  .cat-skills{background:rgba(124,110,245,.15);}
+  .cat-purpose{background:rgba(245,131,74,.15);}
+  .cat-environment{background:rgba(245,197,71,.12);}
+  .cat-poker{background:rgba(245,131,74,.2);}
+
+  /* HIGHLIGHTS */
+  .note-form{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;}
+  .note-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;align-items:center;}
+  .note-input,.note-select{font-family:var(--mono);font-size:12px;padding:7px 10px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text);outline:none;transition:border-color .15s;}
+  .note-input:focus,.note-select:focus{border-color:var(--accent);}
+  .note-input::placeholder{color:var(--text3);}
+  .note-select{appearance:none;-webkit-appearance:none;cursor:pointer;}
+  .note-textarea{width:100%;min-height:80px;font-family:var(--mono);font-size:12px;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text);resize:vertical;outline:none;line-height:1.6;transition:border-color .15s;}
+  .note-textarea:focus{border-color:var(--accent);}
+  .note-textarea::placeholder{color:var(--text3);}
+  .add-btn{font-family:var(--mono);font-size:11px;padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);cursor:pointer;transition:all .15s;}
+  .add-btn:hover{background:rgba(124,110,245,.22);}
+  .note-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:6px;}
+  .note-card-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+  .note-book-label{font-family:var(--mono);font-size:10px;color:var(--accent);padding:2px 7px;border-radius:3px;background:var(--accent-soft);}
+  .note-date{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:auto;}
+  .note-text{font-size:12px;color:var(--text2);line-height:1.6;}
+  .del-btn{font-size:11px;color:var(--text3);cursor:pointer;padding:2px 6px;border-radius:3px;transition:all .15s;border:none;background:none;flex-shrink:0;}
+  .del-btn:hover{background:var(--red-soft);color:var(--red);}
+  .empty-state{text-align:center;padding:32px;color:var(--text3);font-size:13px;}
+  .filter-row{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .filter-btn{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;}
+  .filter-btn:hover{color:var(--text);}
+  .filter-btn.active{background:var(--accent-soft);border-color:var(--accent-border);color:var(--accent);}
+  .notes-area{width:100%;min-height:180px;font-family:var(--mono);font-size:12px;padding:14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;outline:none;line-height:1.7;transition:border-color .15s;}
+  .notes-area:focus{border-color:var(--accent);}
+  .notes-area::placeholder{color:var(--text3);}
+  .save-btn{margin-top:10px;font-family:var(--mono);font-size:11px;padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);cursor:pointer;transition:all .15s;}
+  .save-btn:hover{background:rgba(124,110,245,.22);}
+  .save-indicator{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--green);margin-left:10px;opacity:0;transition:opacity .3s;}
+  .save-indicator.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="label">Self-development</div>
+      <div class="title">Book Library</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" onclick="showPage('dashboard',this)"><span style="font-size:14px">◈</span> Dashboard</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Categories</div>
+      <button class="nav-item" onclick="showPage('studies',this)"><span class="dot" style="background:#7c6ef5"></span> Studies <span class="count" id="nc-studies">0/0</span></button>
+      <button class="nav-item" onclick="showPage('body',this)"><span class="dot" style="background:#3ecf8e"></span> Body <span class="count" id="nc-body">0/0</span></button>
+      <button class="nav-item" onclick="showPage('mind',this)"><span class="dot" style="background:#f5c547"></span> Mind <span class="count" id="nc-mind">0/0</span></button>
+      <button class="nav-item" onclick="showPage('social',this)"><span class="dot" style="background:#f26060"></span> Social <span class="count" id="nc-social">0/0</span></button>
+      <button class="nav-item" onclick="showPage('finances',this)"><span class="dot" style="background:#3ecf8e"></span> Finances <span class="count" id="nc-finances">0/0</span></button>
+      <button class="nav-item" onclick="showPage('skills',this)"><span class="dot" style="background:#7c6ef5"></span> Skills <span class="count" id="nc-skills">0/0</span></button>
+      <button class="nav-item" onclick="showPage('purpose',this)"><span class="dot" style="background:#f5834a"></span> Purpose <span class="count" id="nc-purpose">0/0</span></button>
+      <button class="nav-item" onclick="showPage('environment',this)"><span class="dot" style="background:#f5c547"></span> Environment <span class="count" id="nc-environment">0/0</span></button>
+      <button class="nav-item" onclick="showPage('poker',this)"><span class="dot" style="background:#f5834a"></span> Poker <span class="count" id="nc-poker">0/0</span></button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">My reading</div>
+      <button class="nav-item" onclick="showPage('highlights',this)"><span style="font-size:14px">◎</span> Highlights & notes</button>
+      <button class="nav-item" onclick="showPage('freenotes',this)"><span style="font-size:14px">▤</span> Free notes</button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="progress-label"><span>Books read</span><span id="progress-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-header"><h1>Book Library</h1><p>Every great engineer is also a great reader. Track progress, save your page, and upload your files.</p></div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Books read</div><div class="stat-value" id="stat-read">0</div><div class="stat-sub" id="stat-read-of">out of 0</div></div>
+        <div class="stat-card"><div class="stat-label">Reading now</div><div class="stat-value" id="stat-reading" style="color:var(--yellow)">0</div><div class="stat-sub">in progress</div></div>
+        <div class="stat-card"><div class="stat-label">Up next</div><div class="stat-value" id="stat-next" style="color:var(--accent)">0</div><div class="stat-sub">queued</div></div>
+        <div class="stat-card"><div class="stat-label">Highlights</div><div class="stat-value" id="stat-highlights" style="color:var(--green)">0</div><div class="stat-sub">notes saved</div></div>
+      </div>
+      <div class="section-title">Category breakdown</div>
+      <div id="dashboard-cats"></div>
+      <div class="section-title" style="margin-top:24px">Currently reading</div>
+      <div id="dashboard-reading"></div>
+    </div>
+
+    <!-- CATEGORY PAGES -->
+    <div id="page-studies" class="page"><div class="page-header"><h1>Studies — Systems Engineering</h1><p>Technical books that make you a better engineer. These compound directly with your degree.</p></div><div class="filter-row" id="filter-studies"><button class="filter-btn active" onclick="filterCat('studies','all',this)">All</button><button class="filter-btn" onclick="filterCat('studies','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('studies','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('studies','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('studies','done',this)">Done</button></div><div class="books-grid" id="books-studies"></div></div>
+    <div id="page-body" class="page"><div class="page-header"><h1>Body</h1><p>Your body is the hardware everything else runs on. Engineer it like a system.</p></div><div class="filter-row" id="filter-body"><button class="filter-btn active" onclick="filterCat('body','all',this)">All</button><button class="filter-btn" onclick="filterCat('body','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('body','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('body','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('body','done',this)">Done</button></div><div class="books-grid" id="books-body"></div></div>
+    <div id="page-mind" class="page"><div class="page-header"><h1>Mind</h1><p>Mental clarity, focus, and resilience. The operating system underneath everything you do.</p></div><div class="filter-row" id="filter-mind"><button class="filter-btn active" onclick="filterCat('mind','all',this)">All</button><button class="filter-btn" onclick="filterCat('mind','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('mind','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('mind','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('mind','done',this)">Done</button></div><div class="books-grid" id="books-mind"></div></div>
+    <div id="page-social" class="page"><div class="page-header"><h1>Social</h1><p>Communication, influence, and relationships. Soft skills that accelerate hard careers.</p></div><div class="filter-row" id="filter-social"><button class="filter-btn active" onclick="filterCat('social','all',this)">All</button><button class="filter-btn" onclick="filterCat('social','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('social','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('social','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('social','done',this)">Done</button></div><div class="books-grid" id="books-social"></div></div>
+    <div id="page-finances" class="page"><div class="page-header"><h1>Finances</h1><p>Build wealth while you build software. Money is a system — learn the rules early.</p></div><div class="filter-row" id="filter-finances"><button class="filter-btn active" onclick="filterCat('finances','all',this)">All</button><button class="filter-btn" onclick="filterCat('finances','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('finances','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('finances','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('finances','done',this)">Done</button></div><div class="books-grid" id="books-finances"></div></div>
+    <div id="page-skills" class="page"><div class="page-header"><h1>Skills</h1><p>Learning how to learn, think clearly, and perform at a high level.</p></div><div class="filter-row" id="filter-skills"><button class="filter-btn active" onclick="filterCat('skills','all',this)">All</button><button class="filter-btn" onclick="filterCat('skills','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('skills','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('skills','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('skills','done',this)">Done</button></div><div class="books-grid" id="books-skills"></div></div>
+    <div id="page-purpose" class="page"><div class="page-header"><h1>Purpose</h1><p>Direction, meaning, and long-term vision. Why you do what you do — and where you are going.</p></div><div class="filter-row" id="filter-purpose"><button class="filter-btn active" onclick="filterCat('purpose','all',this)">All</button><button class="filter-btn" onclick="filterCat('purpose','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('purpose','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('purpose','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('purpose','done',this)">Done</button></div><div class="books-grid" id="books-purpose"></div></div>
+    <div id="page-environment" class="page"><div class="page-header"><h1>Environment</h1><p>Your workspace, habits, and systems. The context that makes or breaks consistent performance.</p></div><div class="filter-row" id="filter-environment"><button class="filter-btn active" onclick="filterCat('environment','all',this)">All</button><button class="filter-btn" onclick="filterCat('environment','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('environment','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('environment','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('environment','done',this)">Done</button></div><div class="books-grid" id="books-environment"></div></div>
+    <div id="page-poker" class="page"><div class="page-header"><h1>Poker — Hold'em & Omaha</h1><p>Poker is applied mathematics, psychology, and decision-making under pressure. These books teach you to think in expected value — a skill that transfers everywhere.</p></div><div class="filter-row" id="filter-poker"><button class="filter-btn active" onclick="filterCat('poker','all',this)">All</button><button class="filter-btn" onclick="filterCat('poker','todo',this)">Not started</button><button class="filter-btn" onclick="filterCat('poker','next',this)">Up next</button><button class="filter-btn" onclick="filterCat('poker','reading',this)">Reading</button><button class="filter-btn" onclick="filterCat('poker','done',this)">Done</button></div><div class="books-grid" id="books-poker"></div></div>
+
+    <!-- HIGHLIGHTS -->
+    <div id="page-highlights" class="page">
+      <div class="page-header"><h1>Highlights & notes</h1><p>The best idea from a book is worth nothing if you forget it. Write it down here.</p></div>
+      <div class="note-form">
+        <div class="note-row">
+          <select class="note-select" id="hl-book" style="flex:2"><option value="">Select book...</option></select>
+          <input class="note-input" id="hl-page" type="text" placeholder="Page / chapter" style="width:130px">
+        </div>
+        <textarea class="note-textarea" id="hl-text" placeholder="Write the highlight, quote, or insight..."></textarea>
+        <div style="margin-top:10px"><button class="add-btn" onclick="addHighlight()">Save highlight</button></div>
+      </div>
+      <div class="filter-row" id="hl-filters"><button class="filter-btn active" onclick="filterHighlights('all',this)">All</button></div>
+      <div id="highlights-list"></div>
+    </div>
+
+    <!-- FREE NOTES -->
+    <div id="page-freenotes" class="page">
+      <div class="page-header"><h1>Free notes</h1><p>Ideas sparked by reading, connections between books, things to apply.</p></div>
+      <textarea class="notes-area" id="notes-text" placeholder="Write anything — connections between books, ideas to apply, your own reflections..."></textarea>
+      <div><button class="save-btn" onclick="saveNotes()">Save notes</button><span class="save-indicator" id="save-ind">Saved</span></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const BOOKS = {
+  studies:[
+    {id:'st1',title:'Designing Data-Intensive Applications',author:'Martin Kleppmann',emoji:'🗄️',priority:'essential',desc:'The bible of modern backend systems. Covers databases, distributed systems, replication, and consistency from first principles. Read this before any system design interview.',pages:551,tags:['Distributed systems','Databases','Backend']},
+    {id:'st2',title:'The Pragmatic Programmer',author:'Andrew Hunt & David Thomas',emoji:'🛠️',priority:'essential',desc:'A practical guide to becoming a better craftsman. Career advice, coding principles, and habits that separate good engineers from great ones. Read one tip per day.',pages:352,tags:['Career','Best practices','Mindset']},
+    {id:'st3',title:'Clean Code',author:'Robert C. Martin',emoji:'✨',priority:'essential',desc:'How to write code that humans can read and maintain. Naming, functions, comments, and structure. Every professional engineer has read this at least once.',pages:431,tags:['Code quality','Refactoring','Best practices']},
+    {id:'st4',title:'System Design Interview Vol. 1 & 2',author:'Alex Xu',emoji:'🏗️',priority:'essential',desc:'The most practical system design interview prep book. Real designs: URL shorteners, Netflix, WhatsApp, Uber. Practice each one out loud — interviewer style.',pages:436,tags:['System design','Interviews','Architecture']},
+    {id:'st5',title:'Introduction to Algorithms (CLRS)',author:'Cormen, Leiserson, Rivest, Stein',emoji:'📐',priority:'recommended',desc:'The definitive algorithms textbook. Dense and academic but the most complete DSA reference. Use as a reference book, not a cover-to-cover read.',pages:1292,tags:['Algorithms','Data structures','Theory']},
+    {id:'st6',title:'The Phoenix Project',author:'Gene Kim',emoji:'🔥',priority:'recommended',desc:'A novel about DevOps transformation. You will understand CI/CD, on-call culture, and technical debt through a story instead of a textbook. Very readable.',pages:345,tags:['DevOps','Culture','Career']},
+    {id:'st7',title:'Site Reliability Engineering',author:'Google SRE Team',emoji:'⚡',priority:'recommended',desc:'How Google runs production systems at scale. SLOs, error budgets, incident response, and on-call. Free online at sre.google. Essential for understanding top-company operations.',pages:524,tags:['SRE','Reliability','Operations']},
+    {id:'st8',title:'A Philosophy of Software Design',author:'John Ousterhout',emoji:'🧠',priority:'recommended',desc:'A counterpoint to Clean Code. Focuses on managing complexity through deep modules and thoughtful design rather than small functions. Short and dense.',pages:190,tags:['Architecture','Design','Complexity']},
+  ],
+  body:[
+    {id:'bo1',title:'Why We Sleep',author:'Matthew Walker',emoji:'😴',priority:'essential',desc:'Sleep is the highest-leverage thing for cognitive performance, memory consolidation, and mood. This book will permanently change how you treat sleep. Read it first.',pages:368,tags:['Sleep','Neuroscience','Performance']},
+    {id:'bo2',title:'Atomic Habits',author:'James Clear',emoji:'🔄',priority:'essential',desc:'The most practical book on building habits. The 1% improvement principle and habit stacking apply directly to study routines, exercise, and coding practice.',pages:320,tags:['Habits','Systems','Behavior']},
+    {id:'bo3',title:'The Body Keeps the Score',author:'Bessel van der Kolk',emoji:'🧬',priority:'recommended',desc:'How stress and trauma affect the body. Helps you understand the physical cost of burnout — something engineers face constantly without recognizing it.',pages:464,tags:['Health','Stress','Psychology']},
+    {id:'bo4',title:'Spark: The New Science of Exercise',author:'John Ratey',emoji:'🏃',priority:'recommended',desc:'Exercise directly improves brain function, learning speed, and focus. The science behind why moving makes you smarter. Short chapters, very motivating.',pages:294,tags:['Exercise','Brain','Learning']},
+    {id:'bo5',title:'How Not to Die',author:'Michael Greger',emoji:'🥗',priority:'optional',desc:'Evidence-based nutrition without ideology. What the research actually says about food and long-term health. Useful for a long, high-performance engineering career.',pages:562,tags:['Nutrition','Health','Longevity']},
+  ],
+  mind:[
+    {id:'mi1',title:'Deep Work',author:'Cal Newport',emoji:'🎯',priority:'essential',desc:'The ability to focus without distraction is the superpower of knowledge workers. Newport argues it is becoming rarer and more valuable simultaneously. Must-read for engineers.',pages:296,tags:['Focus','Productivity','Career']},
+    {id:'mi2',title:'Thinking, Fast and Slow',author:'Daniel Kahneman',emoji:'⚡',priority:'essential',desc:'A Nobel Prize-winning psychologist explains System 1 (fast, intuitive) vs System 2 (slow, deliberate) thinking. Teaches you to recognize your own cognitive biases.',pages:499,tags:['Psychology','Decision making','Bias']},
+    {id:'mi3',title:'Meditations',author:'Marcus Aurelius',emoji:'🏛️',priority:'recommended',desc:'The private journal of a Roman emperor. A 2,000-year-old guide to staying calm, focused, and disciplined under pressure. Read one short entry per day.',pages:254,tags:['Stoicism','Philosophy','Resilience']},
+    {id:'mi4',title:'The Obstacle Is the Way',author:'Ryan Holiday',emoji:'🪨',priority:'recommended',desc:'Stoic philosophy applied to modern life. How to turn every problem into an advantage. Short and practical — directly applicable when learning something hard.',pages:224,tags:['Stoicism','Mindset','Resilience']},
+    {id:'mi5',title:'Flow',author:'Mihaly Csikszentmihalyi',emoji:'🌊',priority:'recommended',desc:'The psychology of optimal experience. Understanding what the flow state is, how to enter it, and why it matters for creative and technical work.',pages:303,tags:['Psychology','Performance','Creativity']},
+    {id:'mi6',title:'The Power of Now',author:'Eckhart Tolle',emoji:'☀️',priority:'optional',desc:'Presence and mindfulness through a philosophical lens. Useful if you struggle with anxiety about the future or rumination about the past.',pages:236,tags:['Mindfulness','Presence','Philosophy']},
+  ],
+  social:[
+    {id:'so1',title:'How to Win Friends and Influence People',author:'Dale Carnegie',emoji:'🤝',priority:'essential',desc:'Written in 1936 and still the most practically useful book on human relationships. Timeless principles for networking, communication, and leadership.',pages:288,tags:['Relationships','Communication','Leadership']},
+    {id:'so2',title:'Never Split the Difference',author:'Chris Voss',emoji:'🎯',priority:'essential',desc:'Negotiation tactics from an FBI hostage negotiator. Directly applicable to salary negotiations, job offers, and difficult conversations at work.',pages:274,tags:['Negotiation','Communication','Career']},
+    {id:'so3',title:'Crucial Conversations',author:'Patterson, Grenny et al.',emoji:'💬',priority:'recommended',desc:'How to handle high-stakes conversations — with your manager, a difficult colleague, or in a technical disagreement. A skill most engineers never develop.',pages:272,tags:['Communication','Conflict','Leadership']},
+    {id:'so4',title:'Give and Take',author:'Adam Grant',emoji:'🎁',priority:'recommended',desc:'Research on why "givers" end up at the top of most fields. Reframes how you think about networking and professional relationships.',pages:307,tags:['Networking','Career','Relationships']},
+    {id:'so5',title:'The Charisma Myth',author:'Olivia Fox Cabane',emoji:'✨',priority:'optional',desc:'Charisma is a learned skill, not a personality trait. Practical techniques for presence, warmth, and power in professional settings.',pages:268,tags:['Presence','Communication','Confidence']},
+  ],
+  finances:[
+    {id:'fi1',title:'The Psychology of Money',author:'Morgan Housel',emoji:'💰',priority:'essential',desc:'The best personal finance book of the last decade. Not about math — about behavior, patience, and the weird ways people relate to money. Short chapters.',pages:256,tags:['Personal finance','Behavior','Wealth']},
+    {id:'fi2',title:'Rich Dad Poor Dad',author:'Robert Kiyosaki',emoji:'🏠',priority:'essential',desc:'The book that changed how millions think about assets vs liabilities. Some details are simplified but the mental model — make money work for you — is foundational.',pages:336,tags:['Mindset','Wealth','Assets']},
+    {id:'fi3',title:'The Intelligent Investor',author:'Benjamin Graham',emoji:'📈',priority:'recommended',desc:'Warren Buffett\'s favorite book. The bible of value investing. Heavy — read chapters 8 and 20 first. Teaches you to think long-term about money.',pages:640,tags:['Investing','Stocks','Long-term']},
+    {id:'fi4',title:'I Will Teach You to Be Rich',author:'Ramit Sethi',emoji:'💳',priority:'recommended',desc:'Personal finance for young people in plain language. Automate savings, optimize credit, invest early. More actionable than most finance books.',pages:352,tags:['Personal finance','Action','Young professionals']},
+    {id:'fi5',title:'Die with Zero',author:'Bill Perkins',emoji:'⏳',priority:'optional',desc:'A counterintuitive take on money — optimize for experiences, not accumulation. Forces you to think about when in life to spend vs save.',pages:243,tags:['Philosophy','Wealth','Life design']},
+  ],
+  skills:[
+    {id:'sk1',title:'Ultralearning',author:'Scott Young',emoji:'⚡',priority:'essential',desc:'How to learn hard skills fast. Young learned MIT\'s 4-year CS curriculum in 1 year. The principles — directness, drilling, retrieval — apply directly to learning programming.',pages:304,tags:['Learning','Meta-skills','Productivity']},
+    {id:'sk2',title:'A Mind for Numbers',author:'Barbara Oakley',emoji:'🧮',priority:'essential',desc:'How to learn math and science effectively. Focused vs diffuse thinking modes, spaced repetition, and avoiding the illusion of competence. Written for STEM students.',pages:336,tags:['Learning','Math','Study techniques']},
+    {id:'sk3',title:'So Good They Can\'t Ignore You',author:'Cal Newport',emoji:'🎸',priority:'essential',desc:'Counterintuitively argues that "follow your passion" is bad advice. Build rare and valuable skills first — passion follows mastery, not the other way around.',pages:240,tags:['Career','Mastery','Strategy']},
+    {id:'sk4',title:'Peak',author:'Anders Ericsson',emoji:'🏔️',priority:'recommended',desc:'The science of deliberate practice. The researcher who invented the 10,000-hours concept explains what actually makes experts. Spoiler: it is quality of practice, not time.',pages:352,tags:['Expertise','Deliberate practice','Learning']},
+    {id:'sk5',title:'Fluent Forever',author:'Gabriel Wyner',emoji:'🗣️',priority:'recommended',desc:'The most scientifically grounded method for language learning. Spaced repetition, pronunciation-first, immersion. Apply to English learning directly.',pages:336,tags:['Language learning','Memory','English']},
+    {id:'sk6',title:'The Art of Problem Solving Vol. 1',author:'Sandor Lehoczky',emoji:'🔍',priority:'optional',desc:'Mathematical problem-solving foundation. If you want to get strong at algorithmic thinking and competitive programming, this is the starting point.',pages:272,tags:['Problem solving','Math','Algorithms']},
+  ],
+  purpose:[
+    {id:'pu1',title:'Man\'s Search for Meaning',author:'Viktor Frankl',emoji:'🕯️',priority:'essential',desc:'A psychiatrist\'s account of surviving Auschwitz and the framework he built around meaning. One of the most important books ever written. Short — read it in a weekend.',pages:200,tags:['Meaning','Philosophy','Resilience']},
+    {id:'pu2',title:'Ikigai',author:'Héctor García & Francesc Miralles',emoji:'⭕',priority:'essential',desc:'The Japanese concept of finding your reason for being — the intersection of what you love, what you are good at, what the world needs, and what you can be paid for.',pages:208,tags:['Purpose','Career','Life design']},
+    {id:'pu3',title:'Start with Why',author:'Simon Sinek',emoji:'❓',priority:'recommended',desc:'Why do some people and companies inspire while others don\'t? Understanding your WHY before your HOW or WHAT changes how you make decisions.',pages:256,tags:['Purpose','Leadership','Motivation']},
+    {id:'pu4',title:'Designing Your Life',author:'Bill Burnett & Dave Evans',emoji:'🗺️',priority:'recommended',desc:'Stanford design professors apply design thinking to life planning. Prototyping careers, reframing problems, and building a life that works.',pages:272,tags:['Life design','Career','Prototyping']},
+    {id:'pu5',title:'The Almanack of Naval Ravikant',author:'Eric Jorgenson',emoji:'🧭',priority:'recommended',desc:'A collection of Naval\'s ideas on wealth, happiness, and meaning. Free online. Dense with insight — one of the most shared books among engineers and founders.',pages:242,tags:['Wealth','Philosophy','Freedom']},
+    {id:'pu6',title:'Essentialism',author:'Greg McKeown',emoji:'🎯',priority:'optional',desc:'The disciplined pursuit of less. Saying no to good things to say yes to the essential. Helps you focus energy on the highest-leverage activities.',pages:272,tags:['Focus','Simplicity','Decision making']},
+  ],
+  poker:[
+    {id:'pk1',title:'The Theory of Poker',author:'David Sklansky',emoji:'♠️',priority:'essential',desc:"The most important poker book ever written. Sklansky introduces the Fundamental Theorem of Poker: every time you play differently from how you would if you could see your opponent's cards, they gain. Applies to both Hold'em and Omaha. Read this before anything else.",pages:276,tags:["Hold'em","Omaha","Theory","Math","Strategy"]},
+    {id:'pk2',title:'Thinking in Bets',author:'Annie Duke',emoji:'🎲',priority:'essential',desc:'Annie Duke was one of the top poker players in the world. This book teaches decision-making under uncertainty — the core skill in poker and in life. Evaluate decisions by quality of reasoning, not just outcomes. A mindset shift that makes you a better player and a better engineer.',pages:288,tags:['Decision making','Psychology',"Hold'em",'Mindset']},
+    {id:'pk3',title:'Pot-Limit Omaha Poker: The Big Play Strategy',author:'Jeff Hwang',emoji:'🃏',priority:'recommended',desc:'The most cited resource for players moving into Omaha. Hwang explains why PLO requires completely different thinking from Hold’em — hand equities run much closer together, draws are more powerful, and position is even more critical. Clear, structured, and full of hand examples.',pages:320,tags:['Pot-Limit Omaha','Hand ranges','Draws','Position']},
+  ],
+  environment:[
+    {id:'en1',title:'Atomic Habits',author:'James Clear',emoji:'🔄',priority:'essential',desc:'Your environment shapes your habits more than your willpower does. Clear\'s chapter on environment design alone is worth the entire book.',pages:320,tags:['Habits','Environment design','Systems']},
+    {id:'en2',title:'Make Time',author:'Jake Knapp & John Zeratsky',emoji:'⏰',priority:'essential',desc:'The authors of Google Ventures Sprint show you how to design your day around what matters. Practical tactics for your workspace, phone, and schedule.',pages:288,tags:['Productivity','Time','Focus']},
+    {id:'en3',title:'Digital Minimalism',author:'Cal Newport',emoji:'📵',priority:'recommended',desc:'How to use technology intentionally instead of compulsively. Reclaim your attention from social media and notifications — a serious competitive advantage for deep work.',pages:304,tags:['Focus','Technology','Habits']},
+    {id:'en4',title:'The Life-Changing Magic of Tidying Up',author:'Marie Kondo',emoji:'🏠',priority:'recommended',desc:'A decluttered physical space reduces cognitive load and improves focus. The KonMari method is extreme but the core insight — own less, think more clearly — is real.',pages:224,tags:['Environment','Clarity','Minimalism']},
+    {id:'en5',title:'Your Brain at Work',author:'David Rock',emoji:'🧠',priority:'recommended',desc:'Neuroscience of performance. When to do deep work, how to manage distractions, and why your brain performs differently at different times of day.',pages:304,tags:['Neuroscience','Productivity','Focus']},
+    {id:'en6',title:'The 4-Hour Workweek',author:'Tim Ferriss',emoji:'🌎',priority:'optional',desc:'Provocative ideas about designing work around your life. The lifestyle design mindset is worth absorbing even if some tactics feel dated.',pages:396,tags:['Lifestyle','Remote work','Automation']},
+  ],
+};
+
+const ALL_BOOKS=Object.values(BOOKS).flat();
+const CATS=Object.keys(BOOKS);
+const CAT_COLORS={studies:'#7c6ef5',body:'#3ecf8e',mind:'#f5c547',social:'#f26060',finances:'#3ecf8e',skills:'#7c6ef5',purpose:'#f5834a',environment:'#f5c547',poker:'#f5834a'};
+const CAT_NAMES={studies:'Studies',body:'Body',mind:'Mind',social:'Social',finances:'Finances',skills:'Skills',purpose:'Purpose',environment:'Environment',poker:'Poker'};
+
+let state={};
+function loadState(){try{state=JSON.parse(localStorage.getItem('book-tracker-v2')||'{}');}catch(e){state={};}}
+function persist(){localStorage.setItem('book-tracker-v2',JSON.stringify(state));}
+function saveState(){persist();updateAll();}
+function getStatus(id){return state['bst_'+id]||'todo';}
+function setStatus(id,val){state['bst_'+id]=val;saveState();}
+function getCurrentPage(id){return state['bpg_'+id]||'';}
+function getTotalPages(id){return state['btp_'+id]||'';}
+function getNote(id){return state['bnote_'+id]||'';}
+// file data stored in IndexedDB — see idb helpers below
+
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+function priorityBadge(p){
+  if(p==='essential')return '<span class="priority-badge p-essential">essential</span>';
+  if(p==='recommended')return '<span class="priority-badge p-recommended">recommended</span>';
+  return '<span class="priority-badge p-optional">optional</span>';
+}
+
+function statusClass(s){
+  if(s==='reading')return 's-reading';
+  if(s==='done')return 's-done';
+  if(s==='next')return 's-next';
+  return '';
+}
+
+function calcPct(cur,tot){
+  const c=parseInt(cur),t=parseInt(tot);
+  if(!c||!t||t===0)return 0;
+  return Math.min(100,Math.round((c/t)*100));
+}
+
+function renderCat(cat,filter){
+  const el=document.getElementById('books-'+cat);
+  let books=BOOKS[cat];
+  if(filter&&filter!=='all') books=books.filter(b=>getStatus(b.id)===filter);
+  if(!books.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1">No books match this filter.</div>';return;}
+  el.innerHTML=books.map(b=>{
+    const st=getStatus(b.id);
+    const curPage=getCurrentPage(b.id);
+    const totPage=getTotalPages(b.id)||b.pages;
+    const pct=calcPct(curPage,totPage);
+    const savedNote=getNote(b.id);
+    const fileName=state['bfile_name_'+b.id]||'';
+    return `<div class="book-card" id="card-${b.id}">
+      <div class="book-card-header">
+        <div class="book-spine cat-${cat}">${b.emoji}</div>
+        <div class="book-meta">
+          <div class="book-title">${b.title}</div>
+          <div class="book-author">${b.author}</div>
+        </div>
+      </div>
+      <div class="book-card-body">
+        <div class="book-desc">${b.desc}</div>
+        <div class="book-tags">${b.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="book-progress">
+        <div class="progress-row">
+          <label>Current page</label>
+          <input class="page-input" type="number" min="0" value="${curPage}" placeholder="0"
+            onchange="savePageProgress('${b.id}',this.value,'pg')" id="cpg-${b.id}">
+          <span class="page-sep">/</span>
+          <input class="total-input" type="number" min="1" value="${totPage}" placeholder="${b.pages}"
+            onchange="savePageProgress('${b.id}',this.value,'tp')" id="tpg-${b.id}">
+          <div class="reading-bar"><div class="reading-bar-fill" id="bar-${b.id}" style="width:${pct}%"></div></div>
+          <span class="reading-pct" id="pct-${b.id}">${pct?pct+'%':''}</span>
+        </div>
+        <div class="notes-row">
+          <input class="inline-note" type="text" id="note-${b.id}" value="${savedNote}" placeholder="Quick note — where you stopped, what to review next...">
+          <button class="save-inline-btn" onclick="saveInlineNote('${b.id}')">Save note</button>
+        </div>
+        ${savedNote?`<div class="saved-note" id="snote-${b.id}">"${savedNote}"</div>`:`<div class="saved-note" id="snote-${b.id}" style="display:none"></div>`}
+      </div>
+      <div class="book-file">
+        <input type="file" class="hidden-input" id="file-input-${b.id}" accept=".pdf,.epub,.mobi,.txt,.djvu,.azw3" onchange="handleFileUpload('${b.id}',this)">
+        <button class="upload-btn" onclick="document.getElementById('file-input-${b.id}').click()">
+          ${fileName?'↑ Replace file':'↑ Upload book file'}
+        </button>
+        <span class="file-name" id="fname-${b.id}">${fileName||'No file uploaded'}</span>
+        <span id="fopen-${b.id}"></span>
+      </div>
+      <div class="book-card-footer">
+        <select class="book-status-select ${statusClass(st)}" onchange="changeStatus('${b.id}',this.value,this)">
+          <option value="todo"${st==='todo'?' selected':''}>Not started</option>
+          <option value="next"${st==='next'?' selected':''}>Up next</option>
+          <option value="reading"${st==='reading'?' selected':''}>Reading now</option>
+          <option value="done"${st==='done'?' selected':''}>Done</option>
+        </select>
+        ${priorityBadge(b.priority)}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCat(cat,filter,btn){
+  document.querySelectorAll('#filter-'+cat+' .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCat(cat,filter);
+}
+
+function changeStatus(id,val,el){
+  el.className='book-status-select '+statusClass(val);
+  setStatus(id,val);
+}
+
+function savePageProgress(id,val,type){
+  if(type==='pg') state['bpg_'+id]=val;
+  else state['btp_'+id]=val;
+  const cur=document.getElementById('cpg-'+id)?.value||'';
+  const tot=document.getElementById('tpg-'+id)?.value||'';
+  const pct=calcPct(cur,tot);
+  const barEl=document.getElementById('bar-'+id);
+  const pctEl=document.getElementById('pct-'+id);
+  if(barEl)barEl.style.width=pct+'%';
+  if(pctEl)pctEl.textContent=pct?pct+'%':'';
+  persist();
+  updateAll();
+}
+
+function saveInlineNote(id){
+  const val=document.getElementById('note-'+id)?.value||'';
+  state['bnote_'+id]=val;
+  persist();
+  const snEl=document.getElementById('snote-'+id);
+  if(snEl){
+    snEl.textContent=val?'"'+val+'"':'';
+    snEl.style.display=val?'block':'none';
+  }
+  const btn=document.querySelector(`#card-${id} .save-inline-btn`);
+  if(btn){const orig=btn.textContent;btn.textContent='Saved ✓';btn.style.color='var(--green)';setTimeout(()=>{btn.textContent=orig;btn.style.color='';},1500);}
+}
+
+function getMime(filename){
+  const ext=(filename||'').split('.').pop().toLowerCase();
+  const map={pdf:'application/pdf',epub:'application/epub+zip',mobi:'application/x-mobipocket-ebook',txt:'text/plain',djvu:'image/vnd.djvu',azw3:'application/vnd.amazon.ebook'};
+  return map[ext]||'application/octet-stream';
+}
+function dataURLtoBlob(dataURL,mimeType){
+  const arr=dataURL.split(',');
+  const bstr=atob(arr[1]);
+  const n=bstr.length;
+  const u8=new Uint8Array(n);
+  for(let i=0;i<n;i++) u8[i]=bstr.charCodeAt(i);
+  return new Blob([u8],{type:mimeType});
+}
+function openBlob(id){
+  const url=(window._blobUrls||{})[id];
+  if(url){ window.open(url,'_blank'); }
+  else { alert('File not loaded yet. Please wait a moment and try again.'); }
+}
+// ── IndexedDB helpers ──────────────────────────────────────────
+const IDB_NAME='book-files',IDB_STORE='files',IDB_VER=1;
+function openIDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(IDB_NAME,IDB_VER);
+    req.onupgradeneeded=e=>e.target.result.createObjectStore(IDB_STORE);
+    req.onsuccess=e=>res(e.target.result);
+    req.onerror=e=>rej(e.target.error);
+  });
+}
+function idbPut(key,value){
+  return openIDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction(IDB_STORE,'readwrite');
+    tx.objectStore(IDB_STORE).put(value,key);
+    tx.oncomplete=()=>res();
+    tx.onerror=e=>rej(e.target.error);
+  }));
+}
+function idbGet(key){
+  return openIDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction(IDB_STORE,'readonly');
+    const req=tx.objectStore(IDB_STORE).get(key);
+    req.onsuccess=e=>res(e.target.result||null);
+    req.onerror=e=>rej(e.target.error);
+  }));
+}
+// ───────────────────────────────────────────────────────────────
+
+function handleFileUpload(id,input){
+  const file=input.files[0];
+  if(!file)return;
+  const upBtn=document.querySelector(`#card-${id} .upload-btn`);
+  if(upBtn){upBtn.textContent='Uploading...';upBtn.style.color='var(--yellow)';}
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    try{
+      await idbPut('name_'+id, file.name);
+      await idbPut('data_'+id, e.target.result);
+      // also keep file name in state for rendering without async
+      state['bfile_name_'+id]=file.name;
+      persist();
+      const fnEl=document.getElementById('fname-'+id);
+      const foEl=document.getElementById('fopen-'+id);
+      if(fnEl)fnEl.textContent=file.name;
+      if(foEl){
+        const mimeType=getMime(file.name);
+        const blob=dataURLtoBlob(e.target.result,mimeType);
+        const blobUrl=URL.createObjectURL(blob);
+        foEl.outerHTML=`<button class="open-btn" id="fopen-${id}" onclick="openBlob('${id}')">Open ↗</button>`;
+        window._blobUrls=window._blobUrls||{};
+        window._blobUrls[id]=blobUrl;
+      }
+      if(upBtn){upBtn.textContent='↑ Replace file';upBtn.style.color='';}
+    }catch(err){
+      console.error('IDB save error',err);
+      if(upBtn){upBtn.textContent='↑ Upload book file';upBtn.style.color='';}
+      alert('Could not save file: '+err.message);
+    }
+  };
+  reader.onerror=function(){
+    if(upBtn){upBtn.textContent='↑ Upload book file';upBtn.style.color='';}
+    alert('Could not read the file. Please try again.');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function restoreFileButton(id){
+  try{
+    const name=state['bfile_name_'+id];
+    if(!name)return;
+    const data=await idbGet('data_'+id);
+    if(!data)return;
+    const fnEl=document.getElementById('fname-'+id);
+    const foEl=document.getElementById('fopen-'+id);
+    const upBtn=document.querySelector(`#card-${id} .upload-btn`);
+    if(fnEl)fnEl.textContent=name;
+    if(foEl){
+      const mimeType=getMime(name);
+      const blob=dataURLtoBlob(data,mimeType);
+      const blobUrl=URL.createObjectURL(blob);
+      foEl.outerHTML=`<button class="open-btn" id="fopen-${id}" onclick="openBlob('${id}')">Open ↗</button>`;
+      window._blobUrls=window._blobUrls||{};
+      window._blobUrls[id]=blobUrl;
+    }
+    if(upBtn)upBtn.textContent='↑ Replace file';
+  }catch(e){console.warn('restoreFileButton',id,e);}
+}
+
+// HIGHLIGHTS
+function populateBookSelect(){
+  const sel=document.getElementById('hl-book');
+  const usable=ALL_BOOKS.filter(b=>getStatus(b.id)==='reading'||getStatus(b.id)==='done');
+  sel.innerHTML='<option value="">Select book...</option>'+usable.map(b=>`<option value="${b.id}">${b.title}</option>`).join('');
+}
+
+function addHighlight(){
+  const bookId=document.getElementById('hl-book').value;
+  const page=document.getElementById('hl-page').value.trim();
+  const text=document.getElementById('hl-text').value.trim();
+  if(!text)return;
+  const book=ALL_BOOKS.find(b=>b.id===bookId);
+  const highlights=state.highlights||[];
+  highlights.unshift({id:Date.now(),bookId,bookTitle:book?book.title:'Unknown',page,text,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});
+  state.highlights=highlights.slice(0,300);
+  document.getElementById('hl-text').value='';
+  document.getElementById('hl-page').value='';
+  saveState();
+  renderHighlights(currentHlFilter);
+  buildHlFilters();
+  populateBookSelect();
+}
+
+function deleteHighlight(id){
+  state.highlights=(state.highlights||[]).filter(h=>h.id!==id);
+  saveState();
+  renderHighlights(currentHlFilter);
+  buildHlFilters();
+}
+
+let currentHlFilter='all';
+function renderHighlights(filter){
+  currentHlFilter=filter;
+  const el=document.getElementById('highlights-list');
+  let hl=state.highlights||[];
+  if(filter!=='all') hl=hl.filter(h=>h.bookId===filter);
+  if(!hl.length){el.innerHTML='<div class="empty-state">No highlights yet. Start saving insights from what you read.</div>';return;}
+  el.innerHTML=hl.map(h=>`<div class="note-card">
+    <div class="note-card-top">
+      <span class="note-book-label">${h.bookTitle}</span>
+      ${h.page?`<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">p.${h.page}</span>`:''}
+      <span class="note-date">${h.date}</span>
+      <button class="del-btn" onclick="deleteHighlight(${h.id})">✕</button>
+    </div>
+    <div class="note-text">${h.text}</div>
+  </div>`).join('');
+}
+
+function buildHlFilters(){
+  const filtersEl=document.getElementById('hl-filters');
+  const bookIds=[...new Set((state.highlights||[]).map(h=>h.bookId))];
+  filtersEl.innerHTML=`<button class="filter-btn${currentHlFilter==='all'?' active':''}" onclick="filterHighlights('all',this)">All</button>`+
+    bookIds.map(id=>{const b=ALL_BOOKS.find(x=>x.id===id);return `<button class="filter-btn${currentHlFilter===id?' active':''}" onclick="filterHighlights('${id}',this)">${b?b.title.split(':')[0]:id}</button>`;}).join('');
+}
+
+function filterHighlights(filter,btn){
+  currentHlFilter=filter;
+  buildHlFilters();
+  renderHighlights(filter);
+}
+
+function saveNotes(){
+  state.notes=document.getElementById('notes-text').value;
+  persist();
+  const ind=document.getElementById('save-ind');
+  ind.classList.add('show');
+  setTimeout(()=>ind.classList.remove('show'),2000);
+}
+
+function updateAll(){
+  const done=ALL_BOOKS.filter(b=>getStatus(b.id)==='done').length;
+  const reading=ALL_BOOKS.filter(b=>getStatus(b.id)==='reading').length;
+  const next=ALL_BOOKS.filter(b=>getStatus(b.id)==='next').length;
+  const highlights=(state.highlights||[]).length;
+  const total=ALL_BOOKS.length;
+  const pct=Math.round((done/total)*100);
+
+  document.getElementById('stat-read').textContent=done;
+  document.getElementById('stat-read-of').textContent='out of '+total;
+  document.getElementById('stat-reading').textContent=reading;
+  document.getElementById('stat-next').textContent=next;
+  document.getElementById('stat-highlights').textContent=highlights;
+  document.getElementById('progress-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=pct+'%';
+
+  CATS.forEach(cat=>{
+    const d=BOOKS[cat].filter(b=>getStatus(b.id)==='done').length;
+    document.getElementById('nc-'+cat).textContent=d+'/'+BOOKS[cat].length;
+  });
+
+  document.getElementById('dashboard-cats').innerHTML=CATS.map(cat=>{
+    const books=BOOKS[cat];
+    const d=books.filter(b=>getStatus(b.id)==='done').length;
+    const p=Math.round((d/books.length)*100);
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px">
+      <span style="font-size:13px;font-weight:500;flex:1">${CAT_NAMES[cat]}</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">${d}/${books.length} read</span>
+      <div style="width:80px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden"><div style="height:100%;background:${CAT_COLORS[cat]};border-radius:2px;width:${p}%"></div></div>
+      <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:${CAT_COLORS[cat]};min-width:32px;text-align:right">${p}%</span>
+    </div>`;
+  }).join('');
+
+  const readingNow=ALL_BOOKS.filter(b=>getStatus(b.id)==='reading');
+  const dashReading=document.getElementById('dashboard-reading');
+  if(!readingNow.length){
+    dashReading.innerHTML='<div class="empty-state">No books marked as "Reading now". Pick one and start!</div>';
+  } else {
+    dashReading.innerHTML=readingNow.map(b=>{
+      const cur=getCurrentPage(b.id);
+      const tot=getTotalPages(b.id)||b.pages;
+      const pct=calcPct(cur,tot);
+      const note=getNote(b.id);
+      return `<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px">
+        <span style="font-size:22px">${b.emoji}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:500">${b.title}</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px">${b.author}${cur?' · page '+cur+' / '+tot:''}</div>
+          ${pct?`<div style="height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;width:100%;max-width:200px"><div style="height:100%;background:var(--accent);border-radius:2px;width:${pct}%"></div></div>`:''}
+          ${note?`<div style="font-size:11px;color:var(--text3);font-style:italic;margin-top:4px">"${note}"</div>`:''}
+        </div>
+        <span style="font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:var(--yellow-soft);color:var(--yellow)">${pct?pct+'%':'reading'}</span>
+      </div>`;
+    }).join('');
+  }
+
+  populateBookSelect();
+  buildHlFilters();
+}
+
+async function init(){
+  loadState();
+  CATS.forEach(cat=>renderCat(cat,'all'));
+  renderHighlights('all');
+  if(state.notes) document.getElementById('notes-text').value=state.notes;
+  updateAll();
+  // restore file buttons from IndexedDB
+  for(const b of ALL_BOOKS){ await restoreFileButton(b.id); }
+}
+init();
+</script>
+</body>
+</html>

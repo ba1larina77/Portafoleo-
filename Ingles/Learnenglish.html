@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Tracker — Engineer Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root{--bg:#0f0f11;--bg2:#17171a;--bg3:#1e1e22;--bg4:#26262c;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8e8ea;--text2:#8a8a92;--text3:#55555f;--accent:#7c6ef5;--accent-soft:rgba(124,110,245,0.12);--accent-border:rgba(124,110,245,0.3);--green:#3ecf8e;--green-soft:rgba(62,207,142,0.1);--yellow:#f5c547;--yellow-soft:rgba(245,197,71,0.1);--red:#f26060;--red-soft:rgba(242,96,96,0.08);--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--radius:10px;--radius-sm:6px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;}
+  ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+  .sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:24px 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+  .sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+  .sidebar-logo .label{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .sidebar-logo .title{font-size:15px;font-weight:600;}
+  .nav-section{padding:0 12px;margin-bottom:6px;}
+  .nav-section-label{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:4px 8px 6px;}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;border:none;background:none;width:100%;text-align:left;}
+  .nav-item:hover{background:var(--bg3);color:var(--text);}
+  .nav-item.active{background:var(--accent-soft);color:var(--accent);font-weight:500;}
+  .nav-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .nav-item .count{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text3);}
+  .sidebar-footer{margin-top:auto;padding:16px 20px 0;border-top:1px solid var(--border);}
+  .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:6px;}
+  .progress-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;}
+  .main{padding:32px 40px;max-width:900px;}
+  .page{display:none;}.page.active{display:block;}
+  .page-header{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+  .page-header h1{font-size:22px;font-weight:600;margin-bottom:4px;}
+  .page-header p{font-size:13px;color:var(--text2);}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+  .stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+  .stat-value{font-family:var(--mono);font-size:22px;font-weight:500;}
+  .stat-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+  .section-title{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;margin-top:24px;}
+  .section-title:first-child{margin-top:0;}
+  .topic-block{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:8px;}
+  .topic-header{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;background:var(--bg2);transition:background .15s;user-select:none;}
+  .topic-header:hover{background:var(--bg3);}
+  .topic-header-left{flex:1;display:flex;align-items:center;gap:10px;}
+  .topic-title{font-size:14px;font-weight:500;color:var(--text);}
+  .topic-title.all-done{color:var(--text3);text-decoration:line-through;}
+  .topic-chevron{font-size:11px;color:var(--text3);transition:transform .2s;flex-shrink:0;}
+  .topic-block.open .topic-chevron{transform:rotate(180deg);}
+  .topic-progress-mini{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .mini-bar{width:60px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;}
+  .mini-bar-fill{height:100%;background:var(--green);border-radius:2px;transition:width .3s;}
+  .mini-pct{font-family:var(--mono);font-size:10px;color:var(--text3);min-width:28px;text-align:right;}
+  .topic-body{display:none;border-top:1px solid var(--border);}
+  .topic-block.open .topic-body{display:block;}
+  .guide-panel{background:var(--bg3);border-bottom:1px solid var(--border);padding:14px 18px 16px;}
+  .guide-panel p{font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:8px;}
+  .guide-panel p:last-of-type{margin-bottom:0;}
+  .guide-label{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
+  .guide-resources{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .guide-resource{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:4px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-border);transition:background .15s;}
+  .subitems{padding:4px 0;}
+  .subitem-row{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 42px;transition:background .12s;}
+  .subitem-row:hover{background:var(--bg3);}
+  .subitem-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:10px;color:transparent;user-select:none;}
+  .subitem-check:hover{border-color:var(--green);}
+  .subitem-check.checked{background:var(--green-soft);border-color:rgba(62,207,142,.35);color:var(--green);}
+  .subitem-name{font-size:13px;color:var(--text);flex:1;}
+  .subitem-name.done{color:var(--text3);text-decoration:line-through;}
+  .subitem-diff{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;flex-shrink:0;}
+  .diff-must{background:var(--red-soft);color:var(--red);}
+  .diff-important{background:var(--yellow-soft);color:var(--yellow);}
+  .diff-bonus{background:var(--accent-soft);color:var(--accent);}
+  .level-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;}
+  .level-a1{background:rgba(62,207,142,.1);color:#3ecf8e;}
+  .level-a2{background:rgba(62,207,142,.15);color:#3ecf8e;}
+  .level-b1{background:rgba(245,197,71,.1);color:#f5c547;}
+  .level-b2{background:rgba(245,197,71,.15);color:#f5c547;}
+  .level-c1{background:rgba(124,110,245,.12);color:#7c6ef5;}
+  .level-c2{background:rgba(124,110,245,.18);color:#7c6ef5;}
+  .legend{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3);}
+  .legend-dot{width:8px;height:8px;border-radius:2px;}
+
+  /* DAILY LOG */
+  .log-form{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;}
+  .log-form-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .log-input,.log-select,.log-textarea{font-family:var(--mono);font-size:12px;padding:7px 10px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text);outline:none;transition:border-color .15s;}
+  .log-input:focus,.log-select:focus,.log-textarea:focus{border-color:var(--accent);}
+  .log-input::placeholder,.log-textarea::placeholder{color:var(--text3);}
+  .log-select{appearance:none;-webkit-appearance:none;cursor:pointer;}
+  .log-textarea{width:100%;min-height:70px;resize:vertical;line-height:1.6;}
+  .log-btn{font-family:var(--mono);font-size:11px;padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .log-btn:hover{background:rgba(124,110,245,.22);}
+  .log-entries{display:flex;flex-direction:column;gap:6px;}
+  .log-entry{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:flex-start;gap:12px;}
+  .log-entry-date{font-family:var(--mono);font-size:10px;color:var(--text3);white-space:nowrap;margin-top:2px;}
+  .log-entry-body{flex:1;}
+  .log-entry-type{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;margin-bottom:4px;display:inline-block;}
+  .type-speaking{background:rgba(62,207,142,.1);color:var(--green);}
+  .type-writing{background:rgba(124,110,245,.12);color:var(--accent);}
+  .type-listening{background:rgba(245,197,71,.1);color:var(--yellow);}
+  .type-reading{background:rgba(242,96,96,.08);color:var(--red);}
+  .log-entry-text{font-size:12px;color:var(--text2);line-height:1.55;}
+  .log-entry-del{font-size:11px;color:var(--text3);cursor:pointer;padding:2px 6px;border-radius:3px;transition:all .15s;border:none;background:none;flex-shrink:0;}
+  .log-entry-del:hover{background:var(--red-soft);color:var(--red);}
+  .empty-state{text-align:center;padding:32px;color:var(--text3);font-size:13px;}
+
+  /* MISTAKES LOG */
+  .mistake-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;}
+  .mistake-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+  .mistake-wrong{font-family:var(--mono);font-size:13px;color:var(--red);text-decoration:line-through;flex:1;}
+  .mistake-right{font-family:var(--mono);font-size:13px;color:var(--green);flex:1;}
+  .mistake-note{font-size:12px;color:var(--text2);margin-top:4px;line-height:1.55;}
+  .mistake-date{font-family:var(--mono);font-size:10px;color:var(--text3);}
+  .arrow{color:var(--text3);font-size:12px;flex-shrink:0;margin-top:1px;}
+
+  /* WEEK GRID */
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:24px;}
+  .day-cell{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 6px;text-align:center;cursor:pointer;transition:all .15s;}
+  .day-cell:hover{border-color:var(--border2);}
+  .day-cell.has-activity{background:var(--accent-soft);border-color:var(--accent-border);}
+  .day-label{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px;}
+  .day-num{font-family:var(--mono);font-size:13px;color:var(--text2);}
+  .day-cell.has-activity .day-num{color:var(--accent);}
+
+  .notes-area{width:100%;min-height:180px;font-family:var(--mono);font-size:12px;padding:14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg2);color:var(--text);resize:vertical;outline:none;line-height:1.7;transition:border-color .15s;}
+  .notes-area:focus{border-color:var(--accent);}
+  .notes-area::placeholder{color:var(--text3);}
+  .save-btn{margin-top:10px;font-family:var(--mono);font-size:11px;padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--accent-border);background:var(--accent-soft);color:var(--accent);cursor:pointer;transition:all .15s;}
+  .save-btn:hover{background:rgba(124,110,245,.22);}
+  .save-indicator{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--green);margin-left:10px;opacity:0;transition:opacity .3s;}
+  .save-indicator.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="label">Engineer Edition</div>
+      <div class="title">English Tracker</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" onclick="showPage('dashboard',this)"><span style="font-size:14px">◈</span> Dashboard</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Skills</div>
+      <button class="nav-item" onclick="showPage('grammar',this)"><span class="dot" style="background:#f26060"></span> Grammar <span class="count" id="nav-count-grammar">0/0</span></button>
+      <button class="nav-item" onclick="showPage('vocabulary',this)"><span class="dot" style="background:#f5c547"></span> Vocabulary <span class="count" id="nav-count-vocab">0/0</span></button>
+      <button class="nav-item" onclick="showPage('speaking',this)"><span class="dot" style="background:#3ecf8e"></span> Speaking <span class="count" id="nav-count-speaking">0/0</span></button>
+      <button class="nav-item" onclick="showPage('writing',this)"><span class="dot" style="background:#7c6ef5"></span> Writing <span class="count" id="nav-count-writing">0/0</span></button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Practice</div>
+      <button class="nav-item" onclick="showPage('dailylog',this)"><span style="font-size:14px">◎</span> Daily log</button>
+      <button class="nav-item" onclick="showPage('mistakes',this)"><span style="font-size:14px">◉</span> Mistakes log</button>
+      <button class="nav-item" onclick="showPage('streak',this)"><span style="font-size:14px">▣</span> Streak calendar</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Extras</div>
+      <button class="nav-item" onclick="showPage('notes',this)"><span style="font-size:14px">▤</span> Notes</button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="progress-label"><span>Overall progress</span><span id="progress-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-header"><h1>Dashboard</h1><p>Your English progress as a systems engineer targeting top companies.</p></div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Topics done</div><div class="stat-value" id="stat-done">0</div><div class="stat-sub" id="stat-done-of">out of 0</div></div>
+        <div class="stat-card"><div class="stat-label">Practice sessions</div><div class="stat-value" id="stat-sessions" style="color:var(--green)">0</div><div class="stat-sub">logged total</div></div>
+        <div class="stat-card"><div class="stat-label">Mistakes fixed</div><div class="stat-value" id="stat-mistakes" style="color:var(--yellow)">0</div><div class="stat-sub">in mistakes log</div></div>
+        <div class="stat-card"><div class="stat-label">Streak</div><div class="stat-value" id="stat-streak" style="color:var(--accent)">0</div><div class="stat-sub">days this month</div></div>
+      </div>
+      <div class="section-title">Skill breakdown</div>
+      <div id="dashboard-skills"></div>
+      <div class="section-title" style="margin-top:24px">Suggested next steps</div>
+      <div id="next-steps" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <!-- GRAMMAR -->
+    <div id="page-grammar" class="page">
+      <div class="page-header"><h1>Grammar</h1><p>The rules that make your English clear and professional. Click any topic to expand the guide.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-grammar"></div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div id="page-vocabulary" class="page">
+      <div class="page-header"><h1>Vocabulary</h1><p>Words and phrases that matter for technical interviews and professional settings.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-vocab"></div>
+    </div>
+
+    <!-- SPEAKING -->
+    <div id="page-speaking" class="page">
+      <div class="page-header"><h1>Speaking</h1><p>The skill that opens doors at international companies. Confidence comes from repetition.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-speaking"></div>
+    </div>
+
+    <!-- WRITING -->
+    <div id="page-writing" class="page">
+      <div class="page-header"><h1>Writing</h1><p>Emails, Slack messages, GitHub PRs, and documentation. Writing is your daily professional voice.</p></div>
+      <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>must know</span><span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>important</span><span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>bonus</span></div>
+      <div id="topic-list-writing"></div>
+    </div>
+
+    <!-- DAILY LOG -->
+    <div id="page-dailylog" class="page">
+      <div class="page-header"><h1>Daily log</h1><p>Record every practice session — speaking, writing, listening, or reading. Consistency beats intensity.</p></div>
+      <div class="log-form">
+        <div class="log-form-row">
+          <select class="log-select" id="log-type" style="flex:1">
+            <option value="speaking">Speaking</option>
+            <option value="writing">Writing</option>
+            <option value="listening">Listening</option>
+            <option value="reading">Reading</option>
+          </select>
+          <input class="log-input" id="log-duration" type="number" min="1" max="300" placeholder="Minutes" style="width:100px">
+          <input class="log-input" id="log-activity" type="text" placeholder="What did you do? (e.g. watched a talk, wrote an email)" style="flex:2">
+        </div>
+        <textarea class="log-textarea" id="log-note" placeholder="Optional notes — what was hard? what did you learn?"></textarea>
+        <div style="margin-top:10px"><button class="log-btn" onclick="addLogEntry()">Add entry</button></div>
+      </div>
+      <div class="section-title">Recent sessions</div>
+      <div id="log-entries-list"></div>
+    </div>
+
+    <!-- MISTAKES LOG -->
+    <div id="page-mistakes" class="page">
+      <div class="page-header"><h1>Mistakes log</h1><p>Every mistake you fix is a permanent improvement. Log them here so you never repeat them.</p></div>
+      <div class="log-form">
+        <div class="log-form-row">
+          <input class="log-input" id="mistake-wrong" type="text" placeholder="What you wrote / said (wrong)" style="flex:1">
+          <span style="color:var(--text3);font-size:16px;align-self:center">→</span>
+          <input class="log-input" id="mistake-right" type="text" placeholder="Correct version" style="flex:1">
+        </div>
+        <input class="log-input" id="mistake-note" type="text" placeholder="Why is it wrong? Rule or explanation" style="width:100%;margin-bottom:0">
+        <div style="margin-top:10px"><button class="log-btn" onclick="addMistake()">Log mistake</button></div>
+      </div>
+      <div class="section-title">Logged mistakes</div>
+      <div id="mistakes-list"></div>
+    </div>
+
+    <!-- STREAK CALENDAR -->
+    <div id="page-streak" class="page">
+      <div class="page-header"><h1>Streak calendar</h1><p>Click a day to mark it as practiced. Aim for at least 20 minutes every day.</p></div>
+      <div class="section-title">Current month — <span id="cal-month"></span></div>
+      <div class="week-grid" id="cal-grid"></div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">Monthly targets</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><div style="font-size:12px;color:var(--text2);margin-bottom:4px;">Days practiced</div><div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--accent)" id="days-practiced">0 / 20</div></div>
+          <div><div style="font-size:12px;color:var(--text2);margin-bottom:4px;">Longest streak</div><div style="font-family:var(--mono);font-size:18px;font-weight:500;color:var(--green)" id="longest-streak">0 days</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div id="page-notes" class="page">
+      <div class="page-header"><h1>Notes</h1><p>Phrases you want to remember, patterns you noticed, anything useful.</p></div>
+      <textarea class="notes-area" id="notes-text" placeholder="Write anything here — useful phrases, grammar rules you keep forgetting, words to review..."></textarea>
+      <div><button class="save-btn" onclick="saveNotes()">Save notes</button><span class="save-indicator" id="save-ind">Saved</span></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const TOPICS = {
+  grammar: [
+    {id:'g1', name:'Verb tenses — the most important ones',
+     level:'b1',
+     guide:['English has 12 tenses but you need about 6 in daily life. The ones that trip up Spanish speakers the most: Present Perfect ("I have studied" vs "I studied") and the difference between Simple Past and Past Continuous.','Present Perfect is used for actions connected to the present — "I have been learning English for 3 months." Simple Past is used for finished actions at a specific time — "I studied last night." Spanish speakers often use Simple Past where English needs Present Perfect.','Focus on: Simple Present, Present Continuous, Simple Past, Present Perfect, Simple Future (will / going to), and Conditional (would). Master these and you cover 95% of real conversations.'],
+     resources:['British Council grammar','Perfect English Grammar site','BBC Learning English'],
+     subitems:[
+       {id:'g1_1',name:'Simple Present vs Present Continuous — habitual vs happening now',diff:'must'},
+       {id:'g1_2',name:'Simple Past — regular and irregular verbs, time markers',diff:'must'},
+       {id:'g1_3',name:'Present Perfect — have + past participle, when to use vs Simple Past',diff:'must'},
+       {id:'g1_4',name:'Simple Future — will vs going to, difference in meaning',diff:'must'},
+       {id:'g1_5',name:'Past Continuous — was/were + -ing, interrupted actions',diff:'important'},
+       {id:'g1_6',name:'Present Perfect Continuous — have been + -ing, ongoing recent actions',diff:'important'},
+       {id:'g1_7',name:'Past Perfect — had + past participle, before another past event',diff:'bonus'},
+     ]},
+    {id:'g2', name:'Articles — a, an, the, and zero article',
+     level:'b1',
+     guide:['Articles are one of the hardest things for Spanish speakers because Spanish does not have the same system. The rules feel arbitrary at first but there is logic behind them.','Use "a/an" for something mentioned for the first time or any member of a group ("I need a laptop"). Use "the" for something specific and already known ("Can you fix the laptop?"). Use no article (zero article) for general statements about all things of a type ("Engineers need patience").','The most common mistake: using "the" before general nouns. "The engineering is interesting" is wrong — "Engineering is interesting" is correct. "The" makes it specific.'],
+     resources:['British Council — articles','English Page — articles','Grammarly blog'],
+     subitems:[
+       {id:'g2_1',name:'a vs an — before vowel sounds, not just vowel letters',diff:'must'},
+       {id:'g2_2',name:'Definite article "the" — specific, already known, unique things',diff:'must'},
+       {id:'g2_3',name:'Zero article — general statements, uncountable nouns, proper nouns',diff:'must'},
+       {id:'g2_4',name:'Articles with jobs and roles — "I am a developer" (not "the developer")',diff:'important'},
+       {id:'g2_5',name:'Articles with places — "the" with rivers, oceans, mountain ranges',diff:'bonus'},
+     ]},
+    {id:'g3', name:'Prepositions — in, on, at, and beyond',
+     level:'b1',
+     guide:['Prepositions are memorized, not fully logical. The good news: the most important ones follow consistent patterns that you can learn quickly.','For time: "at" for specific times (at 3pm), "on" for days and dates (on Monday, on June 5th), "in" for longer periods (in the morning, in 2024). For place: "at" for a specific point (at the office), "on" for a surface (on the table), "in" for inside something (in the building).','The ones that cause the most trouble for engineers: "interested in" (not "interested on"), "good at" (not "good in"), "working on" (not "working in" a task).'],
+     resources:['British Council — prepositions','English Page — prepositions','Prepositions of time and place chart'],
+     subitems:[
+       {id:'g3_1',name:'Prepositions of time — at, on, in with correct contexts',diff:'must'},
+       {id:'g3_2',name:'Prepositions of place — at, on, in with correct contexts',diff:'must'},
+       {id:'g3_3',name:'Fixed preposition phrases — interested in, good at, depends on',diff:'must'},
+       {id:'g3_4',name:'Prepositions after verbs — work on, talk about, apply for',diff:'important'},
+       {id:'g3_5',name:'Prepositions after adjectives — responsible for, familiar with',diff:'important'},
+       {id:'g3_6',name:'Phrasal verbs — look into, set up, break down, figure out',diff:'bonus'},
+     ]},
+    {id:'g4', name:'Conditionals — if sentences',
+     level:'b2',
+     guide:['Conditionals are essential for technical discussions: "If we add a cache, the latency will drop." "If we had used a different algorithm, it would have been faster." These are real sentences engineers say in meetings and interviews.','Zero conditional: general truths ("If you exceed the rate limit, the API returns 429"). First conditional: real future possibilities ("If we deploy this, the server will restart"). Second conditional: hypotheticals ("If I were the lead, I would refactor this").','The most common mistake: "If I would have..." — this is always wrong in English. The correct form is "If I had..." (third conditional).'],
+     resources:['British Council — conditionals','Perfect English Grammar — conditionals','English Page'],
+     subitems:[
+       {id:'g4_1',name:'Zero conditional — general truths and facts (if + present, present)',diff:'must'},
+       {id:'g4_2',name:'First conditional — real future possibilities (if + present, will)',diff:'must'},
+       {id:'g4_3',name:'Second conditional — hypotheticals (if + past, would)',diff:'must'},
+       {id:'g4_4',name:'Third conditional — past hypotheticals (if + had + pp, would have)',diff:'important'},
+       {id:'g4_5',name:'Mixed conditionals — combining second and third',diff:'bonus'},
+     ]},
+    {id:'g5', name:'Modal verbs — can, could, should, must, might',
+     level:'b1',
+     guide:['Modals are the most used verbs in professional English. They let you express possibility, ability, obligation, and suggestion — all things you need constantly in interviews and work.','The key distinctions: "can" (ability/possibility now), "could" (ability/possibility in past or politely), "should" (advice/recommendation), "must" (strong obligation), "might/may" (weak possibility). "I might deploy this tomorrow" sounds professional. "I will maybe deploy this tomorrow" sounds awkward.','For interviews: "I could implement this using Redis" sounds more professional than "I can do it." "We should consider the trade-offs" is better than "We need to think about trade-offs."'],
+     resources:['British Council — modal verbs','English Page — modals','BBC Learning English modals'],
+     subitems:[
+       {id:'g5_1',name:'Can vs could — ability, permission, polite requests',diff:'must'},
+       {id:'g5_2',name:'Should vs must vs have to — advice vs strong obligation',diff:'must'},
+       {id:'g5_3',name:'Might vs may vs will — degrees of certainty',diff:'must'},
+       {id:'g5_4',name:'Would — hypotheticals, polite offers, past habits',diff:'important'},
+       {id:'g5_5',name:'Modal perfects — should have, could have, might have',diff:'bonus'},
+     ]},
+  ],
+  vocab: [
+    {id:'v1', name:'Technical interview vocabulary',
+     level:'b2',
+     guide:['In a technical interview you need to explain your thinking clearly while using accurate technical language. Vague answers lose points — specific vocabulary shows mastery.','Key verbs: implement, refactor, optimize, deploy, scale, debug, architect, abstract, expose (an API), consume (an API). Key adjectives: scalable, maintainable, fault-tolerant, idempotent, asynchronous, stateless, distributed.','Transition phrases matter too: "The trade-off here is...", "One approach would be...", "The bottleneck in this design is...", "I would consider using X because..."'],
+     resources:['Glassdoor interview questions','YouTube mock interviews','LeetCode discuss section'],
+     subitems:[
+       {id:'v1_1',name:'Action verbs — implement, refactor, optimize, deploy, architect',diff:'must'},
+       {id:'v1_2',name:'System adjectives — scalable, fault-tolerant, idempotent, stateless',diff:'must'},
+       {id:'v1_3',name:'Trade-off phrases — "the downside of this is", "the trade-off here is"',diff:'must'},
+       {id:'v1_4',name:'Uncertainty phrases — "I would need to verify", "I am not 100% sure but"',diff:'must'},
+       {id:'v1_5',name:'Clarification phrases — "Could you clarify what you mean by...?", "Do you mean...?"',diff:'important'},
+       {id:'v1_6',name:'Time phrases — "given more time I would...", "in a production setting..."',diff:'important'},
+     ]},
+    {id:'v2', name:'Professional workplace vocabulary',
+     level:'b1',
+     guide:['Day-to-day work communication in English requires a specific register — more formal than chat with friends, less stiff than formal letters. Tech companies use Slack, email, GitHub comments, and Zoom — all in English at international companies.','The most important skill: knowing when to be direct vs when to be diplomatic. English professional culture (especially in the US and UK) values directness more than Spanish-speaking cultures, but still uses softeners like "I think", "it might be worth", "could we consider".','Common phrases for meetings: "I wanted to follow up on...", "Just to clarify...", "That makes sense", "I see your point, but...", "Let me think about that and come back to you."'],
+     resources:['Business English Pod podcast','Coursera Business English','English for Emails (British Council)'],
+     subitems:[
+       {id:'v2_1',name:'Meeting phrases — agree, disagree, clarify, defer politely',diff:'must'},
+       {id:'v2_2',name:'Email phrases — subject lines, opening, closing, follow-up',diff:'must'},
+       {id:'v2_3',name:'Feedback phrases — giving and receiving constructive feedback',diff:'must'},
+       {id:'v2_4',name:'Status update phrases — "blocked on", "waiting for", "in review"',diff:'important'},
+       {id:'v2_5',name:'Hedging language — "it might be worth", "I think", "possibly"',diff:'important'},
+       {id:'v2_6',name:'Idioms — "get the ball rolling", "on the same page", "touch base"',diff:'bonus'},
+     ]},
+    {id:'v3', name:'Common Spanish-speaker mistakes',
+     level:'b1',
+     guide:['Some English errors are specifically common for Spanish speakers. Knowing these in advance lets you avoid them before they become habits.','False friends: "actually" means "in reality" (not "currently" — that is "currently"). "Eventually" means "at some point in the future" (not "possibly"). "Sensible" means "having good judgment" (not "sensitive"). These get engineers every time.','Direct translations that do not work: "make a question" should be "ask a question". "I am agree" should be "I agree". "Is that it has a bug" should be "It has a bug." Capital I — always uppercase in English, unlike Spanish.'],
+     resources:['Spanish false friends list','Common ESL errors','English with Lucy — Spanish speakers'],
+     subitems:[
+       {id:'v3_1',name:'False friends — actually, eventually, sensible, embarrassed, library',diff:'must'},
+       {id:'v3_2',name:'Always capitalize "I" — never lowercase in any context',diff:'must'},
+       {id:'v3_3',name:'"Ask a question" not "make a question" — common verb errors',diff:'must'},
+       {id:'v3_4',name:'"I agree" not "I am agree" — no "to be" before agree/disagree',diff:'must'},
+       {id:'v3_5',name:'"I am X years old" not "I have X years" — ser vs tener trap',diff:'must'},
+       {id:'v3_6',name:'Make vs do — make a decision, do homework, do a task',diff:'important'},
+       {id:'v3_7',name:'Say vs tell vs speak vs talk — each has different usage rules',diff:'important'},
+     ]},
+    {id:'v4', name:'Numbers, dates, and quantities',
+     level:'b1',
+     guide:['Technical discussions involve a lot of numbers — latency in milliseconds, request counts, percentages, dates. Getting these right matters in interviews and in written communication.','Dates: American format is Month/Day/Year ("June 5th, 2025"). British format is Day/Month/Year ("5th June 2025"). In speech, always say "the fifth of June" or "June fifth". Never say "June five."','Large numbers: 1,000 = one thousand, 1,000,000 = one million, 1,000,000,000 = one billion. Note: in Spanish "billón" = one trillion in English, not one billion. This is a very common source of confusion.'],
+     resources:['British Council — numbers','English numbers and dates practice','Merriam-Webster'],
+     subitems:[
+       {id:'v4_1',name:'Ordinal numbers — first, second, third, fourth... in speech and writing',diff:'must'},
+       {id:'v4_2',name:'Large numbers — thousand, million, billion (different from Spanish billón)',diff:'must'},
+       {id:'v4_3',name:'Percentages and fractions — "fifty percent", "two thirds"',diff:'must'},
+       {id:'v4_4',name:'Date formats — US vs UK, how to say dates in speech',diff:'important'},
+       {id:'v4_5',name:'Approximate quantities — roughly, approximately, around, about, nearly',diff:'important'},
+     ]},
+  ],
+  speaking: [
+    {id:'s1', name:'Pronunciation fundamentals',
+     level:'b1',
+     guide:['You do not need a perfect accent — you need to be clearly understood. The goal is not to sound American or British, it is to avoid the specific pronunciation habits that cause misunderstandings.','The most important thing for Spanish speakers: English words have stressed syllables and the stress changes the meaning. "REcord" (noun) vs "reCORD" (verb). "PREsent" vs "preSENT." Getting stress right is more important than perfecting individual sounds.','Sounds that do not exist in Spanish: the "th" sound (think, this), the short "i" (ship vs sheep), and the difference between "v" and "b". These are worth specific practice because they cause frequent misunderstandings.'],
+     resources:['Rachel\'s English (YouTube)','Forvo pronunciation dictionary','English pronunciation with Jon (YouTube)'],
+     subitems:[
+       {id:'s1_1',name:'Word stress — which syllable to emphasize (changes meaning)',diff:'must'},
+       {id:'s1_2',name:'"th" sounds — voiced (this, that) and unvoiced (think, three)',diff:'must'},
+       {id:'s1_3',name:'Short vs long vowels — ship/sheep, bit/beat, pull/pool',diff:'must'},
+       {id:'s1_4',name:'Sentence stress — which words to emphasize in a sentence',diff:'important'},
+       {id:'s1_5',name:'Linking words — how native speakers connect sounds (gonna, wanna)',diff:'important'},
+       {id:'s1_6',name:'Intonation — rising for questions, falling for statements',diff:'bonus'},
+     ]},
+    {id:'s2', name:'Technical interview speaking skills',
+     level:'b2',
+     guide:['A technical interview in English is two things at once: demonstrating engineering knowledge AND communicating clearly in a second language. The good news is that interviewers at most companies are used to non-native speakers — clarity matters more than perfection.','The most important speaking habit to build: think out loud. Do not go silent for 2 minutes. Say "Let me think about this..." or "I\'m considering a couple of approaches here..." Silence reads as not knowing the answer; thinking out loud reads as a thoughtful engineer.','Sentence starters that help: "The way I would approach this is...", "One concern I have is...", "Let me walk you through my reasoning...", "Does that make sense?"'],
+     resources:['Exponent mock interviews','YouTube Google/Amazon interview walkthroughs','Pramp.com — free mock interviews'],
+     subitems:[
+       {id:'s2_1',name:'Thinking out loud — phrases to fill while you think',diff:'must'},
+       {id:'s2_2',name:'Explaining trade-offs — structure your answer clearly',diff:'must'},
+       {id:'s2_3',name:'Asking clarifying questions — before answering, not after',diff:'must'},
+       {id:'s2_4',name:'Signposting — "first... then... finally..." to structure answers',diff:'important'},
+       {id:'s2_5',name:'Hedging — "I believe", "I would probably", "one option might be"',diff:'important'},
+       {id:'s2_6',name:'Recovering from mistakes — "what I meant to say was...", "let me rephrase"',diff:'bonus'},
+     ]},
+    {id:'s3', name:'Everyday conversation skills',
+     level:'b1',
+     guide:['Technical English is not enough. At international companies you will have small talk with colleagues, participate in team standups, and have casual Zoom conversations. This requires a different register.','Small talk topics that are safe everywhere: weekend plans, recent news (non-political), sports, travel, food, films. Avoid: politics, religion, salary, personal relationships. In the US specifically, "How are you?" is a greeting, not a real question — "Good, thanks. You?" is the expected answer.','The most underrated speaking skill: active listening. Nodding, saying "right", "exactly", "I see", "that makes sense" — these show engagement and make conversations flow naturally.'],
+     resources:['6 Minute English (BBC podcast)','TED Talks (watch with English subtitles)','Tandem language exchange app'],
+     subitems:[
+       {id:'s3_1',name:'Small talk — starting, maintaining, and ending conversations',diff:'must'},
+       {id:'s3_2',name:'Active listening phrases — "right", "exactly", "I see", "that makes sense"',diff:'must'},
+       {id:'s3_3',name:'Standup meeting format — "yesterday I..., today I..., blocked on..."',diff:'must'},
+       {id:'s3_4',name:'Expressing opinions — "I think", "in my opinion", "I feel like"',diff:'important'},
+       {id:'s3_5',name:'Agreeing and disagreeing politely — professional register',diff:'important'},
+       {id:'s3_6',name:'Telling stories — past tenses, connectors, natural flow',diff:'bonus'},
+     ]},
+  ],
+  writing: [
+    {id:'w1', name:'Professional email writing',
+     level:'b1',
+     guide:['Email is still the main formal communication channel at tech companies. A well-written email is direct, structured, and easy to scan. A poorly written one is ignored or misunderstood.','Structure: subject line (specific, not vague), greeting (Hi [name], or Hello [name],), one sentence of context if needed, the actual point, call to action (what do you need from them?), closing (Thanks, Best, Kind regards).','Common mistakes: too long, buried main point, no clear ask, too formal ("Dear Sir/Madam" — never use this in tech), or too casual (emojis in professional emails to people you do not know well).'],
+     resources:['Business English Pod — email writing','Grammarly email tips','Coursera Business Writing'],
+     subitems:[
+       {id:'w1_1',name:'Subject lines — specific and action-oriented, not vague',diff:'must'},
+       {id:'w1_2',name:'Opening lines — Hi/Hello, not "Dear", not "To whom it may concern"',diff:'must'},
+       {id:'w1_3',name:'Clear ask — state what you need in the first two sentences',diff:'must'},
+       {id:'w1_4',name:'Closing phrases — Thanks / Best / Kind regards + your name',diff:'must'},
+       {id:'w1_5',name:'Following up — polite follow-up email after no response',diff:'important'},
+       {id:'w1_6',name:'Declining politely — how to say no professionally',diff:'important'},
+       {id:'w1_7',name:'Email tone calibration — formal vs semi-formal vs casual',diff:'bonus'},
+     ]},
+    {id:'w2', name:'Technical writing — docs, PRs, comments',
+     level:'b2',
+     guide:['Technical writing is how engineers communicate their work to teammates, future maintainers, and the world. A great PR description, a clear README, and good code comments are professional differentiators.','For PR descriptions: what does this change do? Why was it needed? How was it tested? Any trade-offs or known issues? This structure takes 5 minutes but saves hours of back-and-forth.','README files are your portfolio\'s first impression. A README with clear installation instructions, what the project does, and why you built it shows professionalism. Most student projects have terrible or missing READMEs — yours should not.'],
+     resources:['Google developer documentation guide','Write the Docs community','GitHub docs style guide'],
+     subitems:[
+       {id:'w2_1',name:'PR descriptions — what, why, how tested, trade-offs',diff:'must'},
+       {id:'w2_2',name:'README files — setup, what it does, why you built it',diff:'must'},
+       {id:'w2_3',name:'Code comments — when to comment and what to say',diff:'must'},
+       {id:'w2_4',name:'Commit messages — imperative mood, specific and concise',diff:'must'},
+       {id:'w2_5',name:'Technical blog posts — structure, audience awareness, clarity',diff:'important'},
+       {id:'w2_6',name:'API documentation — describing endpoints, parameters, examples',diff:'bonus'},
+     ]},
+    {id:'w3', name:'Punctuation and sentence structure',
+     level:'b1',
+     guide:['Clear sentence structure is the difference between writing that is easy to read and writing that requires effort. Most problems come from sentences that are too long, or comma usage that follows Spanish habits instead of English ones.','The Oxford comma: in a list of three or more items, add a comma before "and" — "I know Python, Go, and Rust." This avoids ambiguity. Apostrophes: "it\'s" = "it is" (contraction), "its" = belonging to it (possessive, no apostrophe — the opposite of every other possessive in English).','English does not use an inverted question mark (¿) or exclamation mark (¡). Sentences start with a capital letter and end with a period, question mark, or exclamation mark. One space after a period, not two.'],
+     resources:['Purdue OWL writing guide','Grammarly punctuation guide','The Elements of Style (Strunk and White)'],
+     subitems:[
+       {id:'w3_1',name:'Apostrophes — it\'s vs its, you\'re vs your, they\'re vs their',diff:'must'},
+       {id:'w3_2',name:'Commas — when to use and when not to (comma splices)',diff:'must'},
+       {id:'w3_3',name:'Capitalization — I, proper nouns, start of sentences',diff:'must'},
+       {id:'w3_4',name:'Sentence length — avoiding run-on sentences',diff:'important'},
+       {id:'w3_5',name:'Oxford comma — consistency in lists',diff:'important'},
+       {id:'w3_6',name:'Semicolons and colons — how to use them correctly',diff:'bonus'},
+     ]},
+  ],
+};
+
+const ALL_TOPICS = [
+  ...TOPICS.grammar,
+  ...TOPICS.vocab,
+  ...TOPICS.speaking,
+  ...TOPICS.writing,
+];
+const ALL_SUBS = ALL_TOPICS.flatMap(t=>t.subitems);
+const TOTAL_SUBS = ALL_SUBS.length;
+
+let state = {};
+function loadState(){try{state=JSON.parse(localStorage.getItem('english-tracker-v1')||'{}');}catch(e){state={};}}
+function persist(){localStorage.setItem('english-tracker-v1',JSON.stringify(state));}
+function saveState(){persist();updateAll();}
+function getSub(id){return state['sub_'+id]||false;}
+
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+function toggleTopic(id){document.getElementById('block-'+id).classList.toggle('open');}
+
+function toggleSub(id){
+  const v=!getSub(id);
+  state['sub_'+id]=v;
+  persist();
+  const chk=document.getElementById('chk-'+id);
+  const nm=document.getElementById('snm-'+id);
+  if(chk){chk.className='subitem-check'+(v?' checked':'');chk.textContent=v?'✓':'';}
+  if(nm){nm.className='subitem-name'+(v?' done':'');}
+  refreshTopicBar(id);
+  updateAll();
+}
+
+function refreshTopicBar(subId){
+  const topic=ALL_TOPICS.find(t=>t.subitems.some(s=>s.id===subId));
+  if(!topic)return;
+  const done=topic.subitems.filter(s=>getSub(s.id)).length;
+  const total=topic.subitems.length;
+  const pct=Math.round((done/total)*100);
+  const f=document.getElementById('mf-'+topic.id);
+  const p=document.getElementById('mp-'+topic.id);
+  const tt=document.getElementById('tt-'+topic.id);
+  const ct=document.getElementById('mc-'+topic.id);
+  if(f)f.style.width=pct+'%';
+  if(p)p.textContent=pct+'%';
+  if(tt)tt.className='topic-title'+(done===total?' all-done':'');
+  if(ct)ct.textContent=done+'/'+total;
+}
+
+function diffBadge(d){
+  if(d==='must')return '<span class="subitem-diff diff-must">must know</span>';
+  if(d==='important')return '<span class="subitem-diff diff-important">important</span>';
+  return '<span class="subitem-diff diff-bonus">bonus</span>';
+}
+
+function levelBadge(l){
+  return `<span class="level-badge level-${l}">${l.toUpperCase()}</span>`;
+}
+
+function renderSection(key, containerId){
+  const el=document.getElementById(containerId);
+  el.innerHTML=TOPICS[key].map(t=>{
+    const done=t.subitems.filter(s=>getSub(s.id)).length;
+    const total=t.subitems.length;
+    const pct=Math.round((done/total)*100);
+    const allDone=done===total;
+    const guideParagraphs=t.guide.map(g=>`<p>${g}</p>`).join('');
+    const resourcesHtml=t.resources.map(r=>`<span class="guide-resource">${r}</span>`).join('');
+    const subsHtml=t.subitems.map(s=>{
+      const checked=getSub(s.id);
+      return `<div class="subitem-row">
+        <div class="subitem-check${checked?' checked':''}" id="chk-${s.id}" onclick="toggleSub('${s.id}')">${checked?'✓':''}</div>
+        <span class="subitem-name${checked?' done':''}" id="snm-${s.id}">${s.name}</span>
+        ${diffBadge(s.diff)}
+      </div>`;
+    }).join('');
+    return `<div class="topic-block" id="block-${t.id}">
+      <div class="topic-header" onclick="toggleTopic('${t.id}')">
+        <div class="topic-header-left">
+          ${levelBadge(t.level)}
+          <span class="topic-title${allDone?' all-done':''}" id="tt-${t.id}">${t.name}</span>
+        </div>
+        <div class="topic-progress-mini">
+          <span class="mini-pct" id="mp-${t.id}">${pct}%</span>
+          <div class="mini-bar"><div class="mini-bar-fill" id="mf-${t.id}" style="width:${pct}%"></div></div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text3)" id="mc-${t.id}">${done}/${total}</span>
+        </div>
+        <span class="topic-chevron">▼</span>
+      </div>
+      <div class="topic-body">
+        <div class="guide-panel">
+          <div class="guide-label">Guide</div>
+          ${guideParagraphs}
+          <div class="guide-resources">${resourcesHtml}</div>
+        </div>
+        <div class="subitems">${subsHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// DAILY LOG
+function addLogEntry(){
+  const type=document.getElementById('log-type').value;
+  const duration=parseInt(document.getElementById('log-duration').value)||0;
+  const activity=document.getElementById('log-activity').value.trim();
+  const note=document.getElementById('log-note').value.trim();
+  if(!activity)return;
+  const entries=state.log_entries||[];
+  entries.unshift({id:Date.now(),type,duration,activity,note,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});
+  state.log_entries=entries.slice(0,50);
+  document.getElementById('log-activity').value='';
+  document.getElementById('log-note').value='';
+  document.getElementById('log-duration').value='';
+  saveState();
+  renderLogEntries();
+}
+
+function deleteLogEntry(id){
+  state.log_entries=(state.log_entries||[]).filter(e=>e.id!==id);
+  saveState();
+  renderLogEntries();
+}
+
+function renderLogEntries(){
+  const el=document.getElementById('log-entries-list');
+  const entries=state.log_entries||[];
+  if(!entries.length){el.innerHTML='<div class="empty-state">No sessions logged yet. Add your first one above.</div>';return;}
+  el.innerHTML=entries.map(e=>`<div class="log-entry">
+    <div class="log-entry-date">${e.date}${e.duration?' · '+e.duration+'min':''}</div>
+    <div class="log-entry-body">
+      <span class="log-entry-type type-${e.type}">${e.type}</span>
+      <div class="log-entry-text">${e.activity}${e.note?' — '+e.note:''}</div>
+    </div>
+    <button class="log-entry-del" onclick="deleteLogEntry(${e.id})">✕</button>
+  </div>`).join('');
+}
+
+// MISTAKES LOG
+function addMistake(){
+  const wrong=document.getElementById('mistake-wrong').value.trim();
+  const right=document.getElementById('mistake-right').value.trim();
+  const note=document.getElementById('mistake-note').value.trim();
+  if(!wrong||!right)return;
+  const mistakes=state.mistakes||[];
+  mistakes.unshift({id:Date.now(),wrong,right,note,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});
+  state.mistakes=mistakes.slice(0,100);
+  document.getElementById('mistake-wrong').value='';
+  document.getElementById('mistake-right').value='';
+  document.getElementById('mistake-note').value='';
+  saveState();
+  renderMistakes();
+}
+
+function deleteMistake(id){
+  state.mistakes=(state.mistakes||[]).filter(m=>m.id!==id);
+  saveState();
+  renderMistakes();
+}
+
+function renderMistakes(){
+  const el=document.getElementById('mistakes-list');
+  const mistakes=state.mistakes||[];
+  if(!mistakes.length){el.innerHTML='<div class="empty-state">No mistakes logged yet. The more you log, the faster you improve.</div>';return;}
+  el.innerHTML=mistakes.map(m=>`<div class="mistake-card">
+    <div class="mistake-top">
+      <span class="mistake-wrong">${m.wrong}</span>
+      <span class="arrow">→</span>
+      <span class="mistake-right">${m.right}</span>
+      <button class="log-entry-del" onclick="deleteMistake(${m.id})">✕</button>
+    </div>
+    ${m.note?`<div class="mistake-note">${m.note}</div>`:''}
+    <div class="mistake-date">${m.date}</div>
+  </div>`).join('');
+}
+
+// CALENDAR
+function renderCalendar(){
+  const now=new Date(),months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const y=now.getFullYear(),m=now.getMonth();
+  document.getElementById('cal-month').textContent=months[m]+' '+y;
+  const dim=new Date(y,m+1,0).getDate();
+  let html='',count=0;
+  for(let i=1;i<=Math.min(dim,31);i++){
+    const key='eng-cal-'+y+'-'+m+'-'+i;
+    const active=state[key]||false;
+    if(active)count++;
+    const dow=days[(new Date(y,m,i).getDay()+6)%7];
+    html+=`<div class="day-cell${active?' has-activity':''}" onclick="toggleDay('${key}',this)"><div class="day-label">${dow}</div><div class="day-num">${i}</div></div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+  document.getElementById('days-practiced').textContent=count+' / 20';
+  document.getElementById('stat-streak').textContent=count;
+  calcLongestStreak(y,m);
+}
+
+function calcLongestStreak(y,m){
+  const dim=new Date(y,m+1,0).getDate();
+  let longest=0,current=0;
+  for(let i=1;i<=dim;i++){
+    if(state['eng-cal-'+y+'-'+m+'-'+i]){current++;longest=Math.max(longest,current);}
+    else{current=0;}
+  }
+  document.getElementById('longest-streak').textContent=longest+' days';
+}
+
+function toggleDay(key,el){
+  state[key]=!(state[key]||false);
+  el.classList.toggle('has-activity');
+  persist();
+  const now=new Date();
+  calcLongestStreak(now.getFullYear(),now.getMonth());
+  const count=Object.keys(state).filter(k=>k.startsWith('eng-cal-'+now.getFullYear()+'-'+now.getMonth())&&state[k]).length;
+  document.getElementById('days-practiced').textContent=count+' / 20';
+  document.getElementById('stat-streak').textContent=count;
+}
+
+function saveNotes(){
+  state.notes=document.getElementById('notes-text').value;
+  persist();
+  const ind=document.getElementById('save-ind');
+  ind.classList.add('show');
+  setTimeout(()=>ind.classList.remove('show'),2000);
+}
+
+function updateAll(){
+  const doneSubs=ALL_SUBS.filter(s=>getSub(s.id)).length;
+  const pct=Math.round((doneSubs/TOTAL_SUBS)*100);
+  const sessions=(state.log_entries||[]).length;
+  const mistakes=(state.mistakes||[]).length;
+  const now=new Date();
+  const streak=Object.keys(state).filter(k=>k.startsWith('eng-cal-'+now.getFullYear()+'-'+now.getMonth())&&state[k]).length;
+
+  document.getElementById('stat-done').textContent=doneSubs;
+  document.getElementById('stat-done-of').textContent='out of '+TOTAL_SUBS;
+  document.getElementById('stat-sessions').textContent=sessions;
+  document.getElementById('stat-mistakes').textContent=mistakes;
+  document.getElementById('stat-streak').textContent=streak;
+  document.getElementById('progress-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=pct+'%';
+
+  const skillKeys=['grammar','vocab','speaking','writing'];
+  const skillNames=['Grammar','Vocabulary','Speaking','Writing'];
+  const skillColors=['#f26060','#f5c547','#3ecf8e','#7c6ef5'];
+
+  skillKeys.forEach((k,i)=>{
+    const subs=TOPICS[k].flatMap(t=>t.subitems);
+    const done=subs.filter(s=>getSub(s.id)).length;
+    document.getElementById('nav-count-'+k).textContent=done+'/'+subs.length;
+  });
+
+  document.getElementById('dashboard-skills').innerHTML=skillKeys.map((k,i)=>{
+    const subs=TOPICS[k].flatMap(t=>t.subitems);
+    const done=subs.filter(s=>getSub(s.id)).length;
+    const p=Math.round((done/subs.length)*100);
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px">
+      <span style="font-size:13px;font-weight:500;flex:1">${skillNames[i]}</span>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">${done}/${subs.length}</span>
+      <div style="width:80px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden"><div style="height:100%;background:${skillColors[i]};border-radius:2px;width:${p}%"></div></div>
+      <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:${skillColors[i]};min-width:32px;text-align:right">${p}%</span>
+    </div>`;
+  }).join('');
+
+  const sugg=[];
+  const inProg=ALL_TOPICS.find(t=>{const d=t.subitems.filter(s=>getSub(s.id)).length;return d>0&&d<t.subitems.length;});
+  if(inProg){const rem=inProg.subitems.filter(s=>!getSub(s.id)).length;sugg.push({c:'#f5c547',t:'Continue: '+inProg.name+' — '+rem+' items left'});}
+  const notStarted=ALL_TOPICS.find(t=>t.subitems.every(s=>!getSub(s.id)));
+  if(notStarted)sugg.push({c:'var(--text3)',t:'Start next: '+notStarted.name});
+  if(sessions===0)sugg.push({c:'#3ecf8e',t:'Log your first practice session in the Daily log'});
+  if(streak<5)sugg.push({c:'#7c6ef5',t:'Mark today as practiced in the Streak calendar'});
+  document.getElementById('next-steps').innerHTML=sugg.map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm)"><span style="width:6px;height:6px;border-radius:50%;background:${s.c};flex-shrink:0"></span><span style="font-size:13px;color:var(--text2)">${s.t}</span></div>`).join('');
+}
+
+function init(){
+  loadState();
+  renderSection('grammar','topic-list-grammar');
+  renderSection('vocab','topic-list-vocab');
+  renderSection('speaking','topic-list-speaking');
+  renderSection('writing','topic-list-writing');
+  renderCalendar();
+  renderLogEntries();
+  renderMistakes();
+  if(state.notes) document.getElementById('notes-text').value=state.notes;
+  updateAll();
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+@startuml Diagrama Biblioteca
+entity book{
+    + ISBN varchar(13) : **PK**
+    --
+    + tittle varchar(255)
+    + author varchar(255)
+    + genre varchar(100)
+    + price decimal(10,2)
+    + stock int
+    + publication_year int 
+}
+
+entity account{
+    + account_id int : **PK**
+    --
+    + username varchar(50)
+    + email varchar(255)
+    - password_hash varchar(255)
+    + full_name varchar(255)
+}
+
+entity author{
+    + author_id int : **PK**
+    --
+    + name varchar(255)
+    + biography text
+    + birth_date date
+}
+
+entity book_author{
+    + book_id int : **PK**
+    + author_id int : **PK**
+}
+
+entity librarian {
+    + id_staff int : **PK**
+    --
+    + name varchar(255)
+    + email varchar(255)
+    + phone varchar(20)
+    + hire_date date
+    + position varchar(100)  
+}
+
+entity loan{
+    + loan_id int : **PK**
+    --
+    + book_id int
+    + account_id int
+    + librarian_id int
+    + loan_date date
+    + due_date date
+    + return_date date
+}
+
+entity fine{
+    + fine_id int : **PK**
+    --
+    + loan_id int
+    + fine_amount decimal(10,2)
+    + fine_date date
+    + paid_date date
+}
+
+entity category{
+    + category_id int : **PK**
+    --
+    + name varchar(100)
+    + description text
+}
+
+book -- author : many to many
+book -- category : many to many
+account - loan : one to many
+loan - fine : one to many
+librarian - loan : one to many
+
+
+
+@enduml
