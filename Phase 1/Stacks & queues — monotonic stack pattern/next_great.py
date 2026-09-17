@@ -13,3 +13,4 @@ if __name__ == "__main__":
     nums = [2,1,5,3,4]  
     result = next_greater(nums)  
     print(result)
+# 

@@ -1,6 +1,16 @@
-   Proyecto-laboratorio-de-ingenieria-de-software-feature-modulo-financiero-hu4-hu5-hu6/
-   portafoleo2/
-   c/
-   phase 1/
-   PosgrestSQL/
-   7 proyectos/
+# Dependencies (each project's own node_modules)
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+
+# Compiled binaries (c/ exercises)
+*.exe
+*.obj
+*.o
+
+# OS / editor junk
+.DS_Store
+Thumbs.db

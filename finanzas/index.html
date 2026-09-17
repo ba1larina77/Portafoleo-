@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finanzas Personales</title>
+<style>
+/* ============================================================
+   VARIABLES DE DISEÑO
+   ============================================================ */
+:root{
+  --bg:#f1f5f9;
+  --card:#ffffff;
+  --text:#0f172a;
+  --text-suave:#64748b;
+  --borde:#e2e8f0;
+  --accent:#2563eb;
+  --verde:#16a34a;
+  --verde-bg:#dcfce7;
+  --rojo:#dc2626;
+  --rojo-bg:#fee2e2;
+  --amarillo:#d97706;
+  --amarillo-bg:#fef3c7;
+  --sombra:0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --radio:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#f1f5f9;
+    --text-suave:#94a3b8;
+    --borde:#334155;
+    --accent:#3b82f6;
+    --verde:#22c55e;
+    --verde-bg:#14532d;
+    --rojo:#ef4444;
+    --rojo-bg:#7f1d1d;
+    --amarillo:#f59e0b;
+    --amarillo-bg:#78350f;
+    --sombra:0 1px 3px rgba(0,0,0,.4);
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.contenedor{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem}
+h2{font-size:1.1rem;margin-bottom:12px}
+h3{font-size:.95rem;margin-bottom:8px;color:var(--text-suave);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+a{color:var(--accent)}
+small{color:var(--text-suave)}
+
+/* ============================================================
+   ENCABEZADO + NAVEGACIÓN POR PESTAÑAS
+   ============================================================ */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;margin-bottom:16px;
+}
+header .marca{display:flex;align-items:center;gap:10px;font-weight:700}
+header .marca .logo{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),#7c3aed);
+  display:grid;place-items:center;color:#fff;font-size:1.1rem;
+}
+nav.tabs{
+  display:flex;gap:4px;background:var(--card);border:1px solid var(--borde);
+  border-radius:12px;padding:4px;overflow-x:auto;box-shadow:var(--sombra);
+}
+nav.tabs button{
+  border:0;background:transparent;color:var(--text-suave);
+  padding:8px 14px;border-radius:9px;font-size:.9rem;font-weight:600;
+  cursor:pointer;white-space:nowrap;transition:.15s;
+}
+nav.tabs button:hover{color:var(--text)}
+nav.tabs button.activa{background:var(--accent);color:#fff}
+
+/* ============================================================
+   TARJETAS Y GRID
+   ============================================================ */
+.grid{display:grid;gap:16px}
+.grid>*{min-width:0}            /* permite que el contenido ancho haga scroll interno en vez de desbordar */
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.grid.cols-4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:820px){
+  .grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:680px){
+  .grid.cols-2{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .grid.cols-2,.grid.cols-3,.grid.cols-4{grid-template-columns:1fr}
+}
+.card{
+  background:var(--card);border:1px solid var(--borde);
+  border-radius:var(--radio);padding:18px;box-shadow:var(--sombra);
+}
+.card.compacta{padding:14px}
+
+/* KPI */
+.kpi .valor{font-size:1.6rem;font-weight:700;margin-top:4px}
+.kpi .etiqueta{font-size:.8rem;color:var(--text-suave);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.kpi .delta{font-size:.8rem;margin-top:6px;font-weight:600}
+.pos{color:var(--verde)}
+.neg{color:var(--rojo)}
+.txt-verde{color:var(--verde)}
+.txt-rojo{color:var(--rojo)}
+.txt-amarillo{color:var(--amarillo)}
+
+/* ============================================================
+   FORMULARIOS
+   ============================================================ */
+.campo{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.campo label{font-size:.82rem;font-weight:600;color:var(--text-suave)}
+input,select{
+  font:inherit;color:var(--text);background:var(--bg);
+  border:1px solid var(--borde);border-radius:9px;padding:9px 10px;width:100%;
+}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.fila{display:flex;gap:10px;flex-wrap:wrap}
+.fila>*{flex:1;min-width:120px}
+button.btn{
+  font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:9px;
+  padding:9px 16px;background:var(--accent);color:#fff;transition:.15s;
+}
+button.btn:hover{filter:brightness(1.08)}
+button.btn.sec{background:var(--bg);color:var(--text);border:1px solid var(--borde)}
+button.btn.peligro{background:var(--rojo)}
+button.btn.chip{padding:6px 10px;font-size:.8rem}
+.error-msg{color:var(--rojo);font-size:.82rem;margin-top:4px;min-height:1em}
+
+/* ============================================================
+   TABLA DE TRANSACCIONES
+   ============================================================ */
+.tabla-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--borde)}
+th{font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--text-suave)}
+td.monto{font-weight:700;text-align:right;white-space:nowrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700}
+.badge.ingreso{background:var(--verde-bg);color:var(--verde)}
+.badge.gasto{background:var(--rojo-bg);color:var(--rojo)}
+.acciones-fila{display:flex;gap:6px}
+.icon-btn{
+  border:1px solid var(--borde);background:var(--bg);color:var(--text);
+  border-radius:8px;padding:4px 8px;cursor:pointer;font-size:.8rem;
+}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ============================================================
+   BARRAS DE PROGRESO
+   ============================================================ */
+.progreso{margin-bottom:16px}
+.progreso .top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;font-size:.85rem;margin-bottom:5px}
+.progreso .pista{height:12px;background:var(--bg);border-radius:999px;overflow:hidden;border:1px solid var(--borde)}
+.progreso .barra{height:100%;border-radius:999px;transition:width .4s}
+.barra.verde{background:var(--verde)}
+.barra.amarillo{background:var(--amarillo)}
+.barra.rojo{background:var(--rojo)}
+
+/* ============================================================
+   GRÁFICOS
+   ============================================================ */
+.barras-cat .fila-cat{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:.85rem}
+.barras-cat .etq{width:110px;flex-shrink:0;color:var(--text-suave)}
+.barras-cat .pista{flex:1;height:16px;background:var(--bg);border-radius:6px;overflow:hidden}
+.barras-cat .b{height:100%}
+.barras-cat .val{width:100px;flex-shrink:0;text-align:right;font-weight:600}
+
+.donut-wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.donut{
+  width:150px;height:150px;border-radius:50%;flex-shrink:0;
+  -webkit-mask:radial-gradient(circle 42px at center,transparent 98%,#000 100%);
+          mask:radial-gradient(circle 42px at center,transparent 98%,#000 100%);
+}
+.leyenda{display:flex;flex-direction:column;gap:6px;font-size:.85rem}
+.leyenda .li{display:flex;align-items:center;gap:8px}
+.leyenda .pt{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+
+.evol{display:flex;gap:14px;align-items:flex-end;height:180px;padding-top:10px;overflow-x:auto}
+.evol .grupo{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:54px}
+.evol .par{display:flex;gap:4px;align-items:flex-end;height:140px}
+.evol .col{width:16px;border-radius:4px 4px 0 0;background:var(--text-suave);transition:height .3s}
+.evol .col.ing{background:var(--verde)}
+.evol .col.gas{background:var(--rojo)}
+.evol .lbl{font-size:.75rem;color:var(--text-suave);text-align:center}
+
+.vacio{color:var(--text-suave);font-size:.9rem;padding:12px 0;text-align:center}
+
+/* Navegador de periodos */
+.periodo-nav{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.periodo-nav .titulo{font-weight:700;font-size:1.05rem;flex:1;text-align:center;min-width:160px}
+
+/* Lista simple clave/valor */
+.kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--borde);font-size:.9rem}
+.kv:last-child{border-bottom:0}
+.kv .k{color:var(--text-suave)}
+.kv .v{font-weight:700}
+
+.hint{background:var(--bg);border:1px dashed var(--borde);border-radius:10px;padding:12px;font-size:.85rem;color:var(--text-suave)}
+.mb{margin-bottom:16px}
+.mt{margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-cat{
+  display:inline-flex;align-items:center;gap:6px;background:var(--bg);
+  border:1px solid var(--borde);border-radius:999px;padding:4px 6px 4px 12px;font-size:.85rem;
+}
+.chip-cat button{border:0;background:transparent;color:var(--rojo);cursor:pointer;font-size:1rem;line-height:1}
+</style>
+</head>
+<body>
+<div class="contenedor">
+
+  <header>
+    <div class="marca">
+      <div class="logo">$</div>
+      <div>
+        <h1>Finanzas Personales</h1>
+        <small>Todos tus datos se guardan solo en este navegador</small>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+  </header>
+
+  <main id="vista"><!-- render dinámico --></main>
+
+</div>
+
+<script>
+/* ================================================================
+   FINANZAS PERSONALES — App de una sola página (SPA) sin backend.
+   Persistencia: localStorage.
+   Estructura del archivo:
+     1. Utilidades (formato, fechas, DOM)
+     2. Capa de datos (Store) + estado por defecto
+     3. Cálculos (totales, metas, recomendaciones)
+     4. Componentes reutilizables (barra de progreso, gráficos)
+     5. Vistas (Dashboard, Transacciones, Metas, Semanal, Mensual, Ajustes)
+     6. Router / arranque
+   ================================================================ */
+
+/* ================================================================
+   1. UTILIDADES
+   ================================================================ */
+
+/** Formatea un número a pesos colombianos: 1500000 -> "$1.500.000" */
+const _nf = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 });
+function fmt(n){
+  n = Number(n) || 0;
+  const signo = n < 0 ? '-' : '';
+  return signo + '$' + _nf.format(Math.abs(Math.round(n)));
+}
+
+/** Convierte texto de input a número (acepta "1.500.000" o "1500000") */
+function aNumero(txt){
+  if (typeof txt === 'number') return txt;
+  if (!txt) return NaN;
+  return Number(String(txt).replace(/\./g,'').replace(/,/g,'.').replace(/[^0-9.\-]/g,''));
+}
+
+/** ID corto y único para cada transacción */
+function nuevoId(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+/* --- Fechas --- */
+const HOY = new Date();
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function ymd(d){ // Date -> "YYYY-MM-DD" en horario local
+  const p = n => String(n).padStart(2,'0');
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+}
+function desdeYmd(str){ return new Date(str + 'T12:00:00'); } // mediodía evita saltos de zona horaria
+
+function inicioSemana(d){ // lunes 00:00
+  const x = new Date(d); const dia = (x.getDay() + 6) % 7; // 0 = lunes
+  x.setDate(x.getDate() - dia); x.setHours(0,0,0,0); return x;
+}
+function finSemana(d){ const x = inicioSemana(d); x.setDate(x.getDate()+6); x.setHours(23,59,59,999); return x; }
+function inicioMes(d){ return new Date(d.getFullYear(), d.getMonth(), 1, 0,0,0,0); }
+function finMes(d){ return new Date(d.getFullYear(), d.getMonth()+1, 0, 23,59,59,999); }
+
+function enRango(fechaStr, ini, fin){
+  const d = desdeYmd(fechaStr);
+  return d >= ini && d <= fin;
+}
+function etiquetaSemana(d){
+  const i = inicioSemana(d), f = finSemana(d);
+  const mismoMes = i.getMonth() === f.getMonth();
+  const fi = i.getDate() + (mismoMes ? '' : ' ' + MESES[i.getMonth()].slice(0,3));
+  return `${fi} – ${f.getDate()} ${MESES[f.getMonth()].slice(0,3)} ${f.getFullYear()}`;
+}
+function etiquetaMes(d){ return `${MESES[d.getMonth()]} ${d.getFullYear()}`; }
+
+/* --- DOM --- */
+function el(tag, attrs = {}, hijos = []){
+  const n = document.createElement(tag);
+  for (const k in attrs){
+    if (k === 'class') n.className = attrs[k];
+    else if (k === 'html') n.innerHTML = attrs[k];
+    else if (k === 'text') n.textContent = attrs[k];
+    else if (k.startsWith('on') && typeof attrs[k] === 'function') n.addEventListener(k.slice(2), attrs[k]);
+    else if (attrs[k] != null) n.setAttribute(k, attrs[k]);
+  }
+  (Array.isArray(hijos) ? hijos : [hijos]).forEach(h => {
+    if (h == null) return;
+    n.appendChild(typeof h === 'string' ? document.createTextNode(h) : h);
+  });
+  return n;
+}
+const $vista = document.getElementById('vista');
+
+/* Paleta para gráficos de categorías */
+const PALETA = ['#2563eb','#16a34a','#dc2626','#d97706','#7c3aed','#0891b2','#db2777','#65a30d','#ea580c','#4f46e5','#0d9488','#9333ea'];
+
+/* ================================================================
+   2. CAPA DE DATOS (Store)
+   ================================================================ */
+
+const CLAVE = 'finanzas_app_v1';
+
+/** Estado por defecto la primera vez que se abre la app.
+ *  Regla de ahorro recomendada para empezar: 50 / 30 / 20
+ *  (50% gastos esenciales, 30% gastos personales, 20% ahorro+inversión),
+ *  y dentro de ese 20%, mitad para ahorro y mitad para inversión.
+ *  Todo es editable en la pestaña "Ajustes". */
+function estadoInicial(){
+  return {
+    transacciones: [], // {id, tipo:'ingreso'|'gasto', monto, categoria, descripcion, fecha:'YYYY-MM-DD'}
+    pagosMes: [],       // {id, nombre, monto, pagado:boolean} — obligaciones/deudas del mes en curso
+    categorias: {
+      gasto:   ['Vivienda','Comida','Transporte','Servicios','Entretenimiento','Salud','Deudas','Otros'],
+      ingreso: ['Salario','Freelance','Otros']
+    },
+    metas: {
+      gastoSemanal: 0,
+      gastoMensual: 0,
+      ahorroSemanal: 0,
+      ahorroMensual: 0,
+      gastoPorCategoria: {}   // { 'Comida': 600000, ... } presupuesto mensual por categoría
+    },
+    // Para "¿cuánto debo ganar este mes?"
+    objetivoIngreso: {
+      gastosFijosMensuales: 0,
+      inversionMensual: 0
+    },
+    // Regla configurable (porcentajes que suman 100)
+    regla: { esenciales: 50, personales: 30, ahorroInversion: 20 },
+    // Reparto interno del bloque de ahorro/inversión (suma 100)
+    reparto: { ahorro: 50, inversion: 50 }
+  };
+}
+
+const Store = {
+  datos: null,
+  cargar(){
+    try{
+      const crudo = localStorage.getItem(CLAVE);
+      this.datos = crudo ? this._fusionar(estadoInicial(), JSON.parse(crudo)) : estadoInicial();
+    }catch(e){
+      console.error('No se pudo leer localStorage, se reinicia:', e);
+      this.datos = estadoInicial();
+    }
+    return this.datos;
+  },
+  guardar(){
+    try{ localStorage.setItem(CLAVE, JSON.stringify(this.datos)); }
+    catch(e){ alert('No se pudieron guardar los datos: ' + e.message); }
+  },
+  /* Fusiona defaults con lo guardado para tolerar versiones antiguas */
+  _fusionar(base, guardado){
+    const out = structuredClone(base);
+    for (const k in guardado){
+      if (guardado[k] && typeof guardado[k] === 'object' && !Array.isArray(guardado[k]) && out[k]){
+        out[k] = Object.assign({}, out[k], guardado[k]);
+      } else {
+        out[k] = guardado[k];
+      }
+    }
+    return out;
+  },
+  reiniciar(){
+    this.datos = estadoInicial();
+    this.guardar();
+  }
+};
+
+/* Atajos */
+const D = () => Store.datos;
+function persistirYRender(){ Store.guardar(); render(); }
+
+/* ================================================================
+   3. CÁLCULOS
+   ================================================================ */
+
+/** Suma montos de transacciones filtradas por tipo y rango de fechas */
+function total(tipo, ini, fin){
+  return D().transacciones
+    .filter(t => t.tipo === tipo && (!ini || enRango(t.fecha, ini, fin)))
+    .reduce((s,t) => s + Number(t.monto), 0);
+}
+
+/** { ingresos, gastos, balance } para un rango */
+function resumenRango(ini, fin){
+  const ingresos = total('ingreso', ini, fin);
+  const gastos   = total('gasto', ini, fin);
+  return { ingresos, gastos, balance: ingresos - gastos };
+}
+
+/** Gastos agrupados por categoría en un rango -> [{categoria, monto}] desc */
+function gastosPorCategoria(ini, fin){
+  const mapa = {};
+  D().transacciones
+    .filter(t => t.tipo === 'gasto' && enRango(t.fecha, ini, fin))
+    .forEach(t => { mapa[t.categoria] = (mapa[t.categoria] || 0) + Number(t.monto); });
+  return Object.entries(mapa).map(([categoria, monto]) => ({ categoria, monto }))
+    .sort((a,b) => b.monto - a.monto);
+}
+
+/** Clasificación de color para metas de GASTO (gastar de más es malo) */
+function colorGasto(pct){
+  if (pct > 100) return 'rojo';
+  if (pct >= 80) return 'amarillo';
+  return 'verde';
+}
+/** Clasificación de color para metas de AHORRO (ahorrar de más es bueno) */
+function colorAhorro(pct){
+  if (pct >= 100) return 'verde';
+  if (pct >= 60) return 'amarillo';
+  return 'rojo';
+}
+
+/** Recomendación según la regla configurable, a partir de un ingreso */
+function recomendacion(ingreso){
+  const r = D().regla;
+  const sumaR = r.esenciales + r.personales + r.ahorroInversion || 1;
+  const esenciales = ingreso * r.esenciales / sumaR;
+  const personales = ingreso * r.personales / sumaR;
+  const bloque     = ingreso * r.ahorroInversion / sumaR;
+  const rp = D().reparto;
+  const sumaP = rp.ahorro + rp.inversion || 1;
+  return {
+    esenciales, personales, bloque,
+    ahorro:    bloque * rp.ahorro / sumaP,
+    inversion: bloque * rp.inversion / sumaP,
+    paraGastos: esenciales + personales
+  };
+}
+
+/** Ingreso mínimo necesario este mes = gastos fijos + meta ahorro + meta inversión */
+function ingresoMinimoMes(){
+  const o = D().objetivoIngreso;
+  return (Number(o.gastosFijosMensuales)||0) + (Number(D().metas.ahorroMensual)||0) + (Number(o.inversionMensual)||0);
+}
+
+/** Info del calendario para el mes de 'ref' (por defecto, el mes actual) */
+function infoMesActual(ref = HOY){
+  const y = ref.getFullYear(), m = ref.getMonth();
+  const diasMes = new Date(y, m + 1, 0).getDate();
+  // Si 'ref' es el mes en curso usamos el día de hoy; si es otro mes, lo tratamos como completo.
+  const esMesEnCurso = (y === HOY.getFullYear() && m === HOY.getMonth());
+  const diaActual = esMesEnCurso ? HOY.getDate() : diasMes;
+  return {
+    diasMes,
+    diaActual,
+    diasTranscurridos: diaActual - 1,          // días ya cerrados antes de hoy
+    diasRestantes: diasMes - diaActual + 1     // días que faltan, incluyendo hoy
+  };
+}
+
+/** Cálculo central de "Pagos del mes":
+ *  totaliza las obligaciones, deriva el ingreso diario necesario y compara
+ *  el avance real (ingresos del mes) contra una meta lineal según el día. */
+function calcPagos(){
+  const items = D().pagosMes || [];
+  const totalPagar  = items.reduce((s,p) => s + (Number(p.monto) || 0), 0);
+  const totalPagado = items.filter(p => p.pagado).reduce((s,p) => s + (Number(p.monto) || 0), 0);
+  const pendiente   = totalPagar - totalPagado;
+
+  const ingresosMes = total('ingreso', inicioMes(HOY), finMes(HOY));
+  const cal = infoMesActual();
+
+  const promedioDiario = cal.diasMes ? totalPagar / cal.diasMes : 0;   // objetivo diario para todo el mes
+  const metaHoy        = totalPagar * cal.diaActual / cal.diasMes;      // cuánto deberías llevar hoy (ritmo parejo)
+  const deltaDinero    = ingresosMes - metaHoy;                        // + adelantado / - atrasado (en $)
+  const deltaDias      = promedioDiario ? deltaDinero / promedioDiario : 0;
+  const faltaGanar     = Math.max(0, totalPagar - ingresosMes);
+  const ritmoRestante  = cal.diasRestantes ? faltaGanar / cal.diasRestantes : 0; // $/día de aquí a fin de mes
+  const pctIngresos    = totalPagar > 0 ? ingresosMes / totalPagar * 100 : 0;
+
+  return {
+    items, totalPagar, totalPagado, pendiente, ingresosMes,
+    promedioDiario, metaHoy, deltaDinero, deltaDias, faltaGanar, ritmoRestante, pctIngresos,
+    ...cal
+  };
+}
+
+/* ================================================================
+   4. COMPONENTES REUTILIZABLES
+   ================================================================ */
+
+/** Barra de progreso. modo: 'gasto' | 'ahorro' */
+function barraProgreso(titulo, actual, meta, modo){
+  const pct = meta > 0 ? (actual / meta) * 100 : 0;
+  const color = modo === 'ahorro' ? colorAhorro(pct) : colorGasto(pct);
+  const ancho = Math.max(0, Math.min(100, pct));
+  return el('div', { class:'progreso' }, [
+    el('div', { class:'top' }, [
+      el('span', { text: titulo }),
+      el('span', { class: 'txt-' + color, text: meta > 0 ? `${fmt(actual)} / ${fmt(meta)} (${Math.round(pct)}%)` : `${fmt(actual)} — sin meta` })
+    ]),
+    el('div', { class:'pista' }, [ el('div', { class:'barra ' + color, style:`width:${ancho}%` }) ])
+  ]);
+}
+
+/** Gráfico de barras horizontales por categoría */
+function graficoBarrasCat(items){
+  if (!items.length) return el('p', { class:'vacio', text:'Sin gastos en este periodo' });
+  const max = Math.max(...items.map(i => i.monto)) || 1;
+  const cont = el('div', { class:'barras-cat' });
+  items.forEach((it, idx) => {
+    cont.appendChild(el('div', { class:'fila-cat' }, [
+      el('span', { class:'etq', text: it.categoria }),
+      el('div', { class:'pista' }, [
+        el('div', { class:'b', style:`width:${(it.monto/max)*100}%;background:${PALETA[idx % PALETA.length]}` })
+      ]),
+      el('span', { class:'val', text: fmt(it.monto) })
+    ]));
+  });
+  return cont;
+}
+
+/** Gráfico de dona (categorías) con leyenda */
+function graficoDona(items){
+  const totalV = items.reduce((s,i) => s + i.monto, 0);
+  if (totalV <= 0) return el('p', { class:'vacio', text:'Sin gastos en este periodo' });
+  let acc = 0;
+  const segmentos = items.map((it, idx) => {
+    const ini = acc / totalV * 360;
+    acc += it.monto;
+    const fin = acc / totalV * 360;
+    return `${PALETA[idx % PALETA.length]} ${ini}deg ${fin}deg`;
+  });
+  const leyenda = el('div', { class:'leyenda' },
+    items.map((it, idx) => el('div', { class:'li' }, [
+      el('span', { class:'pt', style:`background:${PALETA[idx % PALETA.length]}` }),
+      el('span', { text: `${it.categoria} — ${fmt(it.monto)} (${Math.round(it.monto/totalV*100)}%)` })
+    ]))
+  );
+  return el('div', { class:'donut-wrap' }, [
+    el('div', { class:'donut', style:`background:conic-gradient(${segmentos.join(',')})` }),
+    leyenda
+  ]);
+}
+
+/** Gráfico de evolución: barras ingreso vs gasto por periodo */
+function graficoEvolucion(periodos){
+  const max = Math.max(1, ...periodos.map(p => Math.max(p.ingresos, p.gastos)));
+  const cont = el('div', { class:'evol' });
+  periodos.forEach(p => {
+    cont.appendChild(el('div', { class:'grupo' }, [
+      el('div', { class:'par' }, [
+        el('div', { class:'col ing', style:`height:${(p.ingresos/max)*100}%`, title:`Ingresos: ${fmt(p.ingresos)}` }),
+        el('div', { class:'col gas', style:`height:${(p.gastos/max)*100}%`, title:`Gastos: ${fmt(p.gastos)}` })
+      ]),
+      el('div', { class:'lbl', text: p.label })
+    ]));
+  });
+  return cont;
+}
+
+/** KPI card */
+function kpi(etiqueta, valor, deltaTxt, deltaPos){
+  const hijos = [
+    el('div', { class:'etiqueta', text: etiqueta }),
+    el('div', { class:'valor', text: valor })
+  ];
+  if (deltaTxt) hijos.push(el('div', { class:'delta ' + (deltaPos ? 'pos' : 'neg'), text: deltaTxt }));
+  return el('div', { class:'card kpi compacta' }, hijos);
+}
+
+/* ================================================================
+   5. VISTAS
+   ================================================================ */
+
+const estado = {
+  tab: 'dashboard',
+  refSemana: new Date(HOY),   // fecha de referencia para la vista Semanal
+  refMes: new Date(HOY),      // fecha de referencia para la vista Mensual
+  editandoId: null,           // transacción en edición
+  filtros: { desde:'', hasta:'', categoria:'', tipo:'' }
+};
+
+/* ---------- 5.1 DASHBOARD ---------- */
+function vistaDashboard(){
+  const cont = el('div');
+  const iniMes = inicioMes(HOY), finMesA = finMes(HOY);
+  const rMes = resumenRango(iniMes, finMesA);
+
+  // Mes anterior para comparación
+  const refPrev = new Date(HOY.getFullYear(), HOY.getMonth()-1, 15);
+  const rPrev = resumenRango(inicioMes(refPrev), finMes(refPrev));
+  const deltaGasto = rPrev.gastos ? ((rMes.gastos - rPrev.gastos) / rPrev.gastos) * 100 : 0;
+  const deltaIng = rPrev.ingresos ? ((rMes.ingresos - rPrev.ingresos) / rPrev.ingresos) * 100 : 0;
+
+  cont.appendChild(el('h2', { text: `Resumen de ${etiquetaMes(HOY)}` }));
+
+  cont.appendChild(el('div', { class:'grid cols-4 mb' }, [
+    kpi('Ingresos del mes', fmt(rMes.ingresos),
+        rPrev.ingresos ? `${deltaIng>=0?'▲':'▼'} ${Math.abs(deltaIng).toFixed(0)}% vs mes anterior` : null, deltaIng >= 0),
+    kpi('Gastos del mes', fmt(rMes.gastos),
+        rPrev.gastos ? `${deltaGasto>=0?'▲':'▼'} ${Math.abs(deltaGasto).toFixed(0)}% vs mes anterior` : null, deltaGasto <= 0),
+    kpi('Balance', fmt(rMes.balance), null, rMes.balance >= 0),
+    kpi('Ahorro estimado', fmt(Math.max(0, rMes.balance)), 'Ingresos − gastos del mes', rMes.balance >= 0)
+  ]));
+
+  // Metas rápidas
+  const iniSem = inicioSemana(HOY), finSem = finSemana(HOY);
+  const rSem = resumenRango(iniSem, finSem);
+  const tarjetaMetas = el('div', { class:'card mb' }, [ el('h3', { text:'Progreso de metas' }) ]);
+  tarjetaMetas.appendChild(barraProgreso('Gasto semanal', rSem.gastos, D().metas.gastoSemanal, 'gasto'));
+  tarjetaMetas.appendChild(barraProgreso('Gasto mensual', rMes.gastos, D().metas.gastoMensual, 'gasto'));
+  tarjetaMetas.appendChild(barraProgreso('Ahorro semanal', Math.max(0, rSem.balance), D().metas.ahorroSemanal, 'ahorro'));
+  tarjetaMetas.appendChild(barraProgreso('Ahorro mensual', Math.max(0, rMes.balance), D().metas.ahorroMensual, 'ahorro'));
+  cont.appendChild(tarjetaMetas);
+
+  // Gráficos
+  cont.appendChild(el('div', { class:'grid cols-2 mb' }, [
+    el('div', { class:'card' }, [ el('h3', { text:'Gastos por categoría (mes)' }), graficoDona(gastosPorCategoria(iniMes, finMesA)) ]),
+    el('div', { class:'card' }, [ el('h3', { text:'Ingresos vs gastos (últimos 6 meses)' }), graficoEvolucion(ultimosPeriodos('mes', 6)) ])
+  ]));
+
+  // ¿Cuánto debo ganar este mes?
+  const minimo = ingresoMinimoMes();
+  const dif = rMes.ingresos - minimo;
+  const cardMin = el('div', { class:'card mb' }, [
+    el('h3', { text:'¿Cuánto debo ganar este mes?' }),
+    el('div', { class:'kv' }, [ el('span',{class:'k',text:'Gastos fijos mensuales'}), el('span',{class:'v',text:fmt(D().objetivoIngreso.gastosFijosMensuales)}) ]),
+    el('div', { class:'kv' }, [ el('span',{class:'k',text:'Meta de ahorro mensual'}), el('span',{class:'v',text:fmt(D().metas.ahorroMensual)}) ]),
+    el('div', { class:'kv' }, [ el('span',{class:'k',text:'Meta de inversión mensual'}), el('span',{class:'v',text:fmt(D().objetivoIngreso.inversionMensual)}) ]),
+    el('div', { class:'kv' }, [ el('span',{class:'k',text:'Ingreso mínimo necesario'}), el('span',{class:'v',text:fmt(minimo)}) ]),
+    el('div', { class:'kv' }, [
+      el('span',{class:'k',text:'Ingresos registrados este mes'}), el('span',{class:'v',text:fmt(rMes.ingresos)})
+    ]),
+    el('p', { class: 'mt ' + (dif >= 0 ? 'txt-verde' : 'txt-rojo'), style:'font-weight:700',
+      text: minimo === 0
+        ? 'Define tus gastos fijos y metas en Ajustes / Metas para calcular esto.'
+        : (dif >= 0
+            ? `Vas ${fmt(dif)} por encima de lo necesario. 🎉`
+            : `Te faltan ${fmt(-dif)} para cubrir tus gastos fijos y metas.`)
+    })
+  ]);
+  cont.appendChild(cardMin);
+
+  // Resumen de "Pagos del mes" (solo si hay pagos registrados)
+  const cp = calcPagos();
+  if (cp.items.length){
+    const adelantado = cp.deltaDinero >= 0;
+    cont.appendChild(el('div', { class:'card mb' }, [
+      el('h3', { text:'Pagos del mes' }),
+      el('div', { class:'kv' }, [ el('span',{class:'k',text:'Total a pagar'}), el('span',{class:'v',text:fmt(cp.totalPagar)}) ]),
+      el('div', { class:'kv' }, [ el('span',{class:'k',text:'Necesitas ganar al día'}), el('span',{class:'v',text:fmt(cp.promedioDiario)}) ]),
+      el('div', { class:'kv' }, [ el('span',{class:'k',text:'Días que faltan del mes'}), el('span',{class:'v',text:`${cp.diasRestantes} de ${cp.diasMes}`}) ]),
+      barraProgreso('Ingresos del mes vs total a pagar', cp.ingresosMes, cp.totalPagar, 'ahorro'),
+      el('p', { class: (adelantado ? 'txt-verde' : 'txt-rojo'), style:'font-weight:700;margin-bottom:10px', text:
+        adelantado
+          ? `Vas adelantado por ${fmt(cp.deltaDinero)} (~${Math.abs(cp.deltaDias).toFixed(1)} día).`
+          : `Vas atrasado por ${fmt(-cp.deltaDinero)} (~${Math.abs(cp.deltaDias).toFixed(1)} día).` }),
+      el('button', { class:'btn sec chip', type:'button', text:'Ver pagos del mes',
+        onclick: () => { estado.tab = 'pagos'; render(); } })
+    ]));
+  }
+
+  // Recomendaciones de ahorro e inversión
+  const rec = recomendacion(rMes.ingresos);
+  const r = D().regla;
+  cont.appendChild(el('div', { class:'card' }, [
+    el('h3', { text:`Recomendación (regla ${r.esenciales}/${r.personales}/${r.ahorroInversion})` }),
+    el('p', { style:'font-size:1rem;margin-bottom:10px',
+      html: rMes.ingresos > 0
+        ? `De tus ingresos de este mes (<b>${fmt(rMes.ingresos)}</b>), deberías <b class="txt-verde">ahorrar ${fmt(rec.ahorro)}</b> y podrías <b class="txt-verde">invertir ${fmt(rec.inversion)}</b>, dejando <b>${fmt(rec.paraGastos)}</b> para gastos.`
+        : 'Registra ingresos de este mes para ver tu recomendación personalizada.' }),
+    el('div', { class:'grid cols-3' }, [
+      el('div',{class:'card compacta'},[ el('div',{class:'etiqueta',text:`Esenciales (${r.esenciales}%)`}), el('div',{class:'valor',text:fmt(rec.esenciales)}) ]),
+      el('div',{class:'card compacta'},[ el('div',{class:'etiqueta',text:`Personales (${r.personales}%)`}), el('div',{class:'valor',text:fmt(rec.personales)}) ]),
+      el('div',{class:'card compacta'},[ el('div',{class:'etiqueta',text:`Ahorro + inversión (${r.ahorroInversion}%)`}), el('div',{class:'valor',text:fmt(rec.bloque)}) ])
+    ])
+  ]));
+
+  return cont;
+}
+
+/* ---------- 5.2 TRANSACCIONES ---------- */
+function vistaTransacciones(){
+  const cont = el('div');
+  const editando = estado.editandoId ? D().transacciones.find(t => t.id === estado.editandoId) : null;
+
+  /* --- Formulario de alta / edición --- */
+  const form = el('form', { class:'card mb', novalidate:'novalidate' });
+  form.appendChild(el('h2', { text: editando ? 'Editar transacción' : 'Nueva transacción' }));
+
+  const selTipo = el('select', { id:'f-tipo', onchange: e => { llenarCategorias(selCat, e.target.value); } }, [
+    el('option', { value:'gasto', text:'Gasto' }),
+    el('option', { value:'ingreso', text:'Ingreso' })
+  ]);
+  const selCat = el('select', { id:'f-cat' });
+  const inMonto = el('input', { id:'f-monto', type:'text', inputmode:'numeric', placeholder:'0' });
+  const inDesc = el('input', { id:'f-desc', type:'text', maxlength:'80', placeholder:'Opcional' });
+  const inFecha = el('input', { id:'f-fecha', type:'date', value: ymd(HOY) });
+
+  form.appendChild(el('div', { class:'fila' }, [
+    el('div', { class:'campo' }, [ el('label', { text:'Tipo' }), selTipo ]),
+    el('div', { class:'campo' }, [ el('label', { text:'Monto (COP)' }), inMonto ]),
+    el('div', { class:'campo' }, [ el('label', { text:'Categoría' }), selCat ]),
+    el('div', { class:'campo' }, [ el('label', { text:'Fecha' }), inFecha ])
+  ]));
+  form.appendChild(el('div', { class:'campo' }, [ el('label', { text:'Descripción' }), inDesc ]));
+  const errBox = el('div', { class:'error-msg', id:'f-error' });
+  form.appendChild(errBox);
+
+  const btns = el('div', { class:'fila', style:'flex:0' }, [
+    el('button', { class:'btn', type:'submit', text: editando ? 'Actualizar' : 'Agregar' })
+  ]);
+  if (editando){
+    btns.appendChild(el('button', { class:'btn sec', type:'button', text:'Cancelar',
+      onclick: () => { estado.editandoId = null; render(); } }));
+  }
+  form.appendChild(btns);
+
+  // Prefill categorías + edición
+  llenarCategorias(selCat, 'gasto');
+  if (editando){
+    selTipo.value = editando.tipo;
+    llenarCategorias(selCat, editando.tipo);
+    selCat.value = editando.categoria;
+    inMonto.value = editando.monto;
+    inDesc.value = editando.descripcion || '';
+    inFecha.value = editando.fecha;
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    errBox.textContent = '';
+    const tipo = selTipo.value;
+    const monto = aNumero(inMonto.value);
+    const categoria = selCat.value;
+    const fecha = inFecha.value;
+
+    // --- Validación ---
+    if (!fecha){ errBox.textContent = 'Selecciona una fecha.'; return; }
+    if (!categoria){ errBox.textContent = 'Selecciona una categoría.'; return; }
+    if (!isFinite(monto) || monto <= 0){ errBox.textContent = 'El monto debe ser un número mayor que cero.'; return; }
+
+    const registro = {
+      id: editando ? editando.id : nuevoId(),
+      tipo, monto: Math.round(monto), categoria,
+      descripcion: inDesc.value.trim(),
+      fecha
+    };
+    if (editando){
+      const i = D().transacciones.findIndex(t => t.id === editando.id);
+      D().transacciones[i] = registro;
+      estado.editandoId = null;
+    } else {
+      D().transacciones.push(registro);
+    }
+    persistirYRender();
+  });
+
+  cont.appendChild(form);
+
+  /* --- Filtros --- */
+  const cats = [...D().categorias.gasto, ...D().categorias.ingreso];
+  const fbox = el('div', { class:'card mb' }, [ el('h3', { text:'Filtrar' }) ]);
+  const fFila = el('div', { class:'fila' });
+  const fDesde = el('input', { type:'date', value: estado.filtros.desde });
+  const fHasta = el('input', { type:'date', value: estado.filtros.hasta });
+  const fTipo = el('select', {}, [
+    el('option', { value:'', text:'Todos los tipos' }),
+    el('option', { value:'ingreso', text:'Ingresos' }),
+    el('option', { value:'gasto', text:'Gastos' })
+  ]);
+  fTipo.value = estado.filtros.tipo;
+  const fCat = el('select', {}, [ el('option', { value:'', text:'Todas las categorías' }),
+    ...[...new Set(cats)].map(c => el('option', { value:c, text:c })) ]);
+  fCat.value = estado.filtros.categoria;
+  [fDesde,fHasta,fTipo,fCat].forEach(inp => inp.addEventListener('change', () => {
+    estado.filtros = { desde:fDesde.value, hasta:fHasta.value, tipo:fTipo.value, categoria:fCat.value };
+    render();
+  }));
+  fFila.append(
+    el('div',{class:'campo'},[el('label',{text:'Desde'}),fDesde]),
+    el('div',{class:'campo'},[el('label',{text:'Hasta'}),fHasta]),
+    el('div',{class:'campo'},[el('label',{text:'Tipo'}),fTipo]),
+    el('div',{class:'campo'},[el('label',{text:'Categoría'}),fCat])
+  );
+  fbox.appendChild(fFila);
+  fbox.appendChild(el('button', { class:'btn sec chip', type:'button', text:'Limpiar filtros',
+    onclick: () => { estado.filtros = { desde:'',hasta:'',categoria:'',tipo:'' }; render(); } }));
+  cont.appendChild(fbox);
+
+  /* --- Listado --- */
+  let lista = [...D().transacciones].sort((a,b) => b.fecha.localeCompare(a.fecha) || b.id.localeCompare(a.id));
+  const f = estado.filtros;
+  if (f.desde) lista = lista.filter(t => t.fecha >= f.desde);
+  if (f.hasta) lista = lista.filter(t => t.fecha <= f.hasta);
+  if (f.tipo) lista = lista.filter(t => t.tipo === f.tipo);
+  if (f.categoria) lista = lista.filter(t => t.categoria === f.categoria);
+
+  const sumaIng = lista.filter(t=>t.tipo==='ingreso').reduce((s,t)=>s+t.monto,0);
+  const sumaGas = lista.filter(t=>t.tipo==='gasto').reduce((s,t)=>s+t.monto,0);
+
+  const card = el('div', { class:'card' });
+  card.appendChild(el('h3', { text: `Transacciones (${lista.length})` }));
+  card.appendChild(el('p', { class:'mb', html:
+    `Ingresos: <b class="txt-verde">${fmt(sumaIng)}</b> · Gastos: <b class="txt-rojo">${fmt(sumaGas)}</b> · Balance: <b>${fmt(sumaIng-sumaGas)}</b>` }));
+
+  if (!lista.length){
+    card.appendChild(el('p', { class:'vacio', text:'No hay transacciones que coincidan.' }));
+  } else {
+    const tabla = el('table');
+    tabla.appendChild(el('thead', {}, el('tr', {}, [
+      el('th',{text:'Fecha'}), el('th',{text:'Tipo'}), el('th',{text:'Categoría'}),
+      el('th',{text:'Descripción'}), el('th',{text:'Monto',style:'text-align:right'}), el('th',{text:''})
+    ])));
+    const tb = el('tbody');
+    lista.forEach(t => {
+      tb.appendChild(el('tr', {}, [
+        el('td', { text: t.fecha }),
+        el('td', {}, el('span', { class:'badge ' + t.tipo, text: t.tipo === 'ingreso' ? 'Ingreso' : 'Gasto' })),
+        el('td', { text: t.categoria }),
+        el('td', { text: t.descripcion || '—' }),
+        el('td', { class:'monto ' + (t.tipo==='ingreso'?'txt-verde':'txt-rojo'), text: (t.tipo==='ingreso'?'+':'−') + fmt(t.monto).replace('$','$') }),
+        el('td', {}, el('div', { class:'acciones-fila' }, [
+          el('button', { class:'icon-btn', text:'✏️', title:'Editar',
+            onclick: () => { estado.editandoId = t.id; render(); window.scrollTo({top:0,behavior:'smooth'}); } }),
+          el('button', { class:'icon-btn', text:'🗑️', title:'Eliminar',
+            onclick: () => {
+              if (confirm('¿Eliminar esta transacción? Esta acción no se puede deshacer.')){
+                Store.datos.transacciones = D().transacciones.filter(x => x.id !== t.id);
+                persistirYRender();
+              }
+            } })
+        ]))
+      ]));
+    });
+    tabla.appendChild(tb);
+    card.appendChild(el('div', { class:'tabla-wrap' }, tabla));
+  }
+  cont.appendChild(card);
+  return cont;
+}
+
+function llenarCategorias(select, tipo){
+  select.innerHTML = '';
+  (D().categorias[tipo] || []).forEach(c => select.appendChild(el('option', { value:c, text:c })));
+}
+
+/* ---------- 5.3 METAS Y PRESUPUESTOS ---------- */
+function vistaMetas(){
+  const cont = el('div');
+  cont.appendChild(el('h2', { text:'Metas y presupuestos' }));
+  cont.appendChild(el('p', { class:'hint mb', text:
+    'Verde = vas bien · Amarillo = cerca del límite · Rojo = superaste el límite (o estás lejos de la meta de ahorro). El ahorro se estima como ingresos − gastos del periodo.' }));
+
+  /* --- Formulario de metas generales --- */
+  const m = D().metas, o = D().objetivoIngreso;
+  const form = el('form', { class:'card mb' }, [ el('h3', { text:'Metas generales' }) ]);
+  const campos = [
+    ['gastoSemanal', 'Meta de gasto semanal', m.gastoSemanal],
+    ['gastoMensual', 'Meta de gasto mensual', m.gastoMensual],
+    ['ahorroSemanal', 'Meta de ahorro semanal', m.ahorroSemanal],
+    ['ahorroMensual', 'Meta de ahorro mensual', m.ahorroMensual],
+  ];
+  const inputs = {};
+  const fila1 = el('div', { class:'fila' });
+  campos.forEach(([k,label,val]) => {
+    inputs[k] = el('input', { type:'text', inputmode:'numeric', value: val || '' });
+    fila1.appendChild(el('div', { class:'campo' }, [ el('label', { text:label }), inputs[k] ]));
+  });
+  form.appendChild(fila1);
+
+  form.appendChild(el('h3', { class:'mt', text:'Para "¿cuánto debo ganar este mes?"' }));
+  const inFijos = el('input', { type:'text', inputmode:'numeric', value: o.gastosFijosMensuales || '' });
+  const inInv = el('input', { type:'text', inputmode:'numeric', value: o.inversionMensual || '' });
+  form.appendChild(el('div', { class:'fila' }, [
+    el('div', { class:'campo' }, [ el('label', { text:'Gastos fijos mensuales' }), inFijos ]),
+    el('div', { class:'campo' }, [ el('label', { text:'Meta de inversión mensual' }), inInv ])
+  ]));
+
+  const err = el('div', { class:'error-msg' });
+  form.appendChild(err);
+  form.appendChild(el('button', { class:'btn', type:'submit', text:'Guardar metas' }));
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const vals = {};
+    for (const k in inputs){
+      const v = aNumero(inputs[k].value || '0');
+      if (!isFinite(v) || v < 0){ err.textContent = 'Los montos no pueden ser negativos ni vacíos.'; return; }
+      vals[k] = Math.round(v);
+    }
+    const fijos = aNumero(inFijos.value || '0'), inv = aNumero(inInv.value || '0');
+    if ([fijos,inv].some(x => !isFinite(x) || x < 0)){ err.textContent = 'Los montos no pueden ser negativos.'; return; }
+    Object.assign(D().metas, vals);
+    D().objetivoIngreso.gastosFijosMensuales = Math.round(fijos);
+    D().objetivoIngreso.inversionMensual = Math.round(inv);
+    persistirYRender();
+  });
+  cont.appendChild(form);
+
+  /* --- Presupuesto mensual por categoría --- */
+  const formCat = el('form', { class:'card mb' }, [ el('h3', { text:'Presupuesto mensual por categoría de gasto' }) ]);
+  const inputsCat = {};
+  const filaCat = el('div', { class:'grid cols-3' });
+  D().categorias.gasto.forEach(c => {
+    inputsCat[c] = el('input', { type:'text', inputmode:'numeric', value: m.gastoPorCategoria[c] || '' });
+    filaCat.appendChild(el('div', { class:'campo' }, [ el('label', { text:c }), inputsCat[c] ]));
+  });
+  formCat.appendChild(filaCat);
+  const errCat = el('div', { class:'error-msg' });
+  formCat.appendChild(errCat);
+  formCat.appendChild(el('button', { class:'btn', type:'submit', text:'Guardar presupuestos' }));
+  formCat.addEventListener('submit', e => {
+    e.preventDefault();
+    const nuevo = {};
+    for (const c in inputsCat){
+      const raw = inputsCat[c].value.trim();
+      if (!raw) continue;
+      const v = aNumero(raw);
+      if (!isFinite(v) || v < 0){ errCat.textContent = `Valor inválido en "${c}".`; return; }
+      nuevo[c] = Math.round(v);
+    }
+    D().metas.gastoPorCategoria = nuevo;
+    persistirYRender();
+  });
+  cont.appendChild(formCat);
+
+  /* --- Progreso actual --- */
+  const iniMes = inicioMes(HOY), finMesA = finMes(HOY);
+  const iniSem = inicioSemana(HOY), finSem = finSemana(HOY);
+  const rMes = resumenRango(iniMes, finMesA), rSem = resumenRango(iniSem, finSem);
+
+  const prog = el('div', { class:'card mb' }, [ el('h3', { text:`Progreso — ${etiquetaMes(HOY)}` }) ]);
+  prog.appendChild(barraProgreso('Gasto semanal', rSem.gastos, m.gastoSemanal, 'gasto'));
+  prog.appendChild(barraProgreso('Gasto mensual', rMes.gastos, m.gastoMensual, 'gasto'));
+  prog.appendChild(barraProgreso('Ahorro semanal', Math.max(0,rSem.balance), m.ahorroSemanal, 'ahorro'));
+  prog.appendChild(barraProgreso('Ahorro mensual', Math.max(0,rMes.balance), m.ahorroMensual, 'ahorro'));
+  cont.appendChild(prog);
+
+  const gastosMesCat = {};
+  gastosPorCategoria(iniMes, finMesA).forEach(g => gastosMesCat[g.categoria] = g.monto);
+  const catConMeta = Object.keys(m.gastoPorCategoria);
+  if (catConMeta.length){
+    const pc = el('div', { class:'card' }, [ el('h3', { text:'Presupuesto por categoría (mes actual)' }) ]);
+    catConMeta.forEach(c => pc.appendChild(barraProgreso(c, gastosMesCat[c] || 0, m.gastoPorCategoria[c], 'gasto')));
+    cont.appendChild(pc);
+  }
+  return cont;
+}
+
+/* ---------- 5.3b PAGOS DEL MES ---------- */
+function vistaPagos(){
+  const cont = el('div');
+  cont.appendChild(el('h2', { text:'Pagos del mes' }));
+  cont.appendChild(el('p', { class:'hint mb', text:
+    'Registra lo que tienes que pagar este mes. La app lo totaliza, calcula cuánto necesitas ganar por día y te dice si vas adelantado o atrasado según los días transcurridos.' }));
+
+  const c = calcPagos();
+
+  /* --- Formulario para agregar un pago --- */
+  const form = el('form', { class:'card mb' }, [ el('h3', { text:'Agregar pago / deuda' }) ]);
+  const inN = el('input', { type:'text', maxlength:'40', placeholder:'Ej: Arriendo, tarjeta, préstamo…' });
+  const inM = el('input', { type:'text', inputmode:'numeric', placeholder:'0' });
+  form.appendChild(el('div', { class:'fila' }, [
+    el('div', { class:'campo' }, [ el('label', { text:'Concepto' }), inN ]),
+    el('div', { class:'campo' }, [ el('label', { text:'Monto (COP)' }), inM ])
+  ]));
+  const err = el('div', { class:'error-msg' });
+  form.appendChild(err);
+  form.appendChild(el('button', { class:'btn', type:'submit', text:'Agregar' }));
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const nombre = inN.value.trim();
+    const monto = aNumero(inM.value);
+    if (!nombre){ err.textContent = 'Escribe un concepto.'; return; }
+    if (!isFinite(monto) || monto <= 0){ err.textContent = 'El monto debe ser un número mayor que cero.'; return; }
+    D().pagosMes.push({ id: nuevoId(), nombre, monto: Math.round(monto), pagado: false });
+    persistirYRender();
+  });
+  cont.appendChild(form);
+
+  if (!c.items.length){
+    cont.appendChild(el('div', { class:'card' }, [
+      el('p', { class:'vacio', text:'Aún no has agregado pagos para este mes. Agrega el primero arriba.' })
+    ]));
+    return cont;
+  }
+
+  /* --- KPIs --- */
+  cont.appendChild(el('div', { class:'grid cols-4 mb' }, [
+    kpi('Total a pagar', fmt(c.totalPagar)),
+    kpi('Marcado pagado', fmt(c.totalPagado), null, true),
+    kpi('Pendiente', fmt(c.pendiente), null, c.pendiente <= 0),
+    kpi('Ingresos del mes', fmt(c.ingresosMes), null, true)
+  ]));
+
+  /* --- Cuánto ganar por día + días del mes --- */
+  const card1 = el('div', { class:'card mb' }, [ el('h3', { text:'Cuánto necesitas ganar' }) ]);
+  card1.appendChild(el('p', { style:'font-size:1.05rem;margin-bottom:8px', html:
+    `En promedio necesitas ganar <b>${fmt(c.promedioDiario)}</b> al día durante todo el mes para cubrir ${fmt(c.totalPagar)}.` }));
+  card1.appendChild(el('p', { html:
+    c.faltaGanar > 0
+      ? `Aún te falta ganar <b class="txt-rojo">${fmt(c.faltaGanar)}</b>. Con <b>${c.diasRestantes}</b> día(s) por delante, eso equivale a <b>${fmt(c.ritmoRestante)}</b> por día de aquí a fin de mes.`
+      : `Con tus ingresos de este mes ya cubres el total de pagos. 🎉` }));
+  card1.appendChild(el('div', { class:'kv mt' }, [ el('span',{class:'k',text:'Día del mes'}), el('span',{class:'v',text:`${c.diaActual} de ${c.diasMes}`}) ]));
+  card1.appendChild(el('div', { class:'kv' }, [ el('span',{class:'k',text:'Días transcurridos'}), el('span',{class:'v',text:String(c.diasTranscurridos)}) ]));
+  card1.appendChild(el('div', { class:'kv' }, [ el('span',{class:'k',text:'Días que faltan (incluye hoy)'}), el('span',{class:'v',text:String(c.diasRestantes)}) ]));
+  cont.appendChild(card1);
+
+  /* --- Progreso y estado adelantado/atrasado --- */
+  const card2 = el('div', { class:'card mb' }, [ el('h3', { text:'Progreso' }) ]);
+  card2.appendChild(barraProgreso('Ingresos del mes vs total a pagar', c.ingresosMes, c.totalPagar, 'ahorro'));
+  card2.appendChild(barraProgreso('Pagos marcados como pagados', c.totalPagado, c.totalPagar, 'ahorro'));
+  const adelantado = c.deltaDinero >= 0;
+  card2.appendChild(el('p', { class:'mt ' + (adelantado ? 'txt-verde' : 'txt-rojo'), style:'font-weight:700', html:
+    `Meta a ritmo parejo para hoy: ${fmt(c.metaHoy)}. ` + (adelantado
+      ? `Vas <b>adelantado</b> por ${fmt(c.deltaDinero)} (~${Math.abs(c.deltaDias).toFixed(1)} día(s)).`
+      : `Vas <b>atrasado</b> por ${fmt(-c.deltaDinero)} (~${Math.abs(c.deltaDias).toFixed(1)} día(s)).`) }));
+  card2.appendChild(el('p', { class:'hint mt', text:
+    'La "meta a ritmo parejo" asume que ganas lo mismo cada día del mes. El progreso de ingresos se calcula con las transacciones de tipo ingreso que registres este mes.' }));
+  cont.appendChild(card2);
+
+  /* --- Lista editable de pagos --- */
+  const card3 = el('div', { class:'card' }, [ el('h3', { text:`Lista de pagos (${c.items.length})` }) ]);
+  const tabla = el('table');
+  tabla.appendChild(el('thead', {}, el('tr', {}, [
+    el('th',{text:'Pagado'}), el('th',{text:'Concepto'}), el('th',{text:'Monto',style:'text-align:right'}), el('th',{text:''})
+  ])));
+  const tb = el('tbody');
+  c.items.forEach(p => {
+    const chk = el('input', { type:'checkbox', style:'width:auto' });
+    chk.checked = !!p.pagado;
+    chk.addEventListener('change', () => { p.pagado = chk.checked; persistirYRender(); });
+
+    const inNombre = el('input', { type:'text', value: p.nombre, style:'padding:5px 8px' });
+    inNombre.addEventListener('change', () => {
+      const v = inNombre.value.trim();
+      if (v){ p.nombre = v; Store.guardar(); } else { render(); }
+    });
+
+    const inMonto = el('input', { type:'text', inputmode:'numeric', value: p.monto, style:'padding:5px 8px;text-align:right;max-width:130px' });
+    inMonto.addEventListener('change', () => {
+      const v = aNumero(inMonto.value);
+      if (isFinite(v) && v > 0){ p.monto = Math.round(v); persistirYRender(); } else { render(); }
+    });
+
+    tb.appendChild(el('tr', {}, [
+      el('td', {}, chk),
+      el('td', {}, inNombre),
+      el('td', { class:'monto' }, inMonto),
+      el('td', {}, el('button', { class:'icon-btn', text:'🗑️', title:'Eliminar', onclick: () => {
+        if (confirm(`¿Eliminar "${p.nombre}"?`)){
+          Store.datos.pagosMes = D().pagosMes.filter(x => x.id !== p.id);
+          persistirYRender();
+        }
+      } }))
+    ]));
+  });
+  tabla.appendChild(tb);
+  card3.appendChild(el('div', { class:'tabla-wrap' }, tabla));
+  card3.appendChild(el('button', { class:'btn sec chip mt', type:'button', text:'Desmarcar todos (empezar mes nuevo)', onclick: () => {
+    if (confirm('¿Desmarcar todos los pagos como NO pagados? Útil al empezar un mes nuevo (conserva la lista).')){
+      D().pagosMes.forEach(p => p.pagado = false);
+      persistirYRender();
+    }
+  } }));
+  cont.appendChild(card3);
+  return cont;
+}
+
+/* ---------- 5.4 VISTA SEMANAL ---------- */
+function vistaSemanal(){
+  return vistaPeriodo({
+    tipo:'semana',
+    ref: estado.refSemana,
+    ini: inicioSemana(estado.refSemana),
+    fin: finSemana(estado.refSemana),
+    titulo: 'Semana del ' + etiquetaSemana(estado.refSemana),
+    metaGasto: D().metas.gastoSemanal,
+    metaAhorro: D().metas.ahorroSemanal,
+    mover: dias => { estado.refSemana = new Date(estado.refSemana.getTime() + dias*7*86400000); render(); },
+    hoy: () => { estado.refSemana = new Date(HOY); render(); }
+  });
+}
+
+/* ---------- 5.5 VISTA MENSUAL ---------- */
+function vistaMensual(){
+  return vistaPeriodo({
+    tipo:'mes',
+    ref: estado.refMes,
+    ini: inicioMes(estado.refMes),
+    fin: finMes(estado.refMes),
+    titulo: etiquetaMes(estado.refMes),
+    metaGasto: D().metas.gastoMensual,
+    metaAhorro: D().metas.ahorroMensual,
+    mover: meses => { estado.refMes = new Date(estado.refMes.getFullYear(), estado.refMes.getMonth()+meses, 15); render(); },
+    hoy: () => { estado.refMes = new Date(HOY); render(); }
+  });
+}
+
+/** Vista genérica de periodo (reutilizada por Semanal y Mensual) */
+function vistaPeriodo(cfg){
+  const cont = el('div');
+  const r = resumenRango(cfg.ini, cfg.fin);
+
+  // Navegador de periodo
+  cont.appendChild(el('div', { class:'periodo-nav' }, [
+    el('button', { class:'btn sec', text:'‹ Anterior', onclick: () => cfg.mover(-1) }),
+    el('div', { class:'titulo', text: cfg.titulo }),
+    el('button', { class:'btn sec', text:'Hoy', onclick: cfg.hoy }),
+    el('button', { class:'btn sec', text:'Siguiente ›', onclick: () => cfg.mover(1) })
+  ]));
+
+  cont.appendChild(el('div', { class:'grid cols-3 mb' }, [
+    kpi('Ingresos', fmt(r.ingresos)),
+    kpi('Gastos', fmt(r.gastos)),
+    kpi('Balance', fmt(r.balance), null, r.balance >= 0)
+  ]));
+
+  const prog = el('div', { class:'card mb' }, [ el('h3', { text:'Metas del periodo' }) ]);
+  prog.appendChild(barraProgreso('Gasto', r.gastos, cfg.metaGasto, 'gasto'));
+  prog.appendChild(barraProgreso('Ahorro', Math.max(0, r.balance), cfg.metaAhorro, 'ahorro'));
+  cont.appendChild(prog);
+
+  cont.appendChild(el('div', { class:'grid cols-2 mb' }, [
+    el('div', { class:'card' }, [ el('h3', { text:'Gastos por categoría' }), graficoBarrasCat(gastosPorCategoria(cfg.ini, cfg.fin)) ]),
+    el('div', { class:'card' }, [
+      el('h3', { text: cfg.tipo === 'semana' ? 'Ingresos vs gastos (últimas 6 semanas)' : 'Ingresos vs gastos (últimos 6 meses)' }),
+      graficoEvolucion(ultimosPeriodos(cfg.tipo, 6, cfg.ref))
+    ])
+  ]));
+
+  // Recomendación para el periodo (basada en ingresos del periodo)
+  const rec = recomendacion(r.ingresos);
+  cont.appendChild(el('div', { class:'card mb' }, [
+    el('h3', { text:'Recomendación' }),
+    el('p', { html: r.ingresos > 0
+      ? `Con ${fmt(r.ingresos)} de ingresos en este periodo: ahorra <b class="txt-verde">${fmt(rec.ahorro)}</b>, invierte <b class="txt-verde">${fmt(rec.inversion)}</b>, deja <b>${fmt(rec.paraGastos)}</b> para gastos.`
+      : 'Sin ingresos registrados en este periodo.' })
+  ]));
+
+  // Listado del periodo
+  const lista = D().transacciones
+    .filter(t => enRango(t.fecha, cfg.ini, cfg.fin))
+    .sort((a,b) => b.fecha.localeCompare(a.fecha));
+  const card = el('div', { class:'card' }, [ el('h3', { text:`Movimientos (${lista.length})` }) ]);
+  if (!lista.length){
+    card.appendChild(el('p', { class:'vacio', text:'Sin movimientos en este periodo.' }));
+  } else {
+    lista.forEach(t => card.appendChild(el('div', { class:'kv' }, [
+      el('span', { class:'k', text: `${t.fecha} · ${t.categoria}${t.descripcion ? ' · ' + t.descripcion : ''}` }),
+      el('span', { class:'v ' + (t.tipo==='ingreso'?'txt-verde':'txt-rojo'), text: (t.tipo==='ingreso'?'+':'−') + fmt(t.monto) })
+    ])));
+  }
+  cont.appendChild(card);
+  return cont;
+}
+
+/** Devuelve los últimos N periodos (semana|mes) con {label, ingresos, gastos} */
+function ultimosPeriodos(tipo, n, ref = HOY){
+  const arr = [];
+  for (let i = n - 1; i >= 0; i--){
+    let ini, fin, label;
+    if (tipo === 'semana'){
+      const base = new Date(ref.getTime() - i*7*86400000);
+      ini = inicioSemana(base); fin = finSemana(base);
+      label = ini.getDate() + '/' + (ini.getMonth()+1);
+    } else {
+      const base = new Date(ref.getFullYear(), ref.getMonth() - i, 15);
+      ini = inicioMes(base); fin = finMes(base);
+      label = MESES[base.getMonth()].slice(0,3);
+    }
+    const r = resumenRango(ini, fin);
+    arr.push({ label, ingresos: r.ingresos, gastos: r.gastos });
+  }
+  return arr;
+}
+
+/* ---------- 5.6 AJUSTES ---------- */
+function vistaAjustes(){
+  const cont = el('div');
+  cont.appendChild(el('h2', { text:'Ajustes' }));
+
+  /* --- Categorías --- */
+  ['gasto','ingreso'].forEach(tipo => {
+    const card = el('div', { class:'card mb' }, [ el('h3', { text: 'Categorías de ' + (tipo === 'gasto' ? 'gastos' : 'ingresos') }) ]);
+    const chips = el('div', { class:'chips mb' });
+    D().categorias[tipo].forEach(c => {
+      chips.appendChild(el('span', { class:'chip-cat' }, [
+        c,
+        el('button', { type:'button', title:'Eliminar', text:'×', onclick: () => {
+          if (D().categorias[tipo].length <= 1){ alert('Debe quedar al menos una categoría.'); return; }
+          if (confirm(`¿Eliminar la categoría "${c}"? Las transacciones existentes conservarán su etiqueta.`)){
+            D().categorias[tipo] = D().categorias[tipo].filter(x => x !== c);
+            delete D().metas.gastoPorCategoria[c];
+            persistirYRender();
+          }
+        } })
+      ]));
+    });
+    card.appendChild(chips);
+    const inp = el('input', { type:'text', maxlength:'24', placeholder:'Nueva categoría' });
+    const err = el('div', { class:'error-msg' });
+    const addForm = el('form', { class:'fila', style:'align-items:flex-start' }, [
+      el('div', { style:'flex:1' }, [ inp, err ]),
+      el('button', { class:'btn', type:'submit', text:'Agregar' })
+    ]);
+    addForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const v = inp.value.trim();
+      if (!v){ err.textContent = 'Escribe un nombre.'; return; }
+      if (D().categorias[tipo].some(x => x.toLowerCase() === v.toLowerCase())){ err.textContent = 'Ya existe esa categoría.'; return; }
+      D().categorias[tipo].push(v);
+      persistirYRender();
+    });
+    card.appendChild(addForm);
+    cont.appendChild(card);
+  });
+
+  /* --- Regla de ahorro/inversión --- */
+  const r = D().regla, rp = D().reparto;
+  const formR = el('form', { class:'card mb' }, [
+    el('h3', { text:'Regla de reparto de ingresos' }),
+    el('p', { class:'hint mb', text:'Por defecto 50/30/20: 50% gastos esenciales, 30% gastos personales, 20% ahorro + inversión. Los tres deben sumar 100.' })
+  ]);
+  const inE = el('input', { type:'number', min:'0', max:'100', value:r.esenciales });
+  const inP = el('input', { type:'number', min:'0', max:'100', value:r.personales });
+  const inA = el('input', { type:'number', min:'0', max:'100', value:r.ahorroInversion });
+  formR.appendChild(el('div', { class:'fila' }, [
+    el('div',{class:'campo'},[el('label',{text:'% Esenciales'}),inE]),
+    el('div',{class:'campo'},[el('label',{text:'% Personales'}),inP]),
+    el('div',{class:'campo'},[el('label',{text:'% Ahorro + inversión'}),inA])
+  ]));
+  formR.appendChild(el('h3', { class:'mt', text:'Reparto del bloque de ahorro + inversión' }));
+  formR.appendChild(el('p', { class:'hint mb', text:'Recomendado para empezar: 50% ahorro (fondo de emergencia) y 50% inversión. Deben sumar 100.' }));
+  const inAh = el('input', { type:'number', min:'0', max:'100', value:rp.ahorro });
+  const inInv = el('input', { type:'number', min:'0', max:'100', value:rp.inversion });
+  formR.appendChild(el('div', { class:'fila' }, [
+    el('div',{class:'campo'},[el('label',{text:'% Ahorro'}),inAh]),
+    el('div',{class:'campo'},[el('label',{text:'% Inversión'}),inInv])
+  ]));
+  const errR = el('div', { class:'error-msg' });
+  formR.appendChild(errR);
+  formR.appendChild(el('button', { class:'btn', type:'submit', text:'Guardar regla' }));
+  formR.addEventListener('submit', e => {
+    e.preventDefault();
+    const e1 = +inE.value, p1 = +inP.value, a1 = +inA.value;
+    const ah = +inAh.value, iv = +inInv.value;
+    if ([e1,p1,a1,ah,iv].some(x => !isFinite(x) || x < 0)){ errR.textContent = 'Usa números positivos.'; return; }
+    if (e1 + p1 + a1 !== 100){ errR.textContent = `Esenciales + personales + ahorro/inversión deben sumar 100 (ahora suman ${e1+p1+a1}).`; return; }
+    if (ah + iv !== 100){ errR.textContent = `Ahorro + inversión deben sumar 100 (ahora suman ${ah+iv}).`; return; }
+    D().regla = { esenciales:e1, personales:p1, ahorroInversion:a1 };
+    D().reparto = { ahorro:ah, inversion:iv };
+    persistirYRender();
+  });
+  cont.appendChild(formR);
+
+  /* --- Datos --- */
+  const dataCard = el('div', { class:'card' }, [ el('h3', { text:'Datos' }) ]);
+  dataCard.appendChild(el('p', { class:'mb', text:
+    `Tienes ${D().transacciones.length} transacciones guardadas en este navegador.` }));
+  dataCard.appendChild(el('div', { class:'fila', style:'flex:0' }, [
+    el('button', { class:'btn sec', type:'button', text:'Exportar copia (JSON)', onclick: exportar }),
+    el('button', { class:'btn peligro', type:'button', text:'Borrar todos los datos', onclick: () => {
+      if (confirm('Esto eliminará TODAS tus transacciones, metas y ajustes de este navegador. ¿Continuar?')){
+        Store.reiniciar(); estado.editandoId = null; render();
+      }
+    } })
+  ]));
+  cont.appendChild(dataCard);
+  return cont;
+}
+
+function exportar(){
+  const blob = new Blob([JSON.stringify(D(), null, 2)], { type:'application/json' });
+  const a = el('a', { href: URL.createObjectURL(blob), download: 'finanzas-' + ymd(HOY) + '.json' });
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ================================================================
+   6. ROUTER / ARRANQUE
+   ================================================================ */
+
+const TABS = [
+  ['dashboard','Resumen'],
+  ['transacciones','Transacciones'],
+  ['pagos','Pagos'],
+  ['metas','Metas'],
+  ['semanal','Semanal'],
+  ['mensual','Mensual'],
+  ['ajustes','Ajustes']
+];
+const VISTAS = {
+  dashboard: vistaDashboard,
+  transacciones: vistaTransacciones,
+  pagos: vistaPagos,
+  metas: vistaMetas,
+  semanal: vistaSemanal,
+  mensual: vistaMensual,
+  ajustes: vistaAjustes
+};
+
+function renderTabs(){
+  const nav = document.getElementById('tabs');
+  nav.innerHTML = '';
+  TABS.forEach(([id,label]) => {
+    nav.appendChild(el('button', {
+      class: estado.tab === id ? 'activa' : '',
+      text: label,
+      onclick: () => { estado.tab = id; estado.editandoId = null; render(); }
+    }));
+  });
+}
+
+function render(){
+  renderTabs();
+  $vista.innerHTML = '';
+  $vista.appendChild((VISTAS[estado.tab] || vistaDashboard)());
+}
+
+/* Init */
+Store.cargar();
+render();
+</script>
+</body>
+</html>
