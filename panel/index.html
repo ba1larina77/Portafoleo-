@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel Personal</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --panel:#161a21;
+    --border:#242a34;
+    --text:#e6e9ef;
+    --muted:#8b93a3;
+    --accent:#4f9dff;
+    --accent-dim:#1c3a5e;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    display:flex;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
+    overflow:hidden;
+  }
+  nav{
+    width:210px;
+    flex:0 0 210px;
+    background:var(--panel);
+    border-right:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    padding:16px 10px;
+    -webkit-app-region:drag;
+  }
+  nav h1{
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin:4px 8px 16px;
+  }
+  .tab{
+    -webkit-app-region:no-drag;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:8px;
+    color:var(--text);
+    cursor:pointer;
+    font-size:14px;
+    margin-bottom:4px;
+    border:1px solid transparent;
+    background:transparent;
+    text-align:left;
+  }
+  .tab:hover{ background:#1d2229; }
+  .tab.active{
+    background:var(--accent-dim);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .tab .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--muted);
+    flex:0 0 auto;
+  }
+  .tab.active .dot{ background:var(--accent); }
+  .spacer{ flex:1; }
+  .hint{
+    font-size:11px;
+    color:var(--muted);
+    padding:8px;
+    line-height:1.4;
+  }
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+  }
+  iframe{
+    flex:1;
+    border:0;
+    width:100%;
+    background:#fff;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <h1>Panel Personal</h1>
+  <button class="tab" data-src="../calendario/index.html" data-name="Impulso">
+    <span class="dot"></span> Impulso
+  </button>
+  <button class="tab" data-src="../finanzas/index.html" data-name="Finanzas">
+    <span class="dot"></span> Finanzas
+  </button>
+  <button class="tab" data-src="../Ingles/Learnenglish.html" data-name="Inglés">
+    <span class="dot"></span> Inglés
+  </button>
+  <button class="tab" data-src="../Books/Mbooks.html" data-name="Libros">
+    <span class="dot"></span> Libros
+  </button>
+  <div class="spacer"></div>
+  <div class="hint">Cada módulo es su app original, sin modificar. Se abre dentro de este panel.</div>
+</nav>
+
+<main>
+  <iframe id="frame" title="Módulo activo"></iframe>
+</main>
+
+<script>
+  var tabs = document.querySelectorAll('.tab');
+  var frame = document.getElementById('frame');
+
+  function activate(tab){
+    tabs.forEach(function(t){ t.classList.remove('active'); });
+    tab.classList.add('active');
+    frame.src = tab.getAttribute('data-src');
+    try { localStorage.setItem('panel:lastTab', tab.getAttribute('data-name')); } catch(e){}
+  }
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){ activate(tab); });
+  });
+
+  var lastName = null;
+  try { lastName = localStorage.getItem('panel:lastTab'); } catch(e){}
+  var initial = null;
+  tabs.forEach(function(t){ if (t.getAttribute('data-name') === lastName) initial = t; });
+  activate(initial || tabs[0]);
+</script>
+
+</body>
+</html>

@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--prefix", "edits"],
       "port": 3000
+    },
+    {
+      "name": "panel-personal",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "-l", "5500", "."],
+      "port": 5500
     }
   ]
 }
