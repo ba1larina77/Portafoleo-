@@ -1,0 +1,4 @@
+# Nombres, lugares y palabras que usas seguido (una por línea).
+# Se le pasan a Whisper como "pista" para que las escriba bien.
+# Las líneas que empiezan con # se ignoran.
+InDrive

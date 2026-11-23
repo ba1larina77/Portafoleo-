@@ -1,0 +1,39 @@
+# Subtítulos de: Popo
+# Formato:   inicio - fin | TEXTO     (minutos:segundos.centésimas)
+# - Cambia, agrega o borra palabras dentro de una línea.
+# - DIVIDIR: pasa parte del texto a una línea nueva justo debajo, SIN tiempos.
+# - UNIR: deja una sola línea con el inicio de la primera y el fin de la segunda.
+# - QUITAR un subtítulo: borra la línea entera.
+# - Puedes corregir los tiempos a mano. Las líneas con # se ignoran.
+
+00:00.38 - 00:01.90 | HOLA MIS MANICITOS
+00:02.40 - 00:03.16 | HOY HACIENDO INDRIVE
+00:03.42 - 00:04.16 | ME PASARON
+00:04.60 - 00:05.14 | VARIAS COSITAS
+00:06.02 - 00:06.56 | COMENZANDO CON
+00:06.84 - 00:08.36 | ESTE ESPÉCIMEN QUE
+00:08.36 - 00:08.98 | NO SÉ SI
+00:08.98 - 00:09.46 | SE ESTABA
+00:09.46 - 00:11.12 | DISOCIANDO O HABÍA
+00:11.12 - 00:11.96 | VISTO UN CULO
+00:11.96 - 00:16.86 | MUY GRANDE YO
+00:16.94 - 00:17.50 | CULOS NO VI
+00:17.96 - 00:18.56 | ENTONCES CREO QUE
+00:18.60 - 00:19.04 | SE DISOCIÓ
+00:19.72 - 00:20.63 | LUEGO VEO ESTE
+00:20.72 - 00:21.76 | PARCERO QUE
+00:21.92 - 00:22.36 | APARENTEMENTE
+00:22.94 - 00:23.06 | ES POPOLOGO
+00:24.10 - 00:24.22 | Y
+00:24.56 - 00:25.28 | ENCONTRÓ UNO DE
+00:25.80 - 00:25.92 | CALIDAD
+00:26.36 - 00:26.72 | Y MÁS
+00:27.22 - 00:27.34 | ADELANTE
+00:27.50 - 00:27.70 | APARENTEMENTE X2
+00:28.48 - 00:28.87 | UN DISCÍPULO
+00:29.48 - 00:30.08 | QUE VIO UNO
+00:30.42 - 00:30.63 | LEGENDARIO
+00:31.08 - 00:31.60 | Y SE TIRÓ
+00:31.82 - 00:31.94 | DE
+00:32.28 - 00:32.40 | CABEZA
+00:32.70 - 00:34.55 | Y SIN CASCO

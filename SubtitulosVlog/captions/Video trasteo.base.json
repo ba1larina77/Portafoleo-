@@ -1,0 +1,587 @@
+{
+  "nombre": "Video trasteo",
+  "id": "Video-trasteo",
+  "video": "videos/Video-trasteo.mp4",
+  "ancho": 1920,
+  "alto": 1080,
+  "fps": 30,
+  "duracionFrames": 1770,
+  "duracionS": 59,
+  "palabras": [
+    {
+      "texto": "EN",
+      "inicio": 0.22,
+      "fin": 0.34
+    },
+    {
+      "texto": "PEREIRA",
+      "inicio": 0.5,
+      "fin": 0.62
+    },
+    {
+      "texto": "TODO",
+      "inicio": 0.96,
+      "fin": 1.08
+    },
+    {
+      "texto": "EL",
+      "inicio": 1.1,
+      "fin": 1.22
+    },
+    {
+      "texto": "MUNDO",
+      "inicio": 1.34,
+      "fin": 1.46
+    },
+    {
+      "texto": "SE",
+      "inicio": 1.6,
+      "fin": 1.72
+    },
+    {
+      "texto": "QUIERE",
+      "inicio": 1.78,
+      "fin": 1.9
+    },
+    {
+      "texto": "LLEVAR",
+      "inicio": 2.08,
+      "fin": 2.2
+    },
+    {
+      "texto": "EL",
+      "inicio": 2.38,
+      "fin": 2.5
+    },
+    {
+      "texto": "TRASTEO",
+      "inicio": 2.64,
+      "fin": 2.92
+    },
+    {
+      "texto": "Y",
+      "inicio": 3.26,
+      "fin": 3.38
+    },
+    {
+      "texto": "TODO",
+      "inicio": 3.46,
+      "fin": 3.58
+    },
+    {
+      "texto": "EN",
+      "inicio": 3.74,
+      "fin": 3.86
+    },
+    {
+      "texto": "MOTO",
+      "inicio": 4.06,
+      "fin": 4.18
+    },
+    {
+      "texto": "HOY",
+      "inicio": 4.62,
+      "fin": 4.74
+    },
+    {
+      "texto": "ME",
+      "inicio": 4.94,
+      "fin": 5.06
+    },
+    {
+      "texto": "ESTABA",
+      "inicio": 5.14,
+      "fin": 5.26
+    },
+    {
+      "texto": "HACIENDO",
+      "inicio": 5.48,
+      "fin": 5.64
+    },
+    {
+      "texto": "UN",
+      "inicio": 5.78,
+      "fin": 5.9
+    },
+    {
+      "texto": "VIAJECITO",
+      "inicio": 6.08,
+      "fin": 6.48
+    },
+    {
+      "texto": "EN",
+      "inicio": 6.62,
+      "fin": 6.74
+    },
+    {
+      "texto": "INDRIVE",
+      "inicio": 6.88,
+      "fin": 7.2
+    },
+    {
+      "texto": "Y",
+      "inicio": 7.92,
+      "fin": 8.04
+    },
+    {
+      "texto": "ESTA",
+      "inicio": 8.08,
+      "fin": 8.2
+    },
+    {
+      "texto": "ES",
+      "inicio": 8.38,
+      "fin": 8.5
+    },
+    {
+      "texto": "LA",
+      "inicio": 8.54,
+      "fin": 8.66
+    },
+    {
+      "texto": "PRUEBA",
+      "inicio": 8.78,
+      "fin": 8.9
+    },
+    {
+      "texto": "DE",
+      "inicio": 9.1,
+      "fin": 9.22
+    },
+    {
+      "texto": "ELLO",
+      "inicio": 9.52,
+      "fin": 9.64
+    },
+    {
+      "texto": "IBA",
+      "inicio": 9.88,
+      "fin": 10
+    },
+    {
+      "texto": "YO",
+      "inicio": 10.24,
+      "fin": 10.36
+    },
+    {
+      "texto": "A",
+      "inicio": 10.46,
+      "fin": 10.58
+    },
+    {
+      "texto": "RECOGER",
+      "inicio": 10.66,
+      "fin": 10.78
+    },
+    {
+      "texto": "UN",
+      "inicio": 11.06,
+      "fin": 11.18
+    },
+    {
+      "texto": "PASAJERO",
+      "inicio": 11.38,
+      "fin": 11.5
+    },
+    {
+      "texto": "COMILLAS",
+      "inicio": 12.34,
+      "fin": 12.6
+    },
+    {
+      "texto": "COMILLAS",
+      "inicio": 13.34,
+      "fin": 13.46
+    },
+    {
+      "texto": "QUE",
+      "inicio": 15.22,
+      "fin": 15.34
+    },
+    {
+      "texto": "SIENTO",
+      "inicio": 16.04,
+      "fin": 17.2
+    },
+    {
+      "texto": "BUENAS",
+      "inicio": 21.16,
+      "fin": 21.28
+    },
+    {
+      "texto": "BUENAS",
+      "inicio": 21.78,
+      "fin": 22.08
+    },
+    {
+      "texto": "VITO",
+      "inicio": 22.08,
+      "fin": 23.2
+    },
+    {
+      "texto": "WHAT",
+      "inicio": 25.68,
+      "fin": 25.8
+    },
+    {
+      "texto": "WHAT",
+      "inicio": 27.92,
+      "fin": 28.04
+    },
+    {
+      "texto": "THE",
+      "inicio": 28.08,
+      "fin": 28.18
+    },
+    {
+      "texto": "FUCK",
+      "inicio": 28.18,
+      "fin": 28.2
+    },
+    {
+      "texto": "BUENAS",
+      "inicio": 28.2,
+      "fin": 29.4
+    },
+    {
+      "texto": "AQUÍ",
+      "inicio": 31.74,
+      "fin": 31.86
+    },
+    {
+      "texto": "ME",
+      "inicio": 32.14,
+      "fin": 32.26
+    },
+    {
+      "texto": "DICEN",
+      "inicio": 32.46,
+      "fin": 32.58
+    },
+    {
+      "texto": "COMO",
+      "inicio": 32.84,
+      "fin": 32.96
+    },
+    {
+      "texto": "VA",
+      "inicio": 33.2,
+      "fin": 33.32
+    },
+    {
+      "texto": "A",
+      "inicio": 33.32,
+      "fin": 33.44
+    },
+    {
+      "texto": "HACER",
+      "inicio": 33.48,
+      "fin": 33.6
+    },
+    {
+      "texto": "LA",
+      "inicio": 33.7,
+      "fin": 33.82
+    },
+    {
+      "texto": "GESTIÓN",
+      "inicio": 33.98,
+      "fin": 34.1
+    },
+    {
+      "texto": "PARA",
+      "inicio": 34.46,
+      "fin": 34.58
+    },
+    {
+      "texto": "LLEVAR",
+      "inicio": 34.74,
+      "fin": 34.86
+    },
+    {
+      "texto": "EL",
+      "inicio": 35.1,
+      "fin": 35.22
+    },
+    {
+      "texto": "TRIQUI",
+      "inicio": 35.32,
+      "fin": 35.44
+    },
+    {
+      "texto": "EL",
+      "inicio": 36.08,
+      "fin": 36.2
+    },
+    {
+      "texto": "SE",
+      "inicio": 36.28,
+      "fin": 36.4
+    },
+    {
+      "texto": "MONTA",
+      "inicio": 36.5,
+      "fin": 36.62
+    },
+    {
+      "texto": "Y",
+      "inicio": 36.74,
+      "fin": 36.84
+    },
+    {
+      "texto": "SE",
+      "inicio": 36.84,
+      "fin": 36.96
+    },
+    {
+      "texto": "LO",
+      "inicio": 37.02,
+      "fin": 37.14
+    },
+    {
+      "texto": "MONTA",
+      "inicio": 37.2,
+      "fin": 37.32
+    },
+    {
+      "texto": "ENCIMA",
+      "inicio": 37.8,
+      "fin": 37.92
+    },
+    {
+      "texto": "Y",
+      "inicio": 38.26,
+      "fin": 38.38
+    },
+    {
+      "texto": "YO",
+      "inicio": 38.54,
+      "fin": 38.66
+    },
+    {
+      "texto": "YA",
+      "inicio": 38.68,
+      "fin": 38.8
+    },
+    {
+      "texto": "LO",
+      "inicio": 38.9,
+      "fin": 39.02
+    },
+    {
+      "texto": "LLEVO",
+      "inicio": 39.06,
+      "fin": 39.38
+    },
+    {
+      "texto": "YO",
+      "inicio": 41.44,
+      "fin": 41.56
+    },
+    {
+      "texto": "CREO",
+      "inicio": 41.6,
+      "fin": 41.72
+    },
+    {
+      "texto": "QUE",
+      "inicio": 41.76,
+      "fin": 41.88
+    },
+    {
+      "texto": "MEJOR",
+      "inicio": 42.06,
+      "fin": 42.18
+    },
+    {
+      "texto": "ES",
+      "inicio": 42.38,
+      "fin": 42.5
+    },
+    {
+      "texto": "MEJOR",
+      "inicio": 42.5,
+      "fin": 42.62
+    },
+    {
+      "texto": "QUE",
+      "inicio": 42.72,
+      "fin": 42.82
+    },
+    {
+      "texto": "PIDAN",
+      "inicio": 42.82,
+      "fin": 42.94
+    },
+    {
+      "texto": "OTRO",
+      "inicio": 43.72,
+      "fin": 43.84
+    },
+    {
+      "texto": "SI",
+      "inicio": 45.28,
+      "fin": 45.4
+    },
+    {
+      "texto": "SEÑORA",
+      "inicio": 45.9,
+      "fin": 46.26
+    },
+    {
+      "texto": "ACÁ",
+      "inicio": 48.14,
+      "fin": 48.26
+    },
+    {
+      "texto": "LES",
+      "inicio": 48.52,
+      "fin": 48.64
+    },
+    {
+      "texto": "EXPLICO",
+      "inicio": 48.98,
+      "fin": 49.1
+    },
+    {
+      "texto": "QUE",
+      "inicio": 49.3,
+      "fin": 49.42
+    },
+    {
+      "texto": "NO",
+      "inicio": 49.5,
+      "fin": 49.62
+    },
+    {
+      "texto": "PUEDO",
+      "inicio": 49.76,
+      "fin": 49.88
+    },
+    {
+      "texto": "LLEVARLO",
+      "inicio": 50.16,
+      "fin": 50.28
+    },
+    {
+      "texto": "PARA",
+      "inicio": 50.5,
+      "fin": 50.62
+    },
+    {
+      "texto": "EVITAR",
+      "inicio": 50.88,
+      "fin": 51
+    },
+    {
+      "texto": "PROBLEMAS",
+      "inicio": 51.46,
+      "fin": 51.58
+    },
+    {
+      "texto": "CON",
+      "inicio": 51.82,
+      "fin": 51.94
+    },
+    {
+      "texto": "LOS",
+      "inicio": 52.06,
+      "fin": 52.18
+    },
+    {
+      "texto": "ENANITOS",
+      "inicio": 52.22,
+      "fin": 52.77
+    },
+    {
+      "texto": "VERDES",
+      "inicio": 52.92,
+      "fin": 53.4
+    },
+    {
+      "texto": "QUE",
+      "inicio": 53.7,
+      "fin": 53.82
+    },
+    {
+      "texto": "ME",
+      "inicio": 53.98,
+      "fin": 54.1
+    },
+    {
+      "texto": "QUITAN",
+      "inicio": 54.12,
+      "fin": 54.51
+    },
+    {
+      "texto": "EL",
+      "inicio": 54.52,
+      "fin": 54.71
+    },
+    {
+      "texto": "ORO",
+      "inicio": 54.78,
+      "fin": 55.03
+    },
+    {
+      "texto": "SI",
+      "inicio": 55.2,
+      "fin": 55.32
+    },
+    {
+      "texto": "ME",
+      "inicio": 55.42,
+      "fin": 55.54
+    },
+    {
+      "texto": "VEN",
+      "inicio": 55.56,
+      "fin": 55.74
+    },
+    {
+      "texto": "CON",
+      "inicio": 55.82,
+      "fin": 56.05
+    },
+    {
+      "texto": "ESO",
+      "inicio": 56.14,
+      "fin": 56.37
+    },
+    {
+      "texto": "Y",
+      "inicio": 56.66,
+      "fin": 56.78
+    },
+    {
+      "texto": "ME",
+      "inicio": 56.98,
+      "fin": 57.1
+    },
+    {
+      "texto": "VOY",
+      "inicio": 57.12,
+      "fin": 57.24
+    },
+    {
+      "texto": "PARA",
+      "inicio": 57.5,
+      "fin": 57.62
+    },
+    {
+      "texto": "LA",
+      "inicio": 57.78,
+      "fin": 57.9
+    },
+    {
+      "texto": "VERGA",
+      "inicio": 58.04,
+      "fin": 58.16
+    },
+    {
+      "texto": "CHICO",
+      "inicio": 58.64,
+      "fin": 58.76
+    }
+  ]
+}

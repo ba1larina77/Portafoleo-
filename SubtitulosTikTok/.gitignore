@@ -1,0 +1,7 @@
+node_modules/
+.whisper/
+.cache/
+public/
+out/
+input/*
+!input/.gitkeep

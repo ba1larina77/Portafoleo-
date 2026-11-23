@@ -1,0 +1,986 @@
+[
+  {
+    "texto": "Hola",
+    "inicioMs": 360,
+    "finMs": 500,
+    "confianza": 0.878335
+  },
+  {
+    "texto": "mis",
+    "inicioMs": 760,
+    "finMs": 880,
+    "confianza": 0.582503
+  },
+  {
+    "texto": "manicitos,",
+    "inicioMs": 1020,
+    "finMs": 1990,
+    "confianza": 0.762129
+  },
+  {
+    "texto": "hoy",
+    "inicioMs": 2260,
+    "finMs": 2380,
+    "confianza": 0.925681
+  },
+  {
+    "texto": "venía",
+    "inicioMs": 2500,
+    "finMs": 2840,
+    "confianza": 0.993233
+  },
+  {
+    "texto": "yo.",
+    "inicioMs": 3320,
+    "finMs": 3440,
+    "confianza": 0.995089
+  },
+  {
+    "texto": "Llevan",
+    "inicioMs": 3620,
+    "finMs": 3740,
+    "confianza": 0.546109
+  },
+  {
+    "texto": "de",
+    "inicioMs": 3920,
+    "finMs": 4040,
+    "confianza": 0.981298
+  },
+  {
+    "texto": "una",
+    "inicioMs": 4120,
+    "finMs": 4240,
+    "confianza": 0.992097
+  },
+  {
+    "texto": "chica",
+    "inicioMs": 4360,
+    "finMs": 4480,
+    "confianza": 0.990135
+  },
+  {
+    "texto": "cerca",
+    "inicioMs": 4900,
+    "finMs": 5020,
+    "confianza": 0.975762
+  },
+  {
+    "texto": "de",
+    "inicioMs": 5100,
+    "finMs": 5220,
+    "confianza": 0.987178
+  },
+  {
+    "texto": "la",
+    "inicioMs": 5220,
+    "finMs": 5340,
+    "confianza": 0.973719
+  },
+  {
+    "texto": "vía",
+    "inicioMs": 5360,
+    "finMs": 5480,
+    "confianza": 0.679101
+  },
+  {
+    "texto": "armenia",
+    "inicioMs": 5680,
+    "finMs": 6270,
+    "confianza": 0.406339
+  },
+  {
+    "texto": "cuando",
+    "inicioMs": 6520,
+    "finMs": 6640,
+    "confianza": 0.384407
+  },
+  {
+    "texto": "una",
+    "inicioMs": 6740,
+    "finMs": 6860,
+    "confianza": 0.973346
+  },
+  {
+    "texto": "señora",
+    "inicioMs": 7160,
+    "finMs": 7430,
+    "confianza": 0.974682
+  },
+  {
+    "texto": "solicita",
+    "inicioMs": 7660,
+    "finMs": 7980,
+    "confianza": 0.960574
+  },
+  {
+    "texto": "la",
+    "inicioMs": 7980,
+    "finMs": 8160,
+    "confianza": 0.973749
+  },
+  {
+    "texto": "ayuda",
+    "inicioMs": 8160,
+    "finMs": 8360,
+    "confianza": 0.998742
+  },
+  {
+    "texto": "de",
+    "inicioMs": 8360,
+    "finMs": 8640,
+    "confianza": 0.993676
+  },
+  {
+    "texto": "un",
+    "inicioMs": 8640,
+    "finMs": 8940,
+    "confianza": 0.981178
+  },
+  {
+    "texto": "strong",
+    "inicioMs": 8940,
+    "finMs": 9680,
+    "confianza": 0.621397
+  },
+  {
+    "texto": "man.",
+    "inicioMs": 10300,
+    "finMs": 10420,
+    "confianza": 0.642683
+  },
+  {
+    "texto": "Dime,",
+    "inicioMs": 10680,
+    "finMs": 11760,
+    "confianza": 0.34905
+  },
+  {
+    "texto": "dime.",
+    "inicioMs": 11920,
+    "finMs": 12040,
+    "confianza": 0.498002
+  },
+  {
+    "texto": "Que",
+    "inicioMs": 12220,
+    "finMs": 12340,
+    "confianza": 0.302083
+  },
+  {
+    "texto": "necesitamos",
+    "inicioMs": 12520,
+    "finMs": 13120,
+    "confianza": 0.995797
+  },
+  {
+    "texto": "un",
+    "inicioMs": 13120,
+    "finMs": 13360,
+    "confianza": 0.950873
+  },
+  {
+    "texto": "mero",
+    "inicioMs": 13360,
+    "finMs": 13790,
+    "confianza": 0.317281
+  },
+  {
+    "texto": "mero.",
+    "inicioMs": 14220,
+    "finMs": 14340,
+    "confianza": 0.174377
+  },
+  {
+    "texto": "Voy",
+    "inicioMs": 14720,
+    "finMs": 14840,
+    "confianza": 0.370691
+  },
+  {
+    "texto": "a",
+    "inicioMs": 14880,
+    "finMs": 14980,
+    "confianza": 0.989717
+  },
+  {
+    "texto": "reventar",
+    "inicioMs": 14980,
+    "finMs": 16100,
+    "confianza": 0.422597
+  },
+  {
+    "texto": "un...",
+    "inicioMs": 16340,
+    "finMs": 16460,
+    "confianza": 0.936333
+  },
+  {
+    "texto": "Un",
+    "inicioMs": 17020,
+    "finMs": 17140,
+    "confianza": 0.0952964
+  },
+  {
+    "texto": "qué?",
+    "inicioMs": 18360,
+    "finMs": 18480,
+    "confianza": 0.376902
+  },
+  {
+    "texto": "Para",
+    "inicioMs": 19300,
+    "finMs": 19420,
+    "confianza": 0.753704
+  },
+  {
+    "texto": "reventar,",
+    "inicioMs": 19500,
+    "finMs": 19650,
+    "confianza": 0.712218
+  },
+  {
+    "texto": "para",
+    "inicioMs": 20420,
+    "finMs": 20540,
+    "confianza": 0.945438
+  },
+  {
+    "texto": "poner",
+    "inicioMs": 20760,
+    "finMs": 20880,
+    "confianza": 0.968285
+  },
+  {
+    "texto": "acá",
+    "inicioMs": 21140,
+    "finMs": 21260,
+    "confianza": 0.754986
+  },
+  {
+    "texto": "un",
+    "inicioMs": 21340,
+    "finMs": 21460,
+    "confianza": 0.936801
+  },
+  {
+    "texto": "renal",
+    "inicioMs": 21560,
+    "finMs": 21840,
+    "confianza": 0.152624
+  },
+  {
+    "texto": "checo.",
+    "inicioMs": 21840,
+    "finMs": 22430,
+    "confianza": 0.422537
+  },
+  {
+    "texto": "Sí.",
+    "inicioMs": 23740,
+    "finMs": 23860,
+    "confianza": 0.490247
+  },
+  {
+    "texto": "Aquí",
+    "inicioMs": 25020,
+    "finMs": 25140,
+    "confianza": 0.87676
+  },
+  {
+    "texto": "ya",
+    "inicioMs": 25280,
+    "finMs": 25380,
+    "confianza": 0.947936
+  },
+  {
+    "texto": "me",
+    "inicioMs": 25380,
+    "finMs": 25500,
+    "confianza": 0.995946
+  },
+  {
+    "texto": "bajo",
+    "inicioMs": 25600,
+    "finMs": 25720,
+    "confianza": 0.977644
+  },
+  {
+    "texto": "yo",
+    "inicioMs": 25980,
+    "finMs": 26100,
+    "confianza": 0.973071
+  },
+  {
+    "texto": "a",
+    "inicioMs": 26100,
+    "finMs": 26220,
+    "confianza": 0.962239
+  },
+  {
+    "texto": "ayudar",
+    "inicioMs": 26380,
+    "finMs": 26500,
+    "confianza": 0.98805
+  },
+  {
+    "texto": "a",
+    "inicioMs": 26560,
+    "finMs": 26680,
+    "confianza": 0.993252
+  },
+  {
+    "texto": "la",
+    "inicioMs": 26800,
+    "finMs": 26920,
+    "confianza": 0.995627
+  },
+  {
+    "texto": "señora,",
+    "inicioMs": 27160,
+    "finMs": 27350,
+    "confianza": 0.988974
+  },
+  {
+    "texto": "porque",
+    "inicioMs": 28000,
+    "finMs": 28120,
+    "confianza": 0.950746
+  },
+  {
+    "texto": "definitivamente",
+    "inicioMs": 28660,
+    "finMs": 29350,
+    "confianza": 0.982349
+  },
+  {
+    "texto": "soy",
+    "inicioMs": 29920,
+    "finMs": 30040,
+    "confianza": 0.849735
+  },
+  {
+    "texto": "el",
+    "inicioMs": 30260,
+    "finMs": 30380,
+    "confianza": 0.995019
+  },
+  {
+    "texto": "macho",
+    "inicioMs": 30480,
+    "finMs": 30600,
+    "confianza": 0.982701
+  },
+  {
+    "texto": "que",
+    "inicioMs": 30860,
+    "finMs": 30980,
+    "confianza": 0.978864
+  },
+  {
+    "texto": "ella",
+    "inicioMs": 31180,
+    "finMs": 31300,
+    "confianza": 0.965263
+  },
+  {
+    "texto": "necesitaba.",
+    "inicioMs": 31800,
+    "finMs": 31920,
+    "confianza": 0.667571
+  },
+  {
+    "texto": "Es",
+    "inicioMs": 34040,
+    "finMs": 34160,
+    "confianza": 0.846557
+  },
+  {
+    "texto": "apretable",
+    "inicioMs": 34320,
+    "finMs": 34440,
+    "confianza": 0.901209
+  },
+  {
+    "texto": "aquí,",
+    "inicioMs": 35160,
+    "finMs": 35280,
+    "confianza": 0.905037
+  },
+  {
+    "texto": "hacerle",
+    "inicioMs": 35560,
+    "finMs": 35680,
+    "confianza": 0.6771
+  },
+  {
+    "texto": "así",
+    "inicioMs": 36120,
+    "finMs": 36240,
+    "confianza": 0.98142
+  },
+  {
+    "texto": "hasta",
+    "inicioMs": 36420,
+    "finMs": 36540,
+    "confianza": 0.739619
+  },
+  {
+    "texto": "que",
+    "inicioMs": 36580,
+    "finMs": 36700,
+    "confianza": 0.978829
+  },
+  {
+    "texto": "revienta.",
+    "inicioMs": 36820,
+    "finMs": 37440,
+    "confianza": 0.4551
+  },
+  {
+    "texto": "Ya.",
+    "inicioMs": 38660,
+    "finMs": 38780,
+    "confianza": 0.421883
+  },
+  {
+    "texto": "Si",
+    "inicioMs": 38840,
+    "finMs": 38940,
+    "confianza": 0.209133
+  },
+  {
+    "texto": "no,",
+    "inicioMs": 38940,
+    "finMs": 39060,
+    "confianza": 0.600812
+  },
+  {
+    "texto": "aquí",
+    "inicioMs": 39100,
+    "finMs": 39270,
+    "confianza": 0.342066
+  },
+  {
+    "texto": "como",
+    "inicioMs": 39280,
+    "finMs": 39540,
+    "confianza": 0.664387
+  },
+  {
+    "texto": "está",
+    "inicioMs": 39540,
+    "finMs": 39880,
+    "confianza": 0.684876
+  },
+  {
+    "texto": "grueso,",
+    "inicioMs": 39880,
+    "finMs": 40430,
+    "confianza": 0.481787
+  },
+  {
+    "texto": "no",
+    "inicioMs": 41900,
+    "finMs": 42020,
+    "confianza": 0.847143
+  },
+  {
+    "texto": "tenemos",
+    "inicioMs": 42260,
+    "finMs": 42380,
+    "confianza": 0.6129
+  },
+  {
+    "texto": "la",
+    "inicioMs": 42480,
+    "finMs": 42600,
+    "confianza": 0.792361
+  },
+  {
+    "texto": "fuerza.",
+    "inicioMs": 42480,
+    "finMs": 42600,
+    "confianza": 0.342595
+  },
+  {
+    "texto": "Así,",
+    "inicioMs": 42840,
+    "finMs": 42960,
+    "confianza": 0.617992
+  },
+  {
+    "texto": "pero",
+    "inicioMs": 43060,
+    "finMs": 43180,
+    "confianza": 0.937637
+  },
+  {
+    "texto": "hacerle",
+    "inicioMs": 43200,
+    "finMs": 43330,
+    "confianza": 0.301182
+  },
+  {
+    "texto": "más",
+    "inicioMs": 43440,
+    "finMs": 43540,
+    "confianza": 0.945397
+  },
+  {
+    "texto": "duro",
+    "inicioMs": 43540,
+    "finMs": 43740,
+    "confianza": 0.991283
+  },
+  {
+    "texto": "que...",
+    "inicioMs": 43860,
+    "finMs": 43980,
+    "confianza": 0.316638
+  },
+  {
+    "texto": "Sí,",
+    "inicioMs": 44360,
+    "finMs": 44690,
+    "confianza": 0.605157
+  },
+  {
+    "texto": "usted",
+    "inicioMs": 44720,
+    "finMs": 44900,
+    "confianza": 0.884087
+  },
+  {
+    "texto": "le",
+    "inicioMs": 44900,
+    "finMs": 45180,
+    "confianza": 0.920009
+  },
+  {
+    "texto": "de",
+    "inicioMs": 45180,
+    "finMs": 45580,
+    "confianza": 0.388417
+  },
+  {
+    "texto": "eso",
+    "inicioMs": 46120,
+    "finMs": 46240,
+    "confianza": 0.761698
+  },
+  {
+    "texto": "así,",
+    "inicioMs": 46560,
+    "finMs": 46680,
+    "confianza": 0.48233
+  },
+  {
+    "texto": "dele",
+    "inicioMs": 46920,
+    "finMs": 47040,
+    "confianza": 0.372049
+  },
+  {
+    "texto": "otra",
+    "inicioMs": 47320,
+    "finMs": 47440,
+    "confianza": 0.998487
+  },
+  {
+    "texto": "vez,",
+    "inicioMs": 47580,
+    "finMs": 47700,
+    "confianza": 0.996128
+  },
+  {
+    "texto": "lo",
+    "inicioMs": 48000,
+    "finMs": 48120,
+    "confianza": 0.940787
+  },
+  {
+    "texto": "abre",
+    "inicioMs": 48240,
+    "finMs": 48360,
+    "confianza": 0.978136
+  },
+  {
+    "texto": "y",
+    "inicioMs": 48580,
+    "finMs": 48700,
+    "confianza": 0.967014
+  },
+  {
+    "texto": "vuelve,",
+    "inicioMs": 48900,
+    "finMs": 49440,
+    "confianza": 0.992436
+  },
+  {
+    "texto": "porque",
+    "inicioMs": 49940,
+    "finMs": 50060,
+    "confianza": 0.881304
+  },
+  {
+    "texto": "él",
+    "inicioMs": 50280,
+    "finMs": 50400,
+    "confianza": 0.43539
+  },
+  {
+    "texto": "adentro",
+    "inicioMs": 50400,
+    "finMs": 50520,
+    "confianza": 0.941616
+  },
+  {
+    "texto": "se",
+    "inicioMs": 50900,
+    "finMs": 51020,
+    "confianza": 0.975591
+  },
+  {
+    "texto": "sopla,",
+    "inicioMs": 51200,
+    "finMs": 51440,
+    "confianza": 0.99691
+  },
+  {
+    "texto": "cuando",
+    "inicioMs": 51780,
+    "finMs": 52030,
+    "confianza": 0.86937
+  },
+  {
+    "texto": "usted",
+    "inicioMs": 52100,
+    "finMs": 52300,
+    "confianza": 0.912238
+  },
+  {
+    "texto": "le",
+    "inicioMs": 52300,
+    "finMs": 52520,
+    "confianza": 0.897205
+  },
+  {
+    "texto": "abre",
+    "inicioMs": 52520,
+    "finMs": 52800,
+    "confianza": 0.927312
+  },
+  {
+    "texto": "y",
+    "inicioMs": 52800,
+    "finMs": 52900,
+    "confianza": 0.499027
+  },
+  {
+    "texto": "se",
+    "inicioMs": 52900,
+    "finMs": 53160,
+    "confianza": 0.979256
+  },
+  {
+    "texto": "sopla,",
+    "inicioMs": 53160,
+    "finMs": 53870,
+    "confianza": 0.999481
+  },
+  {
+    "texto": "vuelve",
+    "inicioMs": 54740,
+    "finMs": 54860,
+    "confianza": 0.722478
+  },
+  {
+    "texto": "y",
+    "inicioMs": 55220,
+    "finMs": 55340,
+    "confianza": 0.945889
+  },
+  {
+    "texto": "le",
+    "inicioMs": 55360,
+    "finMs": 55480,
+    "confianza": 0.753475
+  },
+  {
+    "texto": "hace",
+    "inicioMs": 56040,
+    "finMs": 56160,
+    "confianza": 0.975046
+  },
+  {
+    "texto": "ese",
+    "inicioMs": 56460,
+    "finMs": 56580,
+    "confianza": 0.764687
+  },
+  {
+    "texto": "ejercicio",
+    "inicioMs": 56820,
+    "finMs": 56940,
+    "confianza": 0.983414
+  },
+  {
+    "texto": "hasta",
+    "inicioMs": 57260,
+    "finMs": 57380,
+    "confianza": 0.925115
+  },
+  {
+    "texto": "que",
+    "inicioMs": 57380,
+    "finMs": 57500,
+    "confianza": 0.985287
+  },
+  {
+    "texto": "el",
+    "inicioMs": 57540,
+    "finMs": 57660,
+    "confianza": 0.90161
+  },
+  {
+    "texto": "sol",
+    "inicioMs": 57720,
+    "finMs": 57840,
+    "confianza": 0.865235
+  },
+  {
+    "texto": "y",
+    "inicioMs": 57840,
+    "finMs": 58000,
+    "confianza": 0.0895503
+  },
+  {
+    "texto": "todo",
+    "inicioMs": 58000,
+    "finMs": 58260,
+    "confianza": 0.740629
+  },
+  {
+    "texto": "revienta.",
+    "inicioMs": 58260,
+    "finMs": 58440,
+    "confianza": 0.559078
+  },
+  {
+    "texto": "¡Eso!",
+    "inicioMs": 59480,
+    "finMs": 59600,
+    "confianza": 0.877172
+  },
+  {
+    "texto": "Así",
+    "inicioMs": 60420,
+    "finMs": 60540,
+    "confianza": 0.676574
+  },
+  {
+    "texto": "o",
+    "inicioMs": 60640,
+    "finMs": 60760,
+    "confianza": 0.767236
+  },
+  {
+    "texto": "qué?",
+    "inicioMs": 60760,
+    "finMs": 60880,
+    "confianza": 0.909027
+  },
+  {
+    "texto": "¡Eso!",
+    "inicioMs": 60960,
+    "finMs": 61080,
+    "confianza": 0.915192
+  },
+  {
+    "texto": "Ve,",
+    "inicioMs": 61720,
+    "finMs": 61840,
+    "confianza": 0.623165
+  },
+  {
+    "texto": "pero",
+    "inicioMs": 61940,
+    "finMs": 62140,
+    "confianza": 0.96346
+  },
+  {
+    "texto": "no",
+    "inicioMs": 62140,
+    "finMs": 62320,
+    "confianza": 0.921103
+  },
+  {
+    "texto": "reventó.",
+    "inicioMs": 62320,
+    "finMs": 63150,
+    "confianza": 0.356567
+  },
+  {
+    "texto": "La",
+    "inicioMs": 72120,
+    "finMs": 72240,
+    "confianza": 0.600223
+  },
+  {
+    "texto": "enseñanza",
+    "inicioMs": 75900,
+    "finMs": 76020,
+    "confianza": 0.998133
+  },
+  {
+    "texto": "del",
+    "inicioMs": 76340,
+    "finMs": 76460,
+    "confianza": 0.989108
+  },
+  {
+    "texto": "video",
+    "inicioMs": 76760,
+    "finMs": 77440,
+    "confianza": 0.696696
+  },
+  {
+    "texto": "es",
+    "inicioMs": 77440,
+    "finMs": 77560,
+    "confianza": 0.83435
+  },
+  {
+    "texto": "que",
+    "inicioMs": 78100,
+    "finMs": 78220,
+    "confianza": 0.987091
+  },
+  {
+    "texto": "realmente",
+    "inicioMs": 78100,
+    "finMs": 78220,
+    "confianza": 0.816572
+  },
+  {
+    "texto": "los",
+    "inicioMs": 78480,
+    "finMs": 78600,
+    "confianza": 0.978403
+  },
+  {
+    "texto": "hombres",
+    "inicioMs": 78660,
+    "finMs": 78780,
+    "confianza": 0.977648
+  },
+  {
+    "texto": "sólo",
+    "inicioMs": 79240,
+    "finMs": 79360,
+    "confianza": 0.493845
+  },
+  {
+    "texto": "somos",
+    "inicioMs": 79640,
+    "finMs": 79760,
+    "confianza": 0.989089
+  },
+  {
+    "texto": "decoración,",
+    "inicioMs": 80100,
+    "finMs": 80440,
+    "confianza": 0.781488
+  },
+  {
+    "texto": "porque",
+    "inicioMs": 81140,
+    "finMs": 81260,
+    "confianza": 0.973695
+  },
+  {
+    "texto": "a",
+    "inicioMs": 81360,
+    "finMs": 81480,
+    "confianza": 0.906348
+  },
+  {
+    "texto": "la",
+    "inicioMs": 81500,
+    "finMs": 81620,
+    "confianza": 0.987472
+  },
+  {
+    "texto": "final",
+    "inicioMs": 82120,
+    "finMs": 82240,
+    "confianza": 0.994423
+  },
+  {
+    "texto": "lo",
+    "inicioMs": 82540,
+    "finMs": 82660,
+    "confianza": 0.892743
+  },
+  {
+    "texto": "partió",
+    "inicioMs": 82920,
+    "finMs": 83040,
+    "confianza": 0.993072
+  },
+  {
+    "texto": "ella.",
+    "inicioMs": 83720,
+    "finMs": 83840,
+    "confianza": 0.977005
+  },
+  {
+    "texto": "Al",
+    "inicioMs": 84320,
+    "finMs": 84440,
+    "confianza": 0.974579
+  },
+  {
+    "texto": "menos",
+    "inicioMs": 84820,
+    "finMs": 84940,
+    "confianza": 0.997702
+  },
+  {
+    "texto": "creo",
+    "inicioMs": 85320,
+    "finMs": 85440,
+    "confianza": 0.746797
+  },
+  {
+    "texto": "que",
+    "inicioMs": 85580,
+    "finMs": 85700,
+    "confianza": 0.998887
+  },
+  {
+    "texto": "la",
+    "inicioMs": 85800,
+    "finMs": 85920,
+    "confianza": 0.99151
+  },
+  {
+    "texto": "motive.",
+    "inicioMs": 86220,
+    "finMs": 86340,
+    "confianza": 0.773082
+  },
+  {
+    "texto": "Chao,",
+    "inicioMs": 87440,
+    "finMs": 87560,
+    "confianza": 0.787186
+  },
+  {
+    "texto": "Manicitos.",
+    "inicioMs": 88000,
+    "finMs": 88440,
+    "confianza": 0.7891
+  }
+]

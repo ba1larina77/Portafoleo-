@@ -4,13 +4,54 @@
     {
       "name": "remotion-edits-studio",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "edits"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "edits"
+      ],
       "port": 3000
+    },
+    {
+      "name": "subtitulos-tiktok-studio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "studio:solo",
+        "--prefix",
+        "SubtitulosTikTok",
+        "--",
+        "--port",
+        "3123",
+        "--no-open"
+      ],
+      "port": 3123
+    },
+    {
+      "name": "subtitulos-vlog-studio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "studio",
+        "--prefix",
+        "SubtitulosVlog",
+        "--",
+        "--port",
+        "3124",
+        "--no-open"
+      ],
+      "port": 3124
     },
     {
       "name": "panel-personal",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "serve", "-l", "5500", "."],
+      "runtimeArgs": [
+        "-y",
+        "serve",
+        "-l",
+        "5500",
+        "."
+      ],
       "port": 5500
     }
   ]

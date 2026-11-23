@@ -1,0 +1,62 @@
+# Subtítulos de: Video trasteo
+# Formato:   inicio - fin | TEXTO     (minutos:segundos.centésimas)
+# - Cambia, agrega o borra palabras dentro de una línea.
+# - DIVIDIR: pasa parte del texto a una línea nueva justo debajo, SIN tiempos.
+# - UNIR: deja una sola línea con el inicio de la primera y el fin de la segunda.
+# - QUITAR un subtítulo: borra la línea entera.
+# - Puedes corregir los tiempos a mano. Las líneas con # se ignoran.
+
+00:00.22 - 00:00.62 | EN PEREIRA
+00:00.96 - 00:01.46 | TODO EL MUNDO
+00:01.60 - 00:02.20 | SE QUIERE LLEVAR
+00:02.38 - 00:02.92 | EL TRASTEO
+00:03.26 - 00:03.86 | Y TODO EN
+00:04.06 - 00:04.18 | MOTO
+00:04.62 - 00:05.26 | HOY ME ESTABA
+00:05.48 - 00:05.90 | HACIENDO UN
+00:06.08 - 00:06.74 | VIAJECITO EN
+00:06.88 - 00:07.20 | INDRIVE
+00:07.92 - 00:08.50 | Y ESTA ES
+00:08.54 - 00:09.22 | LA PRUEBA DE
+00:09.52 - 00:10.36 | ELLO IBA YO
+00:10.46 - 00:11.18 | A RECOGER UN
+00:11.38 - 00:11.50 | PASAJERO
+00:12.34 - 00:12.60 | COMILLAS
+00:13.34 - 00:13.46 | COMILLAS
+00:15.22 - 00:15.34 | ME
+00:16.04 - 00:17.20 | SIENTO
+00:21.16 - 00:21.28 | BUENAS
+00:21.78 - 00:23.20 | BUENAS PITO
+
+00:28.20 - 00:29.40 | BUENAS
+00:31.74 - 00:32.58 | AQUÍ ME DICEN
+00:32.84 - 00:33.44 | COMO VA A
+00:33.48 - 00:34.10 | HACER LA GESTIÓN
+00:34.46 - 00:35.22 | PARA LLEVAR EL
+00:35.32 - 00:35.44 | TRIKI
+00:36.08 - 00:36.62 | EL SE MONTA
+00:36.74 - 00:37.14 | Y SE LO
+00:37.20 - 00:37.32 | MONTA
+00:37.80 - 00:37.92 | ENCIMA
+00:38.26 - 00:38.80 | Y YO YA
+00:38.90 - 00:39.38 | LO LLEVO
+00:41.44 - 00:41.88 | YO CREO QUE
+00:42.06 - 00:42.18 | MEJOR
+00:42.38 - 00:42.82 | ES MEJOR QUE
+00:42.82 - 00:42.94 | PIDAN
+00:43.72 - 00:43.84 | OTRO
+00:45.28 - 00:45.40 | SI
+00:45.90 - 00:46.26 | SEÑORA
+00:48.14 - 00:48.64 | ACÁ LES
+00:48.98 - 00:49.62 | EXPLICO QUE NO
+00:49.76 - 00:50.28 | PUEDO LLEVARLO
+00:50.50 - 00:51.00 | PARA EVITAR
+00:51.46 - 00:52.18 | PROBLEMAS CON LOS
+00:52.22 - 00:53.40 | ENANITOS VERDES
+00:53.70 - 00:54.51 | QUE ME QUITAN
+00:54.52 - 00:55.32 | EL ORO SI
+00:55.42 - 00:56.05 | ME VEN CON
+00:56.14 - 00:57.10 | ESO Y ME
+00:57.12 - 00:57.90 | VOY PARA LA
+00:58.04 - 00:58.16 | VG
+00:58.64 - 00:58.76 | CHICO

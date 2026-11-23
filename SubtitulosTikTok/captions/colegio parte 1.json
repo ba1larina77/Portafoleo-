@@ -1,0 +1,1430 @@
+[
+  {
+    "text": " Me",
+    "startMs": 160,
+    "endMs": 280,
+    "timestampMs": 160,
+    "confidence": 0.720845
+  },
+  {
+    "text": " acusaron,",
+    "startMs": 460,
+    "endMs": 750,
+    "timestampMs": 460,
+    "confidence": 0.996892
+  },
+  {
+    "text": " pero",
+    "startMs": 1160,
+    "endMs": 1280,
+    "timestampMs": 1160,
+    "confidence": 0.95699
+  },
+  {
+    "text": " tengo",
+    "startMs": 1460,
+    "endMs": 1610,
+    "timestampMs": 1460,
+    "confidence": 0.994279
+  },
+  {
+    "text": " pruebas.",
+    "startMs": 1800,
+    "endMs": 1990,
+    "timestampMs": 1800,
+    "confidence": 0.995611
+  },
+  {
+    "text": " En",
+    "startMs": 2680,
+    "endMs": 2800,
+    "timestampMs": 2680,
+    "confidence": 0.995213
+  },
+  {
+    "text": " el",
+    "startMs": 2900,
+    "endMs": 3020,
+    "timestampMs": 2900,
+    "confidence": 0.999222
+  },
+  {
+    "text": " colegio",
+    "startMs": 3020,
+    "endMs": 3140,
+    "timestampMs": 3020,
+    "confidence": 0.992174
+  },
+  {
+    "text": " me",
+    "startMs": 3380,
+    "endMs": 3500,
+    "timestampMs": 3380,
+    "confidence": 0.951673
+  },
+  {
+    "text": " acusaron",
+    "startMs": 3600,
+    "endMs": 3720,
+    "timestampMs": 3600,
+    "confidence": 0.999342
+  },
+  {
+    "text": " de",
+    "startMs": 4000,
+    "endMs": 4120,
+    "timestampMs": 4000,
+    "confidence": 0.98763
+  },
+  {
+    "text": " copiar",
+    "startMs": 4160,
+    "endMs": 4280,
+    "timestampMs": 4160,
+    "confidence": 0.990998
+  },
+  {
+    "text": " en",
+    "startMs": 4480,
+    "endMs": 4600,
+    "timestampMs": 4480,
+    "confidence": 0.95764
+  },
+  {
+    "text": " el",
+    "startMs": 4660,
+    "endMs": 4780,
+    "timestampMs": 4660,
+    "confidence": 0.987023
+  },
+  {
+    "text": " examen",
+    "startMs": 4860,
+    "endMs": 4980,
+    "timestampMs": 4860,
+    "confidence": 0.995177
+  },
+  {
+    "text": " final.",
+    "startMs": 5320,
+    "endMs": 5440,
+    "timestampMs": 5320,
+    "confidence": 0.985169
+  },
+  {
+    "text": " La",
+    "startMs": 5780,
+    "endMs": 5900,
+    "timestampMs": 5780,
+    "confidence": 0.990131
+  },
+  {
+    "text": " que",
+    "startMs": 5960,
+    "endMs": 6080,
+    "timestampMs": 5960,
+    "confidence": 0.99851
+  },
+  {
+    "text": " copió",
+    "startMs": 6120,
+    "endMs": 6240,
+    "timestampMs": 6120,
+    "confidence": 0.995927
+  },
+  {
+    "text": " fue",
+    "startMs": 6400,
+    "endMs": 6520,
+    "timestampMs": 6400,
+    "confidence": 0.994473
+  },
+  {
+    "text": " la",
+    "startMs": 6620,
+    "endMs": 6740,
+    "timestampMs": 6620,
+    "confidence": 0.996713
+  },
+  {
+    "text": " hija",
+    "startMs": 6760,
+    "endMs": 6900,
+    "timestampMs": 6760,
+    "confidence": 0.953663
+  },
+  {
+    "text": " del",
+    "startMs": 7000,
+    "endMs": 7120,
+    "timestampMs": 7000,
+    "confidence": 0.996082
+  },
+  {
+    "text": " rector,",
+    "startMs": 7200,
+    "endMs": 7320,
+    "timestampMs": 7200,
+    "confidence": 0.972492
+  },
+  {
+    "text": " y",
+    "startMs": 7820,
+    "endMs": 7940,
+    "timestampMs": 7820,
+    "confidence": 0.837729
+  },
+  {
+    "text": " yo",
+    "startMs": 8020,
+    "endMs": 8140,
+    "timestampMs": 8020,
+    "confidence": 0.997447
+  },
+  {
+    "text": " lo",
+    "startMs": 8240,
+    "endMs": 8360,
+    "timestampMs": 8240,
+    "confidence": 0.99478
+  },
+  {
+    "text": " podía",
+    "startMs": 8480,
+    "endMs": 8600,
+    "timestampMs": 8480,
+    "confidence": 0.988678
+  },
+  {
+    "text": " probar.",
+    "startMs": 8820,
+    "endMs": 8940,
+    "timestampMs": 8820,
+    "confidence": 0.837753
+  },
+  {
+    "text": " Estaba",
+    "startMs": 9540,
+    "endMs": 9660,
+    "timestampMs": 9540,
+    "confidence": 0.993669
+  },
+  {
+    "text": " en",
+    "startMs": 9860,
+    "endMs": 9980,
+    "timestampMs": 9860,
+    "confidence": 0.996942
+  },
+  {
+    "text": " último",
+    "startMs": 10240,
+    "endMs": 10360,
+    "timestampMs": 10240,
+    "confidence": 0.989304
+  },
+  {
+    "text": " año.",
+    "startMs": 10560,
+    "endMs": 10680,
+    "timestampMs": 10560,
+    "confidence": 0.999028
+  },
+  {
+    "text": " Tenía",
+    "startMs": 11200,
+    "endMs": 11320,
+    "timestampMs": 11200,
+    "confidence": 0.99563
+  },
+  {
+    "text": " beca",
+    "startMs": 11560,
+    "endMs": 11680,
+    "timestampMs": 11560,
+    "confidence": 0.993871
+  },
+  {
+    "text": " completa.",
+    "startMs": 12180,
+    "endMs": 12300,
+    "timestampMs": 12180,
+    "confidence": 0.999184
+  },
+  {
+    "text": " Si",
+    "startMs": 12680,
+    "endMs": 12800,
+    "timestampMs": 12680,
+    "confidence": 0.965112
+  },
+  {
+    "text": " perdía",
+    "startMs": 12920,
+    "endMs": 13040,
+    "timestampMs": 12920,
+    "confidence": 0.996147
+  },
+  {
+    "text": " matemáticas,",
+    "startMs": 13300,
+    "endMs": 13780,
+    "timestampMs": 13300,
+    "confidence": 0.976354
+  },
+  {
+    "text": " perdía",
+    "startMs": 14360,
+    "endMs": 14530,
+    "timestampMs": 14360,
+    "confidence": 0.990408
+  },
+  {
+    "text": " la",
+    "startMs": 14700,
+    "endMs": 14820,
+    "timestampMs": 14700,
+    "confidence": 0.997425
+  },
+  {
+    "text": " beca.",
+    "startMs": 14880,
+    "endMs": 15000,
+    "timestampMs": 14880,
+    "confidence": 0.999697
+  },
+  {
+    "text": " Y",
+    "startMs": 15480,
+    "endMs": 15600,
+    "timestampMs": 15480,
+    "confidence": 0.99128
+  },
+  {
+    "text": " mi",
+    "startMs": 15600,
+    "endMs": 15720,
+    "timestampMs": 15600,
+    "confidence": 0.97085
+  },
+  {
+    "text": " familia",
+    "startMs": 15960,
+    "endMs": 16080,
+    "timestampMs": 15960,
+    "confidence": 0.99899
+  },
+  {
+    "text": " no",
+    "startMs": 16240,
+    "endMs": 16360,
+    "timestampMs": 16240,
+    "confidence": 0.998186
+  },
+  {
+    "text": " podía",
+    "startMs": 16440,
+    "endMs": 16560,
+    "timestampMs": 16440,
+    "confidence": 0.994879
+  },
+  {
+    "text": " pagar",
+    "startMs": 16780,
+    "endMs": 16900,
+    "timestampMs": 16780,
+    "confidence": 0.999487
+  },
+  {
+    "text": " ni",
+    "startMs": 16980,
+    "endMs": 17100,
+    "timestampMs": 16980,
+    "confidence": 0.998612
+  },
+  {
+    "text": " un",
+    "startMs": 17160,
+    "endMs": 17280,
+    "timestampMs": 17160,
+    "confidence": 0.995778
+  },
+  {
+    "text": " mes.",
+    "startMs": 17360,
+    "endMs": 17480,
+    "timestampMs": 17360,
+    "confidence": 0.999611
+  },
+  {
+    "text": " El",
+    "startMs": 17740,
+    "endMs": 17860,
+    "timestampMs": 17740,
+    "confidence": 0.988361
+  },
+  {
+    "text": " día",
+    "startMs": 17940,
+    "endMs": 18060,
+    "timestampMs": 17940,
+    "confidence": 0.999268
+  },
+  {
+    "text": " del",
+    "startMs": 18200,
+    "endMs": 18320,
+    "timestampMs": 18200,
+    "confidence": 0.997482
+  },
+  {
+    "text": " examen,",
+    "startMs": 18500,
+    "endMs": 18620,
+    "timestampMs": 18500,
+    "confidence": 0.997584
+  },
+  {
+    "text": " la",
+    "startMs": 19180,
+    "endMs": 19300,
+    "timestampMs": 19180,
+    "confidence": 0.981774
+  },
+  {
+    "text": " profesora",
+    "startMs": 19420,
+    "endMs": 19540,
+    "timestampMs": 19420,
+    "confidence": 0.988446
+  },
+  {
+    "text": " recogió",
+    "startMs": 19880,
+    "endMs": 20110,
+    "timestampMs": 19880,
+    "confidence": 0.994493
+  },
+  {
+    "text": " las",
+    "startMs": 20280,
+    "endMs": 20400,
+    "timestampMs": 20280,
+    "confidence": 0.997482
+  },
+  {
+    "text": " hojas.",
+    "startMs": 20440,
+    "endMs": 20620,
+    "timestampMs": 20440,
+    "confidence": 0.997132
+  },
+  {
+    "text": " Dos",
+    "startMs": 21260,
+    "endMs": 21380,
+    "timestampMs": 21260,
+    "confidence": 0.98116
+  },
+  {
+    "text": " días",
+    "startMs": 21500,
+    "endMs": 21620,
+    "timestampMs": 21500,
+    "confidence": 0.998689
+  },
+  {
+    "text": " después",
+    "startMs": 21820,
+    "endMs": 21940,
+    "timestampMs": 21820,
+    "confidence": 0.999527
+  },
+  {
+    "text": " me",
+    "startMs": 22040,
+    "endMs": 22160,
+    "timestampMs": 22040,
+    "confidence": 0.960008
+  },
+  {
+    "text": " llamaron",
+    "startMs": 22260,
+    "endMs": 22470,
+    "timestampMs": 22260,
+    "confidence": 0.998561
+  },
+  {
+    "text": " a",
+    "startMs": 22560,
+    "endMs": 22680,
+    "timestampMs": 22560,
+    "confidence": 0.997935
+  },
+  {
+    "text": " rectoría.",
+    "startMs": 22740,
+    "endMs": 22980,
+    "timestampMs": 22740,
+    "confidence": 0.970202
+  },
+  {
+    "text": " Mi",
+    "startMs": 23640,
+    "endMs": 23760,
+    "timestampMs": 23640,
+    "confidence": 0.994429
+  },
+  {
+    "text": " examen",
+    "startMs": 23920,
+    "endMs": 24040,
+    "timestampMs": 23920,
+    "confidence": 0.994302
+  },
+  {
+    "text": " y",
+    "startMs": 24080,
+    "endMs": 24200,
+    "timestampMs": 24080,
+    "confidence": 0.994124
+  },
+  {
+    "text": " el",
+    "startMs": 24220,
+    "endMs": 24340,
+    "timestampMs": 24220,
+    "confidence": 0.998213
+  },
+  {
+    "text": " de",
+    "startMs": 24400,
+    "endMs": 24520,
+    "timestampMs": 24400,
+    "confidence": 0.998327
+  },
+  {
+    "text": " Camila,",
+    "startMs": 24560,
+    "endMs": 24680,
+    "timestampMs": 24560,
+    "confidence": 0.941955
+  },
+  {
+    "text": " la",
+    "startMs": 25180,
+    "endMs": 25300,
+    "timestampMs": 25180,
+    "confidence": 0.939427
+  },
+  {
+    "text": " hija",
+    "startMs": 25300,
+    "endMs": 25420,
+    "timestampMs": 25300,
+    "confidence": 0.997752
+  },
+  {
+    "text": " del",
+    "startMs": 25520,
+    "endMs": 25640,
+    "timestampMs": 25520,
+    "confidence": 0.998258
+  },
+  {
+    "text": " rector,",
+    "startMs": 25740,
+    "endMs": 25860,
+    "timestampMs": 25740,
+    "confidence": 0.998795
+  },
+  {
+    "text": " eran",
+    "startMs": 26340,
+    "endMs": 26460,
+    "timestampMs": 26340,
+    "confidence": 0.927785
+  },
+  {
+    "text": " idénticos.",
+    "startMs": 26500,
+    "endMs": 26940,
+    "timestampMs": 26500,
+    "confidence": 0.996805
+  },
+  {
+    "text": " Mismas",
+    "startMs": 27260,
+    "endMs": 27500,
+    "timestampMs": 27260,
+    "confidence": 0.964966
+  },
+  {
+    "text": " respuestas,",
+    "startMs": 27960,
+    "endMs": 28090,
+    "timestampMs": 27960,
+    "confidence": 0.994744
+  },
+  {
+    "text": " mismos",
+    "startMs": 28620,
+    "endMs": 28740,
+    "timestampMs": 28620,
+    "confidence": 0.993453
+  },
+  {
+    "text": " pasos,",
+    "startMs": 28920,
+    "endMs": 29040,
+    "timestampMs": 28920,
+    "confidence": 0.999458
+  },
+  {
+    "text": " el",
+    "startMs": 29360,
+    "endMs": 29480,
+    "timestampMs": 29360,
+    "confidence": 0.996364
+  },
+  {
+    "text": " rector",
+    "startMs": 29540,
+    "endMs": 29660,
+    "timestampMs": 29540,
+    "confidence": 0.999268
+  },
+  {
+    "text": " ni",
+    "startMs": 29860,
+    "endMs": 29980,
+    "timestampMs": 29860,
+    "confidence": 0.972496
+  },
+  {
+    "text": " siquiera",
+    "startMs": 30060,
+    "endMs": 30180,
+    "timestampMs": 30060,
+    "confidence": 0.999306
+  },
+  {
+    "text": " me",
+    "startMs": 30400,
+    "endMs": 30520,
+    "timestampMs": 30400,
+    "confidence": 0.995
+  },
+  {
+    "text": " dejó",
+    "startMs": 30560,
+    "endMs": 30680,
+    "timestampMs": 30560,
+    "confidence": 0.9769
+  },
+  {
+    "text": " hablar.",
+    "startMs": 31000,
+    "endMs": 31120,
+    "timestampMs": 31000,
+    "confidence": 0.984682
+  },
+  {
+    "text": " Dijo",
+    "startMs": 31300,
+    "endMs": 31420,
+    "timestampMs": 31300,
+    "confidence": 0.980692
+  },
+  {
+    "text": " que",
+    "startMs": 31580,
+    "endMs": 31700,
+    "timestampMs": 31580,
+    "confidence": 0.997965
+  },
+  {
+    "text": " era",
+    "startMs": 31780,
+    "endMs": 31900,
+    "timestampMs": 31780,
+    "confidence": 0.997752
+  },
+  {
+    "text": " obvio",
+    "startMs": 32000,
+    "endMs": 32120,
+    "timestampMs": 32000,
+    "confidence": 0.998081
+  },
+  {
+    "text": " que",
+    "startMs": 32240,
+    "endMs": 32360,
+    "timestampMs": 32240,
+    "confidence": 0.994089
+  },
+  {
+    "text": " yo",
+    "startMs": 32420,
+    "endMs": 32540,
+    "timestampMs": 32420,
+    "confidence": 0.998178
+  },
+  {
+    "text": " le",
+    "startMs": 32580,
+    "endMs": 32700,
+    "timestampMs": 32580,
+    "confidence": 0.982564
+  },
+  {
+    "text": " había",
+    "startMs": 32800,
+    "endMs": 32920,
+    "timestampMs": 32800,
+    "confidence": 0.998685
+  },
+  {
+    "text": " copiado",
+    "startMs": 33060,
+    "endMs": 33250,
+    "timestampMs": 33060,
+    "confidence": 0.993583
+  },
+  {
+    "text": " a",
+    "startMs": 33340,
+    "endMs": 33460,
+    "timestampMs": 33340,
+    "confidence": 0.99822
+  },
+  {
+    "text": " su",
+    "startMs": 33480,
+    "endMs": 33600,
+    "timestampMs": 33480,
+    "confidence": 0.999001
+  },
+  {
+    "text": " hija.",
+    "startMs": 33640,
+    "endMs": 33760,
+    "timestampMs": 33640,
+    "confidence": 0.998812
+  },
+  {
+    "text": " Que",
+    "startMs": 34220,
+    "endMs": 34340,
+    "timestampMs": 34220,
+    "confidence": 0.994882
+  },
+  {
+    "text": " alguien",
+    "startMs": 34460,
+    "endMs": 34580,
+    "timestampMs": 34460,
+    "confidence": 0.978218
+  },
+  {
+    "text": " como",
+    "startMs": 34740,
+    "endMs": 34860,
+    "timestampMs": 34740,
+    "confidence": 0.992195
+  },
+  {
+    "text": " yo",
+    "startMs": 34920,
+    "endMs": 35040,
+    "timestampMs": 34920,
+    "confidence": 0.99744
+  },
+  {
+    "text": " no",
+    "startMs": 35120,
+    "endMs": 35240,
+    "timestampMs": 35120,
+    "confidence": 0.960745
+  },
+  {
+    "text": " podía",
+    "startMs": 35360,
+    "endMs": 35480,
+    "timestampMs": 35360,
+    "confidence": 0.997836
+  },
+  {
+    "text": " sacar",
+    "startMs": 35700,
+    "endMs": 35820,
+    "timestampMs": 35700,
+    "confidence": 0.996843
+  },
+  {
+    "text": " la",
+    "startMs": 35900,
+    "endMs": 36020,
+    "timestampMs": 35900,
+    "confidence": 0.997839
+  },
+  {
+    "text": " nota",
+    "startMs": 36080,
+    "endMs": 36200,
+    "timestampMs": 36080,
+    "confidence": 0.999203
+  },
+  {
+    "text": " más",
+    "startMs": 36400,
+    "endMs": 36520,
+    "timestampMs": 36400,
+    "confidence": 0.988108
+  },
+  {
+    "text": " alta",
+    "startMs": 36580,
+    "endMs": 36700,
+    "timestampMs": 36580,
+    "confidence": 0.998845
+  },
+  {
+    "text": " del",
+    "startMs": 36800,
+    "endMs": 36920,
+    "timestampMs": 36800,
+    "confidence": 0.996295
+  },
+  {
+    "text": " curso.",
+    "startMs": 37140,
+    "endMs": 37260,
+    "timestampMs": 37140,
+    "confidence": 0.998858
+  },
+  {
+    "text": " Me",
+    "startMs": 37660,
+    "endMs": 37780,
+    "timestampMs": 37660,
+    "confidence": 0.987581
+  },
+  {
+    "text": " pusieron",
+    "startMs": 37960,
+    "endMs": 38150,
+    "timestampMs": 37960,
+    "confidence": 0.995702
+  },
+  {
+    "text": " cero.",
+    "startMs": 38420,
+    "endMs": 38540,
+    "timestampMs": 38420,
+    "confidence": 0.853984
+  },
+  {
+    "text": " Y",
+    "startMs": 38940,
+    "endMs": 39060,
+    "timestampMs": 38940,
+    "confidence": 0.994689
+  },
+  {
+    "text": " me",
+    "startMs": 39180,
+    "endMs": 39300,
+    "timestampMs": 39180,
+    "confidence": 0.999531
+  },
+  {
+    "text": " dijeron",
+    "startMs": 39300,
+    "endMs": 39420,
+    "timestampMs": 39300,
+    "confidence": 0.998254
+  },
+  {
+    "text": " que",
+    "startMs": 39620,
+    "endMs": 39740,
+    "timestampMs": 39620,
+    "confidence": 0.99899
+  },
+  {
+    "text": " la",
+    "startMs": 39840,
+    "endMs": 39960,
+    "timestampMs": 39840,
+    "confidence": 0.998841
+  },
+  {
+    "text": " beca",
+    "startMs": 39980,
+    "endMs": 40100,
+    "timestampMs": 39980,
+    "confidence": 0.999525
+  },
+  {
+    "text": " estaba",
+    "startMs": 40400,
+    "endMs": 40520,
+    "timestampMs": 40400,
+    "confidence": 0.99819
+  },
+  {
+    "text": " en",
+    "startMs": 40620,
+    "endMs": 40740,
+    "timestampMs": 40620,
+    "confidence": 0.999093
+  },
+  {
+    "text": " revisión.",
+    "startMs": 40860,
+    "endMs": 40980,
+    "timestampMs": 40860,
+    "confidence": 0.995758
+  },
+  {
+    "text": " Salí",
+    "startMs": 41480,
+    "endMs": 41600,
+    "timestampMs": 41480,
+    "confidence": 0.991828
+  },
+  {
+    "text": " llorando",
+    "startMs": 41780,
+    "endMs": 42000,
+    "timestampMs": 41780,
+    "confidence": 0.993659
+  },
+  {
+    "text": " al",
+    "startMs": 42140,
+    "endMs": 42260,
+    "timestampMs": 42140,
+    "confidence": 0.997661
+  },
+  {
+    "text": " baño.",
+    "startMs": 42340,
+    "endMs": 42460,
+    "timestampMs": 42340,
+    "confidence": 0.998892
+  },
+  {
+    "text": " Pero",
+    "startMs": 43020,
+    "endMs": 43140,
+    "timestampMs": 43020,
+    "confidence": 0.996098
+  },
+  {
+    "text": " ahí,",
+    "startMs": 43380,
+    "endMs": 43500,
+    "timestampMs": 43380,
+    "confidence": 0.966634
+  },
+  {
+    "text": " sentada",
+    "startMs": 43940,
+    "endMs": 44060,
+    "timestampMs": 43940,
+    "confidence": 0.990172
+  },
+  {
+    "text": " en",
+    "startMs": 44200,
+    "endMs": 44320,
+    "timestampMs": 44200,
+    "confidence": 0.999249
+  },
+  {
+    "text": " el",
+    "startMs": 44380,
+    "endMs": 44500,
+    "timestampMs": 44380,
+    "confidence": 0.999485
+  },
+  {
+    "text": " piso,",
+    "startMs": 44540,
+    "endMs": 44660,
+    "timestampMs": 44540,
+    "confidence": 0.998595
+  },
+  {
+    "text": " me",
+    "startMs": 45120,
+    "endMs": 45240,
+    "timestampMs": 45120,
+    "confidence": 0.981965
+  },
+  {
+    "text": " acordé",
+    "startMs": 45300,
+    "endMs": 45420,
+    "timestampMs": 45300,
+    "confidence": 0.996149
+  },
+  {
+    "text": " de",
+    "startMs": 45600,
+    "endMs": 45720,
+    "timestampMs": 45600,
+    "confidence": 0.999436
+  },
+  {
+    "text": " algo.",
+    "startMs": 45820,
+    "endMs": 45940,
+    "timestampMs": 45820,
+    "confidence": 0.999607
+  },
+  {
+    "text": " En",
+    "startMs": 46300,
+    "endMs": 46420,
+    "timestampMs": 46300,
+    "confidence": 0.998822
+  },
+  {
+    "text": " el",
+    "startMs": 46480,
+    "endMs": 46600,
+    "timestampMs": 46480,
+    "confidence": 0.99955
+  },
+  {
+    "text": " último",
+    "startMs": 46760,
+    "endMs": 46880,
+    "timestampMs": 46760,
+    "confidence": 0.992384
+  },
+  {
+    "text": " problema",
+    "startMs": 47160,
+    "endMs": 47280,
+    "timestampMs": 47160,
+    "confidence": 0.997272
+  },
+  {
+    "text": " del",
+    "startMs": 47340,
+    "endMs": 47460,
+    "timestampMs": 47340,
+    "confidence": 0.998872
+  },
+  {
+    "text": " examen,",
+    "startMs": 47660,
+    "endMs": 47780,
+    "timestampMs": 47660,
+    "confidence": 0.998281
+  },
+  {
+    "text": " yo",
+    "startMs": 48220,
+    "endMs": 48340,
+    "timestampMs": 48220,
+    "confidence": 0.744374
+  },
+  {
+    "text": " no",
+    "startMs": 48380,
+    "endMs": 48460,
+    "timestampMs": 48380,
+    "confidence": 0.999634
+  },
+  {
+    "text": " usé",
+    "startMs": 48460,
+    "endMs": 48580,
+    "timestampMs": 48460,
+    "confidence": 0.499158
+  },
+  {
+    "text": " la",
+    "startMs": 48740,
+    "endMs": 48860,
+    "timestampMs": 48740,
+    "confidence": 0.993165
+  },
+  {
+    "text": " fórmula",
+    "startMs": 48920,
+    "endMs": 49040,
+    "timestampMs": 48920,
+    "confidence": 0.937205
+  },
+  {
+    "text": " que",
+    "startMs": 49300,
+    "endMs": 49420,
+    "timestampMs": 49300,
+    "confidence": 0.988906
+  },
+  {
+    "text": " enseñó",
+    "startMs": 49520,
+    "endMs": 49640,
+    "timestampMs": 49520,
+    "confidence": 0.989689
+  },
+  {
+    "text": " la",
+    "startMs": 49900,
+    "endMs": 50020,
+    "timestampMs": 49900,
+    "confidence": 0.997543
+  },
+  {
+    "text": " profesora.",
+    "startMs": 50100,
+    "endMs": 50230,
+    "timestampMs": 50100,
+    "confidence": 0.996071
+  },
+  {
+    "text": " Usé",
+    "startMs": 50880,
+    "endMs": 51000,
+    "timestampMs": 50880,
+    "confidence": 0.837836
+  },
+  {
+    "text": " un",
+    "startMs": 51120,
+    "endMs": 51240,
+    "timestampMs": 51120,
+    "confidence": 0.999287
+  },
+  {
+    "text": " método",
+    "startMs": 51320,
+    "endMs": 51440,
+    "timestampMs": 51320,
+    "confidence": 0.998551
+  },
+  {
+    "text": " que",
+    "startMs": 51620,
+    "endMs": 51740,
+    "timestampMs": 51620,
+    "confidence": 0.998034
+  },
+  {
+    "text": " inventé",
+    "startMs": 51880,
+    "endMs": 52020,
+    "timestampMs": 51880,
+    "confidence": 0.613688
+  },
+  {
+    "text": " yo",
+    "startMs": 52180,
+    "endMs": 52300,
+    "timestampMs": 52180,
+    "confidence": 0.998951
+  },
+  {
+    "text": " sola,",
+    "startMs": 52380,
+    "endMs": 52500,
+    "timestampMs": 52380,
+    "confidence": 0.998517
+  },
+  {
+    "text": " estudiando",
+    "startMs": 53020,
+    "endMs": 53230,
+    "timestampMs": 53020,
+    "confidence": 0.97151
+  },
+  {
+    "text": " de",
+    "startMs": 53420,
+    "endMs": 53540,
+    "timestampMs": 53420,
+    "confidence": 0.998673
+  },
+  {
+    "text": " noche.",
+    "startMs": 53640,
+    "endMs": 53760,
+    "timestampMs": 53640,
+    "confidence": 0.999737
+  },
+  {
+    "text": " Un",
+    "startMs": 54180,
+    "endMs": 54300,
+    "timestampMs": 54180,
+    "confidence": 0.784568
+  },
+  {
+    "text": " método",
+    "startMs": 54440,
+    "endMs": 54560,
+    "timestampMs": 54440,
+    "confidence": 0.999188
+  },
+  {
+    "text": " que",
+    "startMs": 54740,
+    "endMs": 54860,
+    "timestampMs": 54740,
+    "confidence": 0.999047
+  },
+  {
+    "text": " solo",
+    "startMs": 55040,
+    "endMs": 55160,
+    "timestampMs": 55040,
+    "confidence": 0.645043
+  },
+  {
+    "text": " existía",
+    "startMs": 55360,
+    "endMs": 55480,
+    "timestampMs": 55360,
+    "confidence": 0.997581
+  },
+  {
+    "text": " en",
+    "startMs": 55580,
+    "endMs": 55700,
+    "timestampMs": 55580,
+    "confidence": 0.999241
+  },
+  {
+    "text": " mi",
+    "startMs": 55740,
+    "endMs": 55860,
+    "timestampMs": 55740,
+    "confidence": 0.995706
+  },
+  {
+    "text": " cuaderno.",
+    "startMs": 55920,
+    "endMs": 56040,
+    "timestampMs": 55920,
+    "confidence": 0.990391
+  },
+  {
+    "text": " Camila",
+    "startMs": 56540,
+    "endMs": 56660,
+    "timestampMs": 56540,
+    "confidence": 0.997619
+  },
+  {
+    "text": " copió",
+    "startMs": 56880,
+    "endMs": 57000,
+    "timestampMs": 56880,
+    "confidence": 0.99759
+  },
+  {
+    "text": " ese",
+    "startMs": 57200,
+    "endMs": 57320,
+    "timestampMs": 57200,
+    "confidence": 0.986963
+  },
+  {
+    "text": " problema,",
+    "startMs": 57680,
+    "endMs": 57800,
+    "timestampMs": 57680,
+    "confidence": 0.99782
+  },
+  {
+    "text": " también",
+    "startMs": 58360,
+    "endMs": 58480,
+    "timestampMs": 58360,
+    "confidence": 0.987089
+  },
+  {
+    "text": " copió",
+    "startMs": 58540,
+    "endMs": 58660,
+    "timestampMs": 58540,
+    "confidence": 0.997038
+  },
+  {
+    "text": " un",
+    "startMs": 58840,
+    "endMs": 58960,
+    "timestampMs": 58840,
+    "confidence": 0.998266
+  },
+  {
+    "text": " método",
+    "startMs": 59060,
+    "endMs": 59180,
+    "timestampMs": 59060,
+    "confidence": 0.997373
+  },
+  {
+    "text": " que",
+    "startMs": 59360,
+    "endMs": 59480,
+    "timestampMs": 59360,
+    "confidence": 0.99663
+  },
+  {
+    "text": " no",
+    "startMs": 59640,
+    "endMs": 59760,
+    "timestampMs": 59640,
+    "confidence": 0.997379
+  },
+  {
+    "text": " entendía.",
+    "startMs": 59940,
+    "endMs": 60060,
+    "timestampMs": 59940,
+    "confidence": 0.999316
+  },
+  {
+    "text": " Y",
+    "startMs": 60580,
+    "endMs": 60700,
+    "timestampMs": 60580,
+    "confidence": 0.99445
+  },
+  {
+    "text": " yo",
+    "startMs": 60780,
+    "endMs": 60900,
+    "timestampMs": 60780,
+    "confidence": 0.998334
+  },
+  {
+    "text": " sabía",
+    "startMs": 61000,
+    "endMs": 61120,
+    "timestampMs": 61000,
+    "confidence": 0.993365
+  },
+  {
+    "text": " cómo",
+    "startMs": 61400,
+    "endMs": 61520,
+    "timestampMs": 61400,
+    "confidence": 0.786201
+  },
+  {
+    "text": " demostrarlo.",
+    "startMs": 61840,
+    "endMs": 62200,
+    "timestampMs": 61840,
+    "confidence": 0.99533
+  },
+  {
+    "text": " Pedí",
+    "startMs": 62720,
+    "endMs": 62840,
+    "timestampMs": 62720,
+    "confidence": 0.940754
+  },
+  {
+    "text": " una",
+    "startMs": 62980,
+    "endMs": 63100,
+    "timestampMs": 62980,
+    "confidence": 0.997451
+  },
+  {
+    "text": " reunión",
+    "startMs": 63220,
+    "endMs": 63530,
+    "timestampMs": 63220,
+    "confidence": 0.998466
+  },
+  {
+    "text": " con",
+    "startMs": 63540,
+    "endMs": 63680,
+    "timestampMs": 63540,
+    "confidence": 0.999184
+  },
+  {
+    "text": " el",
+    "startMs": 63680,
+    "endMs": 63860,
+    "timestampMs": 63680,
+    "confidence": 0.995729
+  },
+  {
+    "text": " rector,",
+    "startMs": 63860,
+    "endMs": 64260,
+    "timestampMs": 63860,
+    "confidence": 0.996327
+  },
+  {
+    "text": " la",
+    "startMs": 64580,
+    "endMs": 64700,
+    "timestampMs": 64580,
+    "confidence": 0.997622
+  },
+  {
+    "text": " profesora",
+    "startMs": 64800,
+    "endMs": 65040,
+    "timestampMs": 64800,
+    "confidence": 0.999218
+  },
+  {
+    "text": " y",
+    "startMs": 65040,
+    "endMs": 65190,
+    "timestampMs": 65040,
+    "confidence": 0.984399
+  },
+  {
+    "text": " Camila.",
+    "startMs": 65300,
+    "endMs": 65420,
+    "timestampMs": 65300,
+    "confidence": 0.997809
+  },
+  {
+    "text": " ¿Quieren",
+    "startMs": 66100,
+    "endMs": 66320,
+    "timestampMs": 66100,
+    "confidence": 0.880329
+  },
+  {
+    "text": " la",
+    "startMs": 66500,
+    "endMs": 66620,
+    "timestampMs": 66500,
+    "confidence": 0.99663
+  },
+  {
+    "text": " parte",
+    "startMs": 66740,
+    "endMs": 66860,
+    "timestampMs": 66740,
+    "confidence": 0.876279
+  },
+  {
+    "text": " dos?",
+    "startMs": 67080,
+    "endMs": 67200,
+    "timestampMs": 67080,
+    "confidence": 0.669874
+  }
+]

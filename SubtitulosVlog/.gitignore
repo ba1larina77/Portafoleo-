@@ -1,0 +1,7 @@
+node_modules/
+.whisper/
+.cache/
+public/videos/
+out/
+input/*
+!input/.gitkeep

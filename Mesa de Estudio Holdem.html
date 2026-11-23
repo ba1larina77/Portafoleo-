@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mesa de Estudio Hold'em</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: una mesa de estudio con pestañas; cada herramienta es una "estación" con controles arriba y resultado debajo */
+:root{
+  --bg:#eef1ec; --surface:#ffffff; --surface-2:#e3e8e2; --ink:#17231c; --muted:#5b6b61; --line:#d2dad3;
+  --felt:#1f6a47; --felt-ink:#ffffff; --chip:#c2372c; --gold:#a97b1f; --good:#1f7a4a; --bad:#b4372c;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1712; --surface:#15221a; --surface-2:#1d2c23; --ink:#e7eee9; --muted:#93a59a; --line:#28392f;
+  --felt:#2f8a5d; --felt-ink:#ffffff; --chip:#e0594c; --gold:#d8aa4a; --good:#4cc185; --bad:#ef6b5e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1712; --surface:#15221a; --surface-2:#1d2c23; --ink:#e7eee9; --muted:#93a59a; --line:#28392f;
+  --felt:#2f8a5d; --felt-ink:#ffffff; --chip:#e0594c; --gold:#d8aa4a; --good:#4cc185; --bad:#ef6b5e; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:22px;font-weight:700}
+h3{font-size:16px;font-weight:700}
+p{margin:0}
+.muted{color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:18px}
+header .sub{color:var(--muted);max-width:60ch}
+.suits{font-size:22px;letter-spacing:.2em}
+.suits .r{color:var(--chip)}
+
+nav{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:22px}
+nav button{font:600 14px var(--body);background:none;border:0;color:var(--muted);padding:10px 12px;border-bottom:3px solid transparent;cursor:pointer;margin-bottom:-1px}
+nav button[aria-selected="true"]{color:var(--ink);border-color:var(--felt)}
+nav button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.panel{display:grid;gap:20px}
+.cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.cols{grid-template-columns:minmax(0,1fr)}}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:14px;min-width:0}
+.label{font:600 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:600 13px var(--mono);padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--felt-ink)}
+
+/* Rejilla de rangos 13x13 */
+.gridwrap{overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(13,minmax(26px,1fr));gap:2px;min-width:360px}
+.cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font:500 11px var(--mono);border-radius:3px;background:var(--surface-2);color:var(--muted);user-select:none}
+.cell.on{background:var(--felt);color:var(--felt-ink)}
+.cell.prem{background:var(--chip);color:#fff}
+.cell.hl{outline:2px solid var(--gold);outline-offset:-2px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+.stat{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.big{font:700 34px var(--display);font-variant-numeric:tabular-nums}
+ul.tips{margin:0;padding-left:18px;display:grid;gap:6px}
+
+/* Entrenador */
+.table{background:radial-gradient(ellipse at 50% 40%, color-mix(in srgb,var(--felt) 88%, #fff 12%), var(--felt));border-radius:120px/80px;padding:28px 16px;display:grid;justify-items:center;gap:14px;color:var(--felt-ink);text-align:center}
+.cards{display:flex;gap:10px}
+.card{width:64px;height:90px;border-radius:8px;background:#fbfaf6;color:#1b1b1b;display:flex;flex-direction:column;justify-content:space-between;padding:6px 8px;font:700 22px var(--display);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.card .s{font-size:26px;align-self:flex-end;line-height:1}
+.card.red{color:#c2372c}
+.pos{font:700 13px var(--mono);letter-spacing:.1em;background:rgba(0,0,0,.28);padding:4px 10px;border-radius:999px}
+.q{font-size:15px;max-width:40ch}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{font:600 15px var(--body);padding:10px 18px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--chip);border-color:var(--chip);color:#fff}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.5;cursor:default}
+.verdict{min-height:48px;font-size:15px;padding:10px 12px;border-radius:8px;background:var(--surface-2)}
+.verdict.ok{border-left:4px solid var(--good)}
+.verdict.no{border-left:4px solid var(--bad)}
+.score{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.score div{background:var(--surface-2);border-radius:8px;padding:10px;display:grid}
+.score b{font:700 22px var(--mono);font-variant-numeric:tabular-nums}
+.toggle{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.toggle input{margin-top:3px;accent-color:var(--felt)}
+
+/* Formularios */
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.field{display:grid;gap:4px}
+.field label{font-size:13px;color:var(--muted)}
+input[type=number],select{font:500 15px var(--mono);padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%}
+.presets{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.preset{text-align:left;font:500 14px var(--body);padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer;display:grid;gap:2px}
+.preset b{font-family:var(--mono);font-size:13px;color:var(--muted);font-weight:500}
+.preset[aria-pressed="true"]{border-color:var(--felt);box-shadow:inset 0 0 0 1px var(--felt)}
+.meter{height:10px;border-radius:999px;background:var(--surface-2);position:relative;overflow:hidden}
+.meter span{position:absolute;inset:0 auto 0 0;background:var(--felt);border-radius:999px}
+.meter .need{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--chip)}
+.rows{display:grid;gap:8px}
+.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+.row:last-child{border:0}
+.pill{display:inline-block;font:600 12px var(--body);padding:3px 10px;border-radius:999px}
+.pill.ok{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.pill.no{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+.pill.mid{background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold)}
+
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font:600 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.num{text-align:right}th.r{text-align:right}
+
+.guide{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.guide .box p{color:var(--ink)}
+.callout{border-left:4px solid var(--gold);padding:10px 14px;background:var(--surface-2);border-radius:0 8px 8px 0;font-size:14px}
+footer{margin-top:32px;font-size:13px;color:var(--muted);max-width:75ch}
+@media (prefers-reduced-motion:no-preference){.card{animation:deal .25s ease-out}@keyframes deal{from{transform:translateY(-8px) rotate(-3deg);opacity:.4}to{transform:none;opacity:1}}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div>
+    <div class="suits" aria-hidden="true">♠<span class="r">♥</span>♣<span class="r">♦</span></div>
+    <h1>Mesa de Estudio Hold'em</h1>
+    <p class="sub">Rangos por posición, entrenador, outs, pot odds, sizing y faroles para cash 6-max a 100 ciegas. Para estudiar fuera de la mesa.</p>
+  </div>
+</header>
+
+<nav role="tablist" aria-label="Secciones">
+  <button role="tab" data-tab="rangos" aria-selected="true">Rangos</button>
+  <button role="tab" data-tab="entrenador" aria-selected="false">Entrenador</button>
+  <button role="tab" data-tab="proyectos" aria-selected="false">Proyectos y outs</button>
+  <button role="tab" data-tab="bote" aria-selected="false">Bote y apuestas</button>
+  <button role="tab" data-tab="faroles" aria-selected="false">Faroles y pagos</button>
+</nav>
+
+<!-- RANGOS -->
+<section class="panel" id="p-rangos">
+  <div class="cols">
+    <div class="box">
+      <div class="label">Tu posición</div>
+      <div class="seg" id="posSeg"></div>
+      <div class="gridwrap"><div class="grid" id="grid" aria-label="Tabla de manos 13 por 13"></div></div>
+      <div class="legend">
+        <span><i style="background:var(--chip)"></i>Premium: sube y re-sube</span>
+        <span><i style="background:var(--felt)"></i>Jugable en esta posición</span>
+        <span><i style="background:var(--surface-2);border:1px solid var(--line)"></i>Fold</span>
+      </div>
+      <p class="muted" style="font-size:13px">Arriba a la derecha van las suited (s), abajo a la izquierda las offsuit (o), en la diagonal las parejas.</p>
+    </div>
+    <div class="box" id="posInfo"></div>
+  </div>
+</section>
+
+<!-- ENTRENADOR -->
+<section class="panel" id="p-entrenador" hidden>
+  <div class="cols">
+    <div class="box">
+      <div class="table">
+        <div class="pos" id="tPos">BTN</div>
+        <div class="cards" id="tCards"></div>
+        <div class="q" id="tQ"></div>
+        <div class="actions">
+          <button class="btn primary" id="bPlay">Subir</button>
+          <button class="btn" id="bFold">Foldear</button>
+        </div>
+      </div>
+      <div class="verdict" id="tVerdict">Pulsa “Subir” o “Foldear”. Después te digo si la mano está en el rango.</div>
+      <div class="actions" style="justify-content:flex-start">
+        <button class="btn" id="bNext">Siguiente mano</button>
+        <button class="btn ghost" id="bReset">Reiniciar marcador</button>
+      </div>
+    </div>
+    <div class="box">
+      <div class="label">Marcador</div>
+      <div class="score">
+        <div><span class="muted">Aciertos</span><b id="sOk">0</b></div>
+        <div><span class="muted">Manos</span><b id="sTot">0</b></div>
+        <div><span class="muted">Racha</span><b id="sStreak">0</b></div>
+      </div>
+      <div class="label">Practicar solo</div>
+      <div class="seg" id="trainPos"></div>
+      <div class="label">Sonido</div>
+      <label class="toggle"><input type="checkbox" id="snd" checked> Sonido al acertar o fallar</label>
+      <label class="toggle"><input type="checkbox" id="sndDeal"> Modo aprendizaje: suena una ficha al repartir si la mano es jugable en esa posición</label>
+      <p class="muted" style="font-size:13px">Empieza con el modo aprendizaje activado para asociar el sonido con las manos buenas. Cuando aciertes más del 90%, apágalo y juega sin ayuda.</p>
+      <div class="label">Tus fallos más repetidos</div>
+      <div id="misses" class="muted" style="font-size:14px">Aún no hay fallos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROYECTOS -->
+<section class="panel" id="p-proyectos" hidden>
+  <div class="box">
+    <div class="label">1. ¿Qué proyecto tienes?</div>
+    <div class="presets" id="presets"></div>
+    <div class="fields">
+      <div class="field"><label for="outs">Outs (cartas que te ligan)</label><input type="number" id="outs" min="1" max="25" value="9"></div>
+      <div class="field"><label for="street">Calle actual</label>
+        <select id="street"><option value="flop">Flop (faltan turn y river)</option><option value="turn">Turn (falta el river)</option></select></div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="box">
+      <div class="label">2. Probabilidad de ligar</div>
+      <div class="rows" id="probRows"></div>
+      <p class="muted" style="font-size:13px">Regla rápida en la mesa: outs × 4 en el flop para ver dos cartas, outs × 2 para ver una. Si tienes más de 8 outs, al ×4 réstale (outs − 8).</p>
+    </div>
+    <div class="box">
+      <div class="label">3. ¿Te sale pagar? (pot odds)</div>
+      <div class="fields">
+        <div class="field"><label for="pPot">Bote antes de la apuesta</label><input type="number" id="pPot" min="0" value="100"></div>
+        <div class="field"><label for="pBet">Apuesta del rival</label><input type="number" id="pBet" min="0" value="50"></div>
+      </div>
+      <div id="callOut" class="rows"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTE -->
+<section class="panel" id="p-bote" hidden>
+  <div class="cols">
+    <div class="box">
+      <div class="label">Tamaños de apuesta según el bote</div>
+      <div class="fields">
+        <div class="field"><label for="bPot">Bote actual</label><input type="number" id="bPot" min="0" value="12"></div>
+        <div class="field"><label for="bUnit">Unidad</label><select id="bUnit"><option value="bb">ciegas grandes (bb)</option><option value="$">dinero ($)</option></select></div>
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Tamaño</th><th class="r">Apostar</th><th class="r">Tu farol necesita que foldeen</th><th class="r">El rival necesita equity</th></tr></thead>
+        <tbody id="sizeRows"></tbody>
+      </table></div>
+      <p class="muted" style="font-size:13px">Cuanto más grande la apuesta, más veces tiene que funcionar tu farol y peor precio le das al rival para pagar.</p>
+    </div>
+    <div class="box">
+      <div class="label">¿Cuánto apostar? Por textura del board</div>
+      <div class="rows">
+        <div class="row"><span><b>Board seco</b><br><span class="muted">A-7-2 de colores distintos, K-8-3</span></span><span class="num">1/3 bote</span></div>
+        <div class="row"><span><b>Board medio</b><br><span class="muted">Q-9-4 con dos del mismo palo</span></span><span class="num">1/2 bote</span></div>
+        <div class="row"><span><b>Board mojado</b><br><span class="muted">J-T-8, 9-8-6 con proyectos de color</span></span><span class="num">2/3 – 3/4</span></div>
+        <div class="row"><span><b>River polarizado</b><br><span class="muted">Mano muy fuerte o farol</span></span><span class="num">3/4 – bote</span></div>
+      </div>
+      <div class="label">Preflop</div>
+      <div class="rows">
+        <div class="row"><span>Abrir desde UTG, HJ, CO</span><span class="num">2.5 bb</span></div>
+        <div class="row"><span>Abrir desde el BTN</span><span class="num">2.2 – 2.5 bb</span></div>
+        <div class="row"><span>Abrir desde la SB</span><span class="num">3 bb</span></div>
+        <div class="row"><span>Aislar limpers</span><span class="num">4 bb + 1 por limper</span></div>
+        <div class="row"><span>3-bet en posición</span><span class="num">3 × la subida</span></div>
+        <div class="row"><span>3-bet fuera de posición</span><span class="num">4 × la subida</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAROLES -->
+<section class="panel" id="p-faroles" hidden>
+  <div class="box">
+    <div class="label">Defensa mínima: ¿cuánto debes pagar contra una apuesta?</div>
+    <div class="fields">
+      <div class="field"><label for="mPot">Bote</label><input type="number" id="mPot" min="1" value="100"></div>
+      <div class="field"><label for="mBet">Apuesta del rival</label><input type="number" id="mBet" min="1" value="75"></div>
+    </div>
+    <div id="mdfOut" class="rows"></div>
+  </div>
+  <div class="guide">
+    <div class="box">
+      <h3>Cuándo farolear</h3>
+      <ul class="tips">
+        <li>Con proyecto (semi-farol): si te pagan, todavía puedes ligar. Es el farol más rentable.</li>
+        <li>Cuando el board favorece tu rango: tú subiste preflop y sale A, K o Q.</li>
+        <li>Contra un solo rival. Con dos o más, alguien casi siempre tiene algo.</li>
+        <li>Con bloqueadores: tener el A♠ en un board de picas hace menos probable que el rival tenga color nuts.</li>
+        <li>Cuando tu historia tiene sentido: apostaste flop y turn como lo haría una mano fuerte.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Cuándo no farolear</h3>
+      <ul class="tips">
+        <li>Contra jugadores que pagan todo. En límites bajos son la mayoría: apuesta por valor más fino y farolea menos.</li>
+        <li>En botes multiway.</li>
+        <li>Cuando tu mano tiene valor de showdown (un par medio): mejor pasar y ver la carta.</li>
+        <li>Para “recuperar” un bote que ya perdiste. Esa decisión casi siempre sale de la emoción.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Cuándo pagar</h3>
+      <ul class="tips">
+        <li>Si tu equity supera la que te piden las pot odds (pestaña Proyectos).</li>
+        <li>Con manos que le ganan a sus faroles pero no hacen que foldee algo peor: par alto en board seco.</li>
+        <li>Los jugadores pasivos que de repente suben fuerte en el river casi siempre tienen la mano. Ahí se foldea.</li>
+        <li>En el river no hay más cartas: tus outs ya no cuentan, solo si ganas ahora.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Proporción valor y farol en el river</h3>
+      <p>Con una apuesta del tamaño del bote, lo equilibrado son unos 2 valores por cada farol. Con media apuesta, unos 3 por 1. Si nunca faroleas, los buenos jugadores foldean siempre que apuestas.</p>
+      <div class="callout">En micro límites, la mayoría de los rivales farolea poco y paga mucho. Empieza apostando por valor y deja los faroles para los spots claros.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Rangos aproximados para cash 6-max a 100 bb, sin limpers delante. Son un punto de partida: contra mesas muy pasivas puedes abrir un poco más, contra mesas agresivas un poco menos. Para cash, lleva al menos 20–30 buy-ins del límite en el que juegas antes de sentarte.
+</footer>
+</div>
+
+<script>
+const R='AKQJT98765432';
+const POS={
+  UTG:{name:'UTG',full:'Under the gun, el primero en hablar',r:'22+, A2s+, KTs+, QTs+, JTs, T9s, 98s, 87s, 76s, ATo+, KJo+, QJo',
+       tips:['Seis jugadores hablan después de ti: juega apretado.','Las suited conectadas bajas solo si la mesa es pasiva.','Evita KTo, QTo o A9o: pierden mucho dominadas.']},
+  HJ:{name:'HJ',full:'Hijack, dos puestos antes del botón',r:'22+, A2s+, K8s+, Q9s+, J9s+, T8s+, 98s, 87s, 76s, 65s, 54s, A9o+, KTo+, QTo+, JTo',
+       tips:['Algo más amplio que UTG.','Las suited conectadas ganan valor: tienes más posición.']},
+  CO:{name:'CO',full:'Cutoff, a la derecha del botón',r:'22+, A2s+, K5s+, Q7s+, J7s+, T7s+, 97s+, 86s+, 75s+, 64s+, 54s, A7o+, A5o, K9o+, Q9o+, J9o+, T9o',
+       tips:['Solo quedan el botón y las ciegas: roba mucho.','Si el BTN es agresivo, abre algo menos.']},
+  BTN:{name:'BTN',full:'Botón, la mejor posición de la mesa',r:'22+, A2s+, K2s+, Q3s+, J5s+, T6s+, 96s+, 85s+, 74s+, 63s+, 53s+, 43s, A2o+, K7o+, Q8o+, J8o+, T8o+, 98o, 87o',
+       tips:['Actúas último en todas las calles después del flop.','Aquí está la mayor parte de tu ganancia: abre casi la mitad de las manos.']},
+  SB:{name:'SB',full:'Ciega pequeña, todos foldean hasta ti',r:'22+, A2s+, K4s+, Q6s+, J7s+, T7s+, 96s+, 86s+, 75s+, 65s, 54s, A4o+, K9o+, Q9o+, J9o+, T9o',
+       tips:['Sube a 3 bb en lugar de completar.','Jugarás fuera de posición contra la BB: no exageres.']},
+  BB:{name:'BB',full:'Ciega grande, defendiendo contra una subida del botón',r:'22+, A2s+, K2s+, Q2s+, J4s+, T6s+, 95s+, 85s+, 74s+, 63s+, 53s+, 43s, A2o+, K5o+, Q7o+, J7o+, T7o+, 97o+, 87o, 76o',
+       tips:['Ya pusiste 1 bb: pagar una subida de 2.5 bb te da buen precio.','Contra subidas de UTG defiende mucho menos (más o menos el rango de HJ).','Re-sube (3-bet) con las premium y algunos A5s o A4s como farol.']}
+};
+const PREM='JJ+, AQs+, AKo';
+
+function expand(str){
+  const out=new Set();
+  str.split(',').map(s=>s.trim()).filter(Boolean).forEach(t=>{
+    const plus=t.endsWith('+'); const b=plus?t.slice(0,-1):t;
+    if(b.length===2&&b[0]===b[1]){
+      const i=R.indexOf(b[0]);
+      if(plus){for(let j=i;j>=0;j--)out.add(R[j]+R[j]);} else out.add(b);
+    }else{
+      const [r1,r2,s]=b; const i1=R.indexOf(r1), i2=R.indexOf(r2);
+      if(plus){for(let j=i2;j>i1;j--)out.add(r1+R[j]+s);} else out.add(b);
+    }
+  });
+  return out;
+}
+const RANGE={}; for(const k in POS) RANGE[k]=expand(POS[k].r);
+const PSET=expand(PREM);
+const combos=h=>h.length===2?6:(h[2]==='s'?4:12);
+function cellKey(i,j){return i===j?R[i]+R[i]:(i<j?R[i]+R[j]+'s':R[j]+R[i]+'o');}
+function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v));}catch(e){return null}}
+
+/* Pestañas */
+const tabs=document.querySelectorAll('nav button');
+function showTab(id){
+  tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!=='p-'+id);
+  store('tab',id);
+}
+tabs.forEach(b=>b.onclick=()=>{showTab(b.dataset.tab); history.replaceState(null,'','#'+b.dataset.tab)});
+const h=location.hash.slice(1); showTab(POS && document.getElementById('p-'+h)?h:(store('tab')||'rangos'));
+
+/* Rangos */
+let curPos='BTN';
+const posSeg=document.getElementById('posSeg');
+Object.keys(POS).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>{curPos=k;renderRange()};posSeg.appendChild(b)});
+const grid=document.getElementById('grid');
+for(let i=0;i<13;i++)for(let j=0;j<13;j++){const d=document.createElement('div');d.className='cell';d.dataset.k=cellKey(i,j);d.textContent=cellKey(i,j);grid.appendChild(d)}
+function renderRange(hl){
+  [...posSeg.children].forEach(b=>b.setAttribute('aria-pressed',b.textContent===curPos));
+  const set=RANGE[curPos]; let c=0; set.forEach(x=>c+=combos(x));
+  grid.querySelectorAll('.cell').forEach(d=>{const k=d.dataset.k;d.className='cell'+(set.has(k)?(PSET.has(k)?' prem':' on'):'')+(hl===k?' hl':'')});
+  const p=POS[curPos];
+  document.getElementById('posInfo').innerHTML=`<div class="label">${p.name}</div><h2>${p.full}</h2>
+   <div class="stat"><span class="big">${(c/1326*100).toFixed(1)}%</span><span class="muted">de las manos se juegan (${c} de 1326 combinaciones)</span></div>
+   <ul class="tips">${p.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+   <div class="callout">${curPos==='BB'?'Esta tabla es para cuando el botón sube y tú decides si defender.':'Esta tabla es para cuando todos foldean hasta ti y decides si abrir subiendo. Si alguien ya subió, juega bastante más apretado.'}</div>`;
+}
+renderRange();
+
+/* Sonido */
+let actx;
+function tone(freqs,dur=.12,type='triangle',gain=.18){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    const t0=actx.currentTime;
+    freqs.forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.value=f;
+      const s=t0+i*dur*.8;g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(gain,s+.01);g.gain.exponentialRampToValueAtTime(.001,s+dur*2);
+      o.connect(g).connect(actx.destination);o.start(s);o.stop(s+dur*2.2)});
+  }catch(e){}
+}
+const chip=()=>tone([2400,3100],.05,'square',.06);
+const good=()=>tone([660,880,1320],.11);
+const bad=()=>tone([220,165],.16,'sawtooth',.08);
+
+/* Entrenador */
+const SUITS=['♠','♥','♦','♣'];
+let tPos='BTN', hand=null, answered=false, onlyPos='Todas';
+let sc=store('score')||{ok:0,tot:0,streak:0,miss:{}};
+const trainPos=document.getElementById('trainPos');
+['Todas',...Object.keys(POS)].forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>{onlyPos=k;[...trainPos.children].forEach(x=>x.setAttribute('aria-pressed',x.textContent===k));deal()};trainPos.appendChild(b)});
+trainPos.firstChild.setAttribute('aria-pressed','true');
+function handKey(a,b){
+  let [r1,s1]=a,[r2,s2]=b; if(R.indexOf(r1)>R.indexOf(r2))[r1,r2,s1,s2]=[r2,r1,s2,s1];
+  return r1===r2?r1+r2:r1+r2+(s1===s2?'s':'o');
+}
+function deal(withSound=true){
+  const deck=[];R.split('').forEach(r=>SUITS.forEach(s=>deck.push([r,s])));
+  const a=deck.splice(Math.floor(Math.random()*52),1)[0], b=deck[Math.floor(Math.random()*51)];
+  const ps=Object.keys(POS); tPos=onlyPos==='Todas'?ps[Math.floor(Math.random()*ps.length)]:onlyPos;
+  hand={cards:[a,b],key:handKey(a,b)}; answered=false;
+  document.getElementById('tPos').textContent=tPos;
+  document.getElementById('tCards').innerHTML=hand.cards.map(([r,s])=>`<div class="card ${s==='♥'||s==='♦'?'red':''}"><span>${r==='T'?'10':r}</span><span class="s">${s}</span></div>`).join('');
+  document.getElementById('tQ').textContent=tPos==='BB'?'El botón sube a 2.5 bb y la ciega pequeña foldea. ¿Defiendes?':'Todos foldean hasta ti. ¿Abres subiendo?';
+  document.getElementById('bPlay').textContent=tPos==='BB'?'Defender':'Subir';
+  document.getElementById('bPlay').disabled=document.getElementById('bFold').disabled=false;
+  const v=document.getElementById('tVerdict');v.className='verdict';v.textContent='Decide: ¿juegas o foldeas?';
+  if(withSound&&document.getElementById('sndDeal').checked&&RANGE[tPos].has(hand.key)) chip();
+}
+function answer(play){
+  if(answered)return; answered=true;
+  const inR=RANGE[tPos].has(hand.key), right=play===inR, prem=PSET.has(hand.key);
+  sc.tot++; if(right){sc.ok++;sc.streak++}else{sc.streak=0;const m=tPos+' '+hand.key;sc.miss[m]=(sc.miss[m]||0)+1}
+  store('score',sc);
+  if(document.getElementById('snd').checked)(right?good:bad)();
+  const v=document.getElementById('tVerdict');v.className='verdict '+(right?'ok':'no');
+  const what=inR?(prem?`${hand.key} es premium: sube y re-sube.`:`${hand.key} está en el rango de ${tPos}.`):`${hand.key} es fold en ${tPos}.`;
+  v.innerHTML=`<b>${right?'Correcto.':'Fallo.'}</b> ${what} <a href="#rangos" id="seeR" style="color:var(--felt)">Ver la tabla</a>`;
+  document.getElementById('seeR').onclick=e=>{e.preventDefault();curPos=tPos;renderRange(hand.key);showTab('rangos')};
+  document.getElementById('bPlay').disabled=document.getElementById('bFold').disabled=true;
+  renderScore();
+}
+function renderScore(){
+  document.getElementById('sOk').textContent=sc.tot?Math.round(sc.ok/sc.tot*100)+'%':'0';
+  document.getElementById('sTot').textContent=sc.tot;
+  document.getElementById('sStreak').textContent=sc.streak;
+  const m=Object.entries(sc.miss).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  document.getElementById('misses').innerHTML=m.length?m.map(([k,n])=>`<div class="row"><span class="num">${k}</span><span class="num">${n}×</span></div>`).join(''):'Aún no hay fallos.';
+}
+document.getElementById('bPlay').onclick=()=>answer(true);
+document.getElementById('bFold').onclick=()=>answer(false);
+document.getElementById('bNext').onclick=()=>deal();
+document.getElementById('bReset').onclick=()=>{sc={ok:0,tot:0,streak:0,miss:{}};store('score',sc);renderScore()};
+document.addEventListener('keydown',e=>{if(document.getElementById('p-entrenador').hidden||e.target.tagName==='INPUT')return;
+  if(e.key==='s'||e.key==='S')answer(true); if(e.key==='f'||e.key==='F')answer(false); if(e.key===' '||e.key==='Enter'){e.preventDefault();deal()}});
+deal(false); renderScore();
+
+/* Proyectos */
+const PRESETS=[
+  ['Proyecto de color',9,'4 cartas del mismo palo'],
+  ['Escalera abierta',8,'Ej. 9-8 en 7-6-K'],
+  ['Escalera interna (gutshot)',4,'Ej. 9-8 en J-7-2'],
+  ['Color + escalera abierta',15,'El monstruo de los proyectos'],
+  ['Color + gutshot',12,'Muy fuerte'],
+  ['Dos cartas altas',6,'Ej. A-K en 9-6-2'],
+  ['Una carta alta',3,'Ej. A-9 en K-7-3'],
+  ['Pareja a trío (set)',2,'Tienes un par en mano'],
+  ['Par + kicker a dos pares/trío',5,'Ej. K-J en K-8-4']
+];
+const presetsEl=document.getElementById('presets'), outsEl=document.getElementById('outs'), streetEl=document.getElementById('street');
+PRESETS.forEach(([n,o,d])=>{const b=document.createElement('button');b.className='preset';b.innerHTML=`<span>${n}</span><b>${o} outs · ${d}</b>`;b.onclick=()=>{outsEl.value=o;calcDraw()};presetsEl.appendChild(b)});
+const C2=n=>n*(n-1)/2;
+function calcDraw(){
+  const o=Math.max(0,Math.min(25,+outsEl.value||0));
+  [...presetsEl.children].forEach((b,i)=>b.setAttribute('aria-pressed',PRESETS[i][1]===o));
+  const flopOne=o/47, flopTwo=1-C2(47-o)/C2(47), turnOne=o/46;
+  const pct=x=>(x*100).toFixed(1)+'%';
+  let rows;
+  if(streetEl.value==='flop'){
+    rows=[['Ligar en el turn',flopOne],['Ligar en turn o river (si ves las dos)',flopTwo]];
+  }else rows=[['Ligar en el river',turnOne]];
+  document.getElementById('probRows').innerHTML=rows.map(([l,p])=>`<div class="row"><span>${l}</span><span class="num"><b>${pct(p)}</b> <span class="muted">· ${(1/p-1).toFixed(1)} a 1</span></span></div>`).join('')+
+    `<div class="row"><span class="muted">Regla rápida</span><span class="num muted">${streetEl.value==='flop'?`×4 ≈ ${Math.min(100,o*4-(o>8?o-8:0))}%  ·  ×2 ≈ ${o*2}%`:`×2 ≈ ${o*2}%`}</span></div>`;
+  calcCall(streetEl.value==='flop'?flopOne:turnOne, streetEl.value==='flop'?flopTwo:turnOne);
+}
+function calcCall(eqNext,eqAll){
+  const pot=+document.getElementById('pPot').value||0, bet=+document.getElementById('pBet').value||0;
+  const out=document.getElementById('callOut');
+  if(bet<=0){out.innerHTML='<p class="muted">Pon la apuesta del rival para calcular.</p>';return}
+  const need=bet/(pot+2*bet);
+  const ok=eqNext>=need, implied=!ok&&eqAll>=need;
+  const extra=ok?0:Math.max(0,bet/eqNext-(pot+2*bet));
+  out.innerHTML=`
+   <div class="row"><span>Pagas ${bet} para ganar ${pot+bet}</span><span class="num">necesitas <b>${(need*100).toFixed(1)}%</b></span></div>
+   <div class="row"><span>Tu probabilidad en la próxima carta</span><span class="num"><b>${(eqNext*100).toFixed(1)}%</b></span></div>
+   <div class="meter" aria-hidden="true"><span style="width:${Math.min(100,eqNext*100)}%"></span><i class="need" style="left:${Math.min(100,need*100)}%"></i></div>
+   <div>${ok?'<span class="pill ok">Paga</span> El precio es bueno aunque no ganes nada más.'
+     : implied?`<span class="pill mid">Depende</span> Solo es rentable si esperas cobrar unos <b class="num">${Math.ceil(extra)}</b> más cuando ligues (odds implícitas), o si el rival no apostará en el turn.`
+     : `<span class="pill no">Foldea</span> Te faltan unos <b class="num">${Math.ceil(extra)}</b> extra de ganancias futuras para que el pago sea rentable.`}</div>
+   <p class="muted" style="font-size:13px">Si tu proyecto liga pero puede perder contra algo mejor (color bajo, escalera por el lado malo), cuenta menos outs.</p>`;
+}
+[outsEl,streetEl,document.getElementById('pPot'),document.getElementById('pBet')].forEach(e=>e.addEventListener('input',calcDraw));
+calcDraw();
+
+/* Bote */
+const SIZES=[['1/4 bote',.25],['1/3 bote',1/3],['1/2 bote',.5],['2/3 bote',2/3],['3/4 bote',.75],['Bote',1],['Overbet 1.5×',1.5]];
+function calcSizes(){
+  const pot=+document.getElementById('bPot').value||0, u=document.getElementById('bUnit').value;
+  const fmt=x=>u==='$'?'$'+(x<10?x.toFixed(2):x.toFixed(0)):(x<10?x.toFixed(1):x.toFixed(0))+' bb';
+  document.getElementById('sizeRows').innerHTML=SIZES.map(([n,f])=>{const b=pot*f;
+    return `<tr><td>${n}</td><td class="num">${fmt(b)}</td><td class="num">${(f/(1+f)*100).toFixed(0)}%</td><td class="num">${(f/(1+2*f)*100).toFixed(0)}%</td></tr>`}).join('');
+}
+['bPot','bUnit'].forEach(id=>document.getElementById(id).addEventListener('input',calcSizes));
+calcSizes();
+
+/* MDF */
+function calcMdf(){
+  const pot=+document.getElementById('mPot').value||0, bet=+document.getElementById('mBet').value||0;
+  if(pot<=0||bet<=0){document.getElementById('mdfOut').innerHTML='';return}
+  const mdf=pot/(pot+bet), bluff=bet/(pot+2*bet);
+  document.getElementById('mdfOut').innerHTML=`
+   <div class="row"><span>Debes continuar con al menos</span><span class="num"><b>${(mdf*100).toFixed(0)}%</b> de tu rango</span></div>
+   <div class="row"><span>Su farol funciona solo con foldear más de</span><span class="num"><b>${(bet/(pot+bet)*100).toFixed(0)}%</b></span></div>
+   <div class="row"><span>Su rango equilibrado tendría faroles en un</span><span class="num"><b>${(bluff*100).toFixed(0)}%</b></span></div>
+   <p class="muted" style="font-size:13px">Contra rivales que casi nunca farolean puedes foldear bastante más de lo que dice este número. Contra agresivos, acércate a él.</p>`;
+}
+['mPot','mBet'].forEach(id=>document.getElementById(id).addEventListener('input',calcMdf));
+calcMdf();
+</script>
+
+</body>
+</html>

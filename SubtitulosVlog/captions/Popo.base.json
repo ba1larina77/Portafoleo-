@@ -1,0 +1,352 @@
+{
+  "nombre": "Popo",
+  "id": "Popo",
+  "video": "videos/Popo.mp4",
+  "ancho": 1920,
+  "alto": 1080,
+  "fps": 30,
+  "duracionFrames": 1036,
+  "duracionS": 34.533333,
+  "palabras": [
+    {
+      "texto": "HOLA",
+      "inicio": 0.38,
+      "fin": 0.5
+    },
+    {
+      "texto": "MIS",
+      "inicio": 0.76,
+      "fin": 0.88
+    },
+    {
+      "texto": "MANICITOS",
+      "inicio": 1.02,
+      "fin": 1.9
+    },
+    {
+      "texto": "HOY",
+      "inicio": 2.4,
+      "fin": 2.52
+    },
+    {
+      "texto": "HACIENDO",
+      "inicio": 2.76,
+      "fin": 3.04
+    },
+    {
+      "texto": "IN",
+      "inicio": 3.04,
+      "fin": 3.16
+    },
+    {
+      "texto": "DRIVE",
+      "inicio": 3.42,
+      "fin": 3.54
+    },
+    {
+      "texto": "ME",
+      "inicio": 3.84,
+      "fin": 3.96
+    },
+    {
+      "texto": "PASARON",
+      "inicio": 4.04,
+      "fin": 4.16
+    },
+    {
+      "texto": "VARIAS",
+      "inicio": 4.6,
+      "fin": 4.72
+    },
+    {
+      "texto": "COSITAS",
+      "inicio": 4.92,
+      "fin": 5.14
+    },
+    {
+      "texto": "COMENZANDO",
+      "inicio": 6.02,
+      "fin": 6.17
+    },
+    {
+      "texto": "CON",
+      "inicio": 6.44,
+      "fin": 6.56
+    },
+    {
+      "texto": "ESTE",
+      "inicio": 6.84,
+      "fin": 6.96
+    },
+    {
+      "texto": "ESPÉCIMEN",
+      "inicio": 7.16,
+      "fin": 8.12
+    },
+    {
+      "texto": "QUE",
+      "inicio": 8.12,
+      "fin": 8.36
+    },
+    {
+      "texto": "NO",
+      "inicio": 8.36,
+      "fin": 8.48
+    },
+    {
+      "texto": "SÉ",
+      "inicio": 8.48,
+      "fin": 8.66
+    },
+    {
+      "texto": "SI",
+      "inicio": 8.66,
+      "fin": 8.98
+    },
+    {
+      "texto": "SE",
+      "inicio": 8.98,
+      "fin": 9.14
+    },
+    {
+      "texto": "ESTABA",
+      "inicio": 9.14,
+      "fin": 9.46
+    },
+    {
+      "texto": "DISOCIANDO",
+      "inicio": 9.46,
+      "fin": 10.64
+    },
+    {
+      "texto": "O",
+      "inicio": 10.64,
+      "fin": 10.82
+    },
+    {
+      "texto": "HABÍA",
+      "inicio": 10.82,
+      "fin": 11.12
+    },
+    {
+      "texto": "VISTO",
+      "inicio": 11.12,
+      "fin": 11.42
+    },
+    {
+      "texto": "UN",
+      "inicio": 11.42,
+      "fin": 11.56
+    },
+    {
+      "texto": "CULO",
+      "inicio": 11.56,
+      "fin": 11.96
+    },
+    {
+      "texto": "MUY",
+      "inicio": 11.96,
+      "fin": 13.3
+    },
+    {
+      "texto": "GRANDE",
+      "inicio": 13.3,
+      "fin": 16.6
+    },
+    {
+      "texto": "YO",
+      "inicio": 16.74,
+      "fin": 16.86
+    },
+    {
+      "texto": "CULOS",
+      "inicio": 16.94,
+      "fin": 17.12
+    },
+    {
+      "texto": "NO",
+      "inicio": 17.26,
+      "fin": 17.38
+    },
+    {
+      "texto": "VI",
+      "inicio": 17.38,
+      "fin": 17.5
+    },
+    {
+      "texto": "ENTONCES",
+      "inicio": 17.96,
+      "fin": 18.08
+    },
+    {
+      "texto": "CREO",
+      "inicio": 18.18,
+      "fin": 18.34
+    },
+    {
+      "texto": "QUE",
+      "inicio": 18.4,
+      "fin": 18.56
+    },
+    {
+      "texto": "SE",
+      "inicio": 18.6,
+      "fin": 18.72
+    },
+    {
+      "texto": "DISOCIÓ",
+      "inicio": 18.9,
+      "fin": 19.04
+    },
+    {
+      "texto": "LUEGO",
+      "inicio": 19.72,
+      "fin": 19.89
+    },
+    {
+      "texto": "VEO",
+      "inicio": 19.96,
+      "fin": 20.21
+    },
+    {
+      "texto": "ESTE",
+      "inicio": 20.34,
+      "fin": 20.63
+    },
+    {
+      "texto": "PARCERO",
+      "inicio": 20.72,
+      "fin": 21.4
+    },
+    {
+      "texto": "QUE",
+      "inicio": 21.64,
+      "fin": 21.76
+    },
+    {
+      "texto": "APARENTEMENTE",
+      "inicio": 21.92,
+      "fin": 22.36
+    },
+    {
+      "texto": "ES",
+      "inicio": 22.94,
+      "fin": 23.06
+    },
+    {
+      "texto": "Y",
+      "inicio": 24.1,
+      "fin": 24.22
+    },
+    {
+      "texto": "ENCONTRÓ",
+      "inicio": 24.56,
+      "fin": 24.68
+    },
+    {
+      "texto": "UNO",
+      "inicio": 24.88,
+      "fin": 25
+    },
+    {
+      "texto": "DE",
+      "inicio": 25.16,
+      "fin": 25.28
+    },
+    {
+      "texto": "CALIDAD",
+      "inicio": 25.8,
+      "fin": 25.92
+    },
+    {
+      "texto": "Y",
+      "inicio": 26.36,
+      "fin": 26.48
+    },
+    {
+      "texto": "MÁS",
+      "inicio": 26.6,
+      "fin": 26.72
+    },
+    {
+      "texto": "ADELANTE",
+      "inicio": 27.22,
+      "fin": 27.34
+    },
+    {
+      "texto": "APARENTEMENTE",
+      "inicio": 27.5,
+      "fin": 27.7
+    },
+    {
+      "texto": "UN",
+      "inicio": 28.48,
+      "fin": 28.6
+    },
+    {
+      "texto": "DISCÍPULO",
+      "inicio": 28.72,
+      "fin": 28.87
+    },
+    {
+      "texto": "QUE",
+      "inicio": 29.48,
+      "fin": 29.6
+    },
+    {
+      "texto": "VIO",
+      "inicio": 29.6,
+      "fin": 29.72
+    },
+    {
+      "texto": "UNO",
+      "inicio": 29.96,
+      "fin": 30.08
+    },
+    {
+      "texto": "LEGENDARIO",
+      "inicio": 30.42,
+      "fin": 30.63
+    },
+    {
+      "texto": "Y",
+      "inicio": 31.08,
+      "fin": 31.2
+    },
+    {
+      "texto": "SE",
+      "inicio": 31.34,
+      "fin": 31.46
+    },
+    {
+      "texto": "TIRÓ",
+      "inicio": 31.48,
+      "fin": 31.6
+    },
+    {
+      "texto": "DE",
+      "inicio": 31.82,
+      "fin": 31.94
+    },
+    {
+      "texto": "CABEZA",
+      "inicio": 32.28,
+      "fin": 32.4
+    },
+    {
+      "texto": "Y",
+      "inicio": 32.7,
+      "fin": 32.82
+    },
+    {
+      "texto": "SIN",
+      "inicio": 32.94,
+      "fin": 33.06
+    },
+    {
+      "texto": "CASCO",
+      "inicio": 33.26,
+      "fin": 34.55
+    }
+  ]
+}

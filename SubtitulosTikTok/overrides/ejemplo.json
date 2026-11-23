@@ -1,0 +1,8 @@
+{
+  "palabrasTitulo": 7,
+  "umbralHz": 170,
+  "voces": [
+    { "desde": 12.5, "hasta": 20, "voz": "mujer" },
+    { "desde": 31, "hasta": 33.2, "voz": "hombre" }
+  ]
+}

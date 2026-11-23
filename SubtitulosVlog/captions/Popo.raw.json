@@ -1,0 +1,410 @@
+[
+  {
+    "texto": "Hola",
+    "inicioMs": 380,
+    "finMs": 500,
+    "confianza": 0.702858
+  },
+  {
+    "texto": "mis",
+    "inicioMs": 760,
+    "finMs": 880,
+    "confianza": 0.36008
+  },
+  {
+    "texto": "manicitos",
+    "inicioMs": 1020,
+    "finMs": 1900,
+    "confianza": 0.746713
+  },
+  {
+    "texto": "hoy",
+    "inicioMs": 2400,
+    "finMs": 2520,
+    "confianza": 0.208801
+  },
+  {
+    "texto": "haciendo",
+    "inicioMs": 2760,
+    "finMs": 3040,
+    "confianza": 0.96321
+  },
+  {
+    "texto": "in",
+    "inicioMs": 3040,
+    "finMs": 3160,
+    "confianza": 0.438167
+  },
+  {
+    "texto": "drive",
+    "inicioMs": 3420,
+    "finMs": 3540,
+    "confianza": 0.77822
+  },
+  {
+    "texto": "me",
+    "inicioMs": 3840,
+    "finMs": 3960,
+    "confianza": 0.787162
+  },
+  {
+    "texto": "pasaron",
+    "inicioMs": 4040,
+    "finMs": 4160,
+    "confianza": 0.956383
+  },
+  {
+    "texto": "varias",
+    "inicioMs": 4600,
+    "finMs": 4720,
+    "confianza": 0.978069
+  },
+  {
+    "texto": "cositas",
+    "inicioMs": 4920,
+    "finMs": 5140,
+    "confianza": 0.973921
+  },
+  {
+    "texto": "comenzando",
+    "inicioMs": 6020,
+    "finMs": 6170,
+    "confianza": 0.595139
+  },
+  {
+    "texto": "con",
+    "inicioMs": 6440,
+    "finMs": 6560,
+    "confianza": 0.92153
+  },
+  {
+    "texto": "este",
+    "inicioMs": 6840,
+    "finMs": 6960,
+    "confianza": 0.701785
+  },
+  {
+    "texto": "espécimen",
+    "inicioMs": 7160,
+    "finMs": 8120,
+    "confianza": 0.471213
+  },
+  {
+    "texto": "que",
+    "inicioMs": 8120,
+    "finMs": 8360,
+    "confianza": 0.964428
+  },
+  {
+    "texto": "no",
+    "inicioMs": 8360,
+    "finMs": 8480,
+    "confianza": 0.991567
+  },
+  {
+    "texto": "sé",
+    "inicioMs": 8480,
+    "finMs": 8660,
+    "confianza": 0.741096
+  },
+  {
+    "texto": "si",
+    "inicioMs": 8660,
+    "finMs": 8980,
+    "confianza": 0.995254
+  },
+  {
+    "texto": "se",
+    "inicioMs": 8980,
+    "finMs": 9140,
+    "confianza": 0.984346
+  },
+  {
+    "texto": "estaba",
+    "inicioMs": 9140,
+    "finMs": 9460,
+    "confianza": 0.972546
+  },
+  {
+    "texto": "disociando",
+    "inicioMs": 9460,
+    "finMs": 10640,
+    "confianza": 0.823552
+  },
+  {
+    "texto": "o",
+    "inicioMs": 10640,
+    "finMs": 10820,
+    "confianza": 0.912818
+  },
+  {
+    "texto": "había",
+    "inicioMs": 10820,
+    "finMs": 11120,
+    "confianza": 0.971578
+  },
+  {
+    "texto": "visto",
+    "inicioMs": 11120,
+    "finMs": 11420,
+    "confianza": 0.996253
+  },
+  {
+    "texto": "un",
+    "inicioMs": 11420,
+    "finMs": 11560,
+    "confianza": 0.995038
+  },
+  {
+    "texto": "culo",
+    "inicioMs": 11560,
+    "finMs": 11960,
+    "confianza": 0.927138
+  },
+  {
+    "texto": "muy",
+    "inicioMs": 11960,
+    "finMs": 13300,
+    "confianza": 0.977871
+  },
+  {
+    "texto": "grande",
+    "inicioMs": 13300,
+    "finMs": 16600,
+    "confianza": 0.984025
+  },
+  {
+    "texto": "yo",
+    "inicioMs": 16740,
+    "finMs": 16860,
+    "confianza": 0.69813
+  },
+  {
+    "texto": "culos",
+    "inicioMs": 16940,
+    "finMs": 17120,
+    "confianza": 0.942851
+  },
+  {
+    "texto": "no",
+    "inicioMs": 17260,
+    "finMs": 17380,
+    "confianza": 0.967883
+  },
+  {
+    "texto": "vi",
+    "inicioMs": 17380,
+    "finMs": 17500,
+    "confianza": 0.930484
+  },
+  {
+    "texto": "entonces",
+    "inicioMs": 17960,
+    "finMs": 18080,
+    "confianza": 0.895827
+  },
+  {
+    "texto": "creo",
+    "inicioMs": 18180,
+    "finMs": 18340,
+    "confianza": 0.992636
+  },
+  {
+    "texto": "que",
+    "inicioMs": 18400,
+    "finMs": 18560,
+    "confianza": 0.998582
+  },
+  {
+    "texto": "se",
+    "inicioMs": 18600,
+    "finMs": 18720,
+    "confianza": 0.993028
+  },
+  {
+    "texto": "disoció",
+    "inicioMs": 18900,
+    "finMs": 19040,
+    "confianza": 0.977719
+  },
+  {
+    "texto": "luego",
+    "inicioMs": 19720,
+    "finMs": 19890,
+    "confianza": 0.754723
+  },
+  {
+    "texto": "veo",
+    "inicioMs": 19960,
+    "finMs": 20210,
+    "confianza": 0.987327
+  },
+  {
+    "texto": "este",
+    "inicioMs": 20340,
+    "finMs": 20630,
+    "confianza": 0.84307
+  },
+  {
+    "texto": "parcero",
+    "inicioMs": 20720,
+    "finMs": 21400,
+    "confianza": 0.707359
+  },
+  {
+    "texto": "que",
+    "inicioMs": 21640,
+    "finMs": 21760,
+    "confianza": 0.963279
+  },
+  {
+    "texto": "aparentemente",
+    "inicioMs": 21920,
+    "finMs": 22360,
+    "confianza": 0.976615
+  },
+  {
+    "texto": "es",
+    "inicioMs": 22940,
+    "finMs": 23060,
+    "confianza": 0.872126
+  },
+  {
+    "texto": "y",
+    "inicioMs": 24100,
+    "finMs": 24220,
+    "confianza": 0.206775
+  },
+  {
+    "texto": "encontró",
+    "inicioMs": 24560,
+    "finMs": 24680,
+    "confianza": 0.742591
+  },
+  {
+    "texto": "uno",
+    "inicioMs": 24880,
+    "finMs": 25000,
+    "confianza": 0.984005
+  },
+  {
+    "texto": "de",
+    "inicioMs": 25160,
+    "finMs": 25280,
+    "confianza": 0.999634
+  },
+  {
+    "texto": "calidad",
+    "inicioMs": 25800,
+    "finMs": 25920,
+    "confianza": 0.997756
+  },
+  {
+    "texto": "y",
+    "inicioMs": 26360,
+    "finMs": 26480,
+    "confianza": 0.983995
+  },
+  {
+    "texto": "más",
+    "inicioMs": 26600,
+    "finMs": 26720,
+    "confianza": 0.97088
+  },
+  {
+    "texto": "adelante",
+    "inicioMs": 27220,
+    "finMs": 27340,
+    "confianza": 0.99763
+  },
+  {
+    "texto": "aparentemente",
+    "inicioMs": 27500,
+    "finMs": 27700,
+    "confianza": 0.997328
+  },
+  {
+    "texto": "un",
+    "inicioMs": 28480,
+    "finMs": 28600,
+    "confianza": 0.996884
+  },
+  {
+    "texto": "discípulo",
+    "inicioMs": 28720,
+    "finMs": 28870,
+    "confianza": 0.881531
+  },
+  {
+    "texto": "que",
+    "inicioMs": 29480,
+    "finMs": 29600,
+    "confianza": 0.992036
+  },
+  {
+    "texto": "vio",
+    "inicioMs": 29600,
+    "finMs": 29720,
+    "confianza": 0.919456
+  },
+  {
+    "texto": "uno",
+    "inicioMs": 29960,
+    "finMs": 30080,
+    "confianza": 0.90925
+  },
+  {
+    "texto": "legendario",
+    "inicioMs": 30420,
+    "finMs": 30630,
+    "confianza": 0.994598
+  },
+  {
+    "texto": "y",
+    "inicioMs": 31080,
+    "finMs": 31200,
+    "confianza": 0.997695
+  },
+  {
+    "texto": "se",
+    "inicioMs": 31340,
+    "finMs": 31460,
+    "confianza": 0.997592
+  },
+  {
+    "texto": "tiró",
+    "inicioMs": 31480,
+    "finMs": 31600,
+    "confianza": 0.970062
+  },
+  {
+    "texto": "de",
+    "inicioMs": 31820,
+    "finMs": 31940,
+    "confianza": 0.999706
+  },
+  {
+    "texto": "cabeza",
+    "inicioMs": 32280,
+    "finMs": 32400,
+    "confianza": 0.996124
+  },
+  {
+    "texto": "y",
+    "inicioMs": 32700,
+    "finMs": 32820,
+    "confianza": 0.986572
+  },
+  {
+    "texto": "sin",
+    "inicioMs": 32940,
+    "finMs": 33060,
+    "confianza": 0.995387
+  },
+  {
+    "texto": "casco",
+    "inicioMs": 33260,
+    "finMs": 34550,
+    "confianza": 0.994057
+  }
+]

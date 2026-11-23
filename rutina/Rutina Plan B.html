@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rutina Plan B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: plan switch -> view tabs (checklist / mes). Checklist: date nav, progress, tasks. Mes: calendar of liquid-filled vessels. Phone-first. */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --ink:#18212b; --muted:#5f6b78; --line:#dde3ea; --accent:#0b6e8a;
+  --water:#1d9bc4; --water-deep:#0b6e8a; --full:#2f8f5b;
+  --display:"Sora",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif;
+  --c-indrive:#e8a317; --c-prep:#0b6e8a; --c-ingles:#7a4fd0; --c-tareas:#2f8f5b; --c-gym:#d4513b;
+  --c-aseo:#8a6a3c; --c-clase:#4a5868; --c-cocina:#a0466e; --c-libre:#9aa6b2; --c-otro:#c3ccd5; --c-sueno:#3d4f8f;
+  --warn-bg:#fff4e0; --warn-ink:#7a4a00;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#11161c; --surface:#1a2129; --ink:#e7edf3; --muted:#9aa7b4; --line:#2b3540; --accent:#4fb6d3;
+    --water:#2aa7cf; --water-deep:#16708d; --full:#5cc08a;
+    --c-prep:#4fb6d3; --c-ingles:#a487e8; --c-tareas:#5cc08a; --c-clase:#8a9aab; --c-otro:#46525e; --c-libre:#6c7884; --c-sueno:#7f93d9;
+    --warn-bg:#3a2c12; --warn-ink:#f3cf8a;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#11161c; --surface:#1a2129; --ink:#e7edf3; --muted:#9aa7b4; --line:#2b3540; --accent:#4fb6d3;
+  --water:#2aa7cf; --water-deep:#16708d; --full:#5cc08a;
+  --c-prep:#4fb6d3; --c-ingles:#a487e8; --c-tareas:#5cc08a; --c-clase:#8a9aab; --c-otro:#46525e; --c-libre:#6c7884; --c-sueno:#7f93d9;
+  --warn-bg:#3a2c12; --warn-ink:#f3cf8a;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+.wrap{max-width:620px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:14px}
+h1{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:2px 0 0;font-size:13.5px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{font:600 14px var(--body);border:0;border-radius:9px;padding:9px 8px;background:transparent;color:var(--muted);cursor:pointer;line-height:1.25}
+.seg button small{display:block;font-weight:400;font-size:12px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.seg button[aria-pressed="true"] small{color:#e6f4f8}
+.seg.views button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible,label:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h2{font-family:var(--display);font-size:15px;margin:0 0 10px}
+.warn{background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.nav{display:flex;align-items:center;gap:8px}
+.nav h2{flex:1;text-align:center;margin:0;font-family:var(--display);font-size:16px;text-transform:capitalize}
+.nav button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;cursor:pointer}
+.today-link{font:600 12.5px var(--body);color:var(--accent);background:none;border:0;cursor:pointer;padding:0;display:block;margin:6px auto 0}
+.prog{display:flex;align-items:center;gap:10px;margin-top:12px}
+.prog .track{flex:1;height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog .fill{height:100%;background:var(--water);border-radius:99px}
+.prog .fill.done{background:var(--full)}
+.prog span{font-variant-numeric:tabular-nums;font-weight:600;font-size:14px;min-width:84px;text-align:right}
+ul.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+ul.tl li{border-top:1px solid var(--line)}
+ul.tl li:first-child{border-top:0}
+.row{display:grid;grid-template-columns:72px 4px 1fr 28px;gap:10px;padding:9px 0;align-items:center}
+label.row{cursor:pointer}
+.time{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);line-height:1.3}
+.time b{display:block;color:var(--ink);font-weight:600;font-size:13.5px}
+.bar{border-radius:2px;align-self:stretch}
+.what{font-weight:600}
+.note{color:var(--muted);font-size:13px;margin-top:1px}
+.row.plain .what{font-weight:500;color:var(--muted)}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:99px;margin-left:6px;vertical-align:1px;background:var(--warn-bg);color:var(--warn-ink)}
+.row input{appearance:none;-webkit-appearance:none;width:26px;height:26px;margin:0;border:2px solid var(--line);border-radius:8px;background:var(--surface);display:grid;place-items:center;cursor:pointer}
+.row input:checked{background:var(--full);border-color:var(--full)}
+.row input:checked::after{content:"";width:7px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg)}
+.row input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row.checked .what{text-decoration:line-through;text-decoration-thickness:2px;color:var(--muted)}
+.totals{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+.tot{display:flex;align-items:center;gap:8px;font-size:14px}
+.tot .dot{width:10px;height:10px;border-radius:3px;flex:none}
+.tot .n{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
+/* Mes */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--bg);border-radius:10px;padding:8px 10px}
+.stat b{display:block;font-family:var(--display);font-size:19px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px}
+.dow{font-size:11.5px;font-weight:600;color:var(--muted);text-align:center}
+.cell{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;cursor:pointer;color:var(--ink);font:inherit}
+.cell:disabled{cursor:default}
+.vessel{position:relative;width:100%;max-width:58px;aspect-ratio:3/4;border:2px solid var(--line);border-top-width:0;border-radius:4px 4px 14px 14px;overflow:hidden;background:var(--surface)}
+.vessel::before{content:"";position:absolute;left:-2px;right:-2px;top:0;height:2px;background:var(--line)}
+.liquid{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--water),var(--water-deep));transition:height .5s ease}
+.liquid.full{background:linear-gradient(180deg,var(--full),color-mix(in srgb,var(--full) 70%,#000))}
+.wave{position:absolute;left:0;top:-5px;width:200%;height:8px;color:var(--water)}
+.liquid.full .wave{color:var(--full)}
+@media (prefers-reduced-motion:no-preference){.wave{animation:wave 3s linear infinite}}
+@keyframes wave{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.pct{position:absolute;inset:0;display:grid;place-items:center;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);text-shadow:0 0 3px var(--surface)}
+.cell .num{font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.cell.today .num{color:#fff;background:var(--accent);border-radius:99px;padding:0 7px;font-weight:600}
+.cell.today .vessel{border-color:var(--accent)}
+.cell.today .vessel::before{background:var(--accent)}
+.cell.future .vessel{border-style:dashed;opacity:.55}
+.legend{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+.foot{color:var(--muted);font-size:12.5px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="h1">Rutina · Plan B</h1>
+    <p class="sub">Semestre UTP · Ingeniería de Sistemas · duermo de 10:30 pm a 5:30 am</p>
+  </header>
+
+  <div class="seg" id="planSwitch" role="group" aria-label="Elegir plan">
+    <button id="btnA" type="button" data-plan="A">Plan A<small>inDrive mañanas libres</small></button>
+    <button id="btnB" type="button" data-plan="B">Plan B<small>inDrive lun–sáb 6–9</small></button>
+  </div>
+
+  <div class="seg views" role="group" aria-label="Elegir vista">
+    <button id="vCheck" type="button" data-view="check">Checklist del día</button>
+    <button id="vMes" type="button" data-view="mes">Mi mes</button>
+  </div>
+
+  <div id="warn" class="warn" hidden></div>
+
+  <section id="viewCheck">
+    <div class="card">
+      <div class="nav">
+        <button type="button" id="dPrev" aria-label="Día anterior">‹</button>
+        <h2 id="dTitle"></h2>
+        <button type="button" id="dNext" aria-label="Día siguiente">›</button>
+      </div>
+      <button type="button" class="today-link" id="dToday">Ir a hoy</button>
+      <div class="prog"><div class="track"><div class="fill" id="dFill"></div></div><span id="dPct"></span></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <ul class="tl" id="tl"></ul>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h2>Horas por semana en este plan</h2>
+      <div class="totals" id="totals"></div>
+    </div>
+  </section>
+
+  <section id="viewMes" hidden>
+    <div class="card">
+      <div class="nav">
+        <button type="button" id="mPrev" aria-label="Mes anterior">‹</button>
+        <h2 id="mTitle"></h2>
+        <button type="button" id="mNext" aria-label="Mes siguiente">›</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="sAvg">0%</b><span>Promedio del mes</span></div>
+        <div class="stat"><b id="sFull">0</b><span>Días al 100%</span></div>
+        <div class="stat"><b id="sStreak">0</b><span>Racha actual</span></div>
+      </div>
+      <div class="cal" id="cal"></div>
+      <p class="legend">Cada recipiente se llena según lo que marcaste ese día. Lleno y verde es día cumplido. Toca un día para abrir su checklist.</p>
+    </div>
+  </section>
+
+  <p class="foot">Todas las clases son virtuales menos Gamificación (viernes). Los bloques de gym incluyen la ida y la vuelta a la U. Turno de cocina supuesto: 10:00 am a 6:00 pm. Tus marcas se guardan en este navegador; si abres el archivo en otro equipo o navegador empieza vacío.</p>
+</div>
+
+<script>
+const FIXED_PLAN = "B";
+const CAT = {
+  indrive:{n:"inDrive",c:"--c-indrive"}, prep:{n:"Preparación laboral",c:"--c-prep"},
+  ingles:{n:"Inglés",c:"--c-ingles"}, tareas:{n:"Tareas",c:"--c-tareas"},
+  gym:{n:"Gym (con traslado)",c:"--c-gym"}, aseo:{n:"Aseo",c:"--c-aseo"},
+  libre:{n:"Libre / descanso",c:"--c-libre"}, clase:{n:"Clase",c:"--c-clase"},
+  cocina:{n:"Trabajo cocina",c:"--c-cocina"}, otro:{n:"",c:"--c-otro"}, sueno:{n:"Dormir",c:"--c-sueno"}
+};
+const SUM_KEYS = ["prep","indrive","tareas","ingles","gym","aseo","libre"];
+const CHECKABLE = new Set(["indrive","prep","ingles","tareas","gym","aseo","clase","cocina","sueno"]);
+const DAYS_FULL = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
+const MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+// [inicio, fin, categoría, texto, nota, etiqueta]
+const V = "Virtual";
+const LUN = [
+  ["5:30","6:00","otro","Levantarse y café"],
+  ["6:00","9:00","indrive","inDrive","Hora pico de la mañana"],
+  ["9:00","9:30","otro","Desayuno y baño"],
+  ["9:30","12:30","prep","Preparación laboral","Proyecto del portafolio"],
+  ["12:30","13:30","otro","Almuerzo"],
+  ["13:30","14:30","ingles","Inglés"],
+  ["14:30","16:00","gym","Gym en la U","Incluye ida y vuelta"],
+  ["16:00","17:00","clase","Cálculo Integral",V],
+  ["17:00","19:30","tareas","Tareas"],
+  ["19:30","20:30","prep","Preparación laboral","Python / SQL"],
+  ["20:30","22:30","libre","Cena y descanso"]
+];
+const MIE = (inEnd,inNote) => [
+  ["5:30","6:00","otro","Levantarse y café"],
+  ["6:00",inEnd,"indrive","inDrive",inNote],
+  [inEnd,"9:00","otro","Llegar a casa y desayunar"],
+  ["9:00","11:00","clase","Constitución Política",V],
+  ["11:00","13:00","prep","Preparación laboral"],
+  ["13:00","14:00","otro","Almuerzo"],
+  ["14:00","15:00","ingles","Inglés"],
+  ["15:00","16:00","tareas","Tareas"],
+  ["16:00","18:00","clase","Cálculo Integral",V],
+  ["18:00","19:30","gym","Gym en la U","Incluye ida y vuelta"],
+  ["19:30","20:15","otro","Cena y baño"],
+  ["20:15","21:15","prep","Preparación laboral"],
+  ["21:15","22:30","libre","Descanso"]
+];
+const VIE = [
+  ["5:30","6:00","otro","Levantarse y café"],
+  ["6:00","9:00","indrive","inDrive","Hora pico de la mañana"],
+  ["9:00","9:30","otro","Desayuno"],
+  ["9:30","11:00","ingles","Inglés"],
+  ["11:00","13:00","clase","Legislación, Ética y Contratación",V],
+  ["13:00","13:30","otro","Almuerzo"],
+  ["13:30","14:00","otro","Traslado a la U"],
+  ["14:00","16:00","clase","Gamificación","Presencial"],
+  ["16:00","17:00","gym","Gym en la U","Ya estás allá"],
+  ["17:00","17:30","otro","Traslado a casa"],
+  ["17:30","18:30","aseo","Aseo de la casa"],
+  ["18:30","19:00","otro","Cena"],
+  ["19:00","21:00","prep","Preparación laboral","Postular a ofertas + LinkedIn"],
+  ["21:00","22:30","libre","Descanso"]
+];
+const SAB = [
+  ["5:30","6:00","otro","Levantarse y café"],
+  ["6:00","9:00","indrive","inDrive","Hora pico de la mañana"],
+  ["9:00","10:00","otro","Desayuno y traslado"],
+  ["10:00","18:00","cocina","Trabajo de auxiliar de cocina"],
+  ["18:00","19:30","otro","Traslado, baño y cena"],
+  ["19:30","21:00","prep","Preparación laboral","Algo ligero: video o curso"],
+  ["21:00","22:30","libre","Descanso"]
+];
+const DOM = [
+  ["7:00","8:00","otro","Levantarse y desayuno","Hoy duermes hasta las 7"],
+  ["8:00","9:30","prep","Preparación laboral","Postular a ofertas"],
+  ["9:30","10:00","otro","Traslado"],
+  ["10:00","18:00","cocina","Trabajo de auxiliar de cocina"],
+  ["18:00","18:30","otro","Traslado"],
+  ["18:30","19:30","aseo","Aseo y ropa de la semana"],
+  ["19:30","20:30","ingles","Inglés","Conversación o serie en inglés"],
+  ["20:30","21:00","prep","Planear la semana"],
+  ["21:00","22:30","libre","Descanso"]
+];
+const MAR_CLASES = [
+  ["9:00","11:00","clase","Sistemas Distribuidos",V],
+  ["11:00","13:00","clase","Estadística",V],
+  ["13:00","14:00","otro","Almuerzo"],
+  ["14:00","16:00","clase","Auditoría de Sistemas",V],
+  ["16:00","18:00","clase","Cálculo Integral",V]
+];
+const JUE_CLASES = [
+  ["9:00","11:00","clase","Sistemas Distribuidos",V],
+  ["11:00","13:00","clase","Estadística",V],
+  ["13:00","14:00","otro","Almuerzo"],
+  ["14:00","16:00","clase","Auditoría de Sistemas",V]
+];
+const SW3 = ["7:00","9:00","clase","Ingeniería del Software III",V];
+const PERDIDA = ["6:00","9:00","indrive","inDrive","Termina cerca de tu casa para conectarte a las 9","Pierdes Ing. Software III"];
+
+const PLANS = {
+  A:{
+    warn:"",
+    days:[
+      LUN,
+      [
+        ["5:30","6:30","ingles","Inglés","Vocabulario y escucha"],
+        ["6:30","7:00","otro","Desayuno"],
+        SW3, ...MAR_CLASES,
+        ["18:00","18:30","otro","Cena"],
+        ["18:30","20:00","tareas","Tareas"],
+        ["20:00","21:30","prep","Preparación laboral"],
+        ["21:30","22:30","libre","Descanso"]
+      ],
+      MIE("8:30","Termina cerca de tu casa"),
+      [
+        ["5:30","6:30","ingles","Inglés","Vocabulario y escucha"],
+        ["6:30","7:00","otro","Desayuno"],
+        SW3, ...JUE_CLASES,
+        ["16:00","17:30","gym","Gym en la U","Incluye ida y vuelta"],
+        ["17:30","18:30","otro","Cena y descanso"],
+        ["18:30","20:30","prep","Preparación laboral"],
+        ["20:30","21:30","tareas","Tareas"],
+        ["21:30","22:30","libre","Descanso"]
+      ],
+      VIE, SAB, DOM
+    ]
+  },
+  B:{
+    warn:"Con este plan pierdes Ingeniería del Software III los martes y jueves (4 horas de clase a la semana). Aunque sea virtual, no puedes conectarte mientras manejas, y con esas fallas te pueden reprobar la materia.",
+    days:[
+      LUN,
+      [
+        ["5:30","6:00","otro","Levantarse y café"],
+        PERDIDA, ...MAR_CLASES,
+        ["18:00","18:30","otro","Cena"],
+        ["18:30","20:00","tareas","Tareas"],
+        ["20:00","21:30","prep","Preparación laboral"],
+        ["21:30","22:00","ingles","Inglés","Repaso corto"],
+        ["22:00","22:30","libre","Descanso"]
+      ],
+      MIE("8:45","Termina cerca de tu casa"),
+      [
+        ["5:30","6:00","otro","Levantarse y café"],
+        PERDIDA, ...JUE_CLASES,
+        ["16:00","17:30","gym","Gym en la U","Incluye ida y vuelta"],
+        ["17:30","18:30","otro","Cena y descanso"],
+        ["18:30","20:30","prep","Preparación laboral"],
+        ["20:30","21:30","tareas","Tareas"],
+        ["21:30","22:00","ingles","Inglés","Repaso corto"],
+        ["22:00","22:30","libre","Descanso"]
+      ],
+      VIE, SAB, DOM
+    ]
+  }
+};
+
+
+
+const SLEEP = ["22:30","5:30","sueno","Dormir a las 10:30 pm","Mínimo 7 horas"];
+const mins = t => { const [h,m] = t.split(":").map(Number); return h*60+m; };
+const fmt = t => { let [h,m] = t.split(":").map(Number); const ap = h>=12?"pm":"am"; h = h%12||12; return `${h}:${String(m).padStart(2,"0")} ${ap}`; };
+const hrs = n => (Math.round(n*100)/100).toString().replace(".",",");
+const pad = n => String(n).padStart(2,"0");
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const dow = d => (d.getDay()+6)%7;
+const midnight = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+let plan = FIXED_PLAN || "A";
+let view = "check";
+const today = midnight(new Date());
+let cur = new Date(today);
+let month = new Date(today.getFullYear(), today.getMonth(), 1);
+try{ const h = location.hash.slice(1); if(!FIXED_PLAN && h==="plan-b") plan="B"; if(h==="mes") view="mes"; }catch(e){}
+
+// --- almacenamiento (solo en este navegador) ---
+const mem = {};
+function load(p){
+  if(mem[p]) return mem[p];
+  let o = {};
+  try{ o = JSON.parse(localStorage.getItem("rutina-plan-"+p) || "{}") || {}; }catch(e){ o = {}; }
+  return mem[p] = o;
+}
+function save(p){ try{ localStorage.setItem("rutina-plan-"+p, JSON.stringify(mem[p])); }catch(e){} }
+
+function blocksFor(p, d){ return [...PLANS[p].days[dow(d)], SLEEP]; }
+function checkIdx(p, d){ return blocksFor(p,d).map((b,i)=>CHECKABLE.has(b[2])?i:-1).filter(i=>i>=0); }
+function pctFor(p, d){
+  const idx = checkIdx(p,d); const done = new Set(load(p)[keyOf(d)] || []);
+  const n = idx.filter(i=>done.has(i)).length;
+  return {n, total: idx.length, pct: idx.length ? Math.round(n*100/idx.length) : 0};
+}
+
+function renderHeader(){
+  document.getElementById("planSwitch").hidden = !!FIXED_PLAN;
+  document.getElementById("btnA").setAttribute("aria-pressed", plan==="A");
+  document.getElementById("btnB").setAttribute("aria-pressed", plan==="B");
+  document.getElementById("vCheck").setAttribute("aria-pressed", view==="check");
+  document.getElementById("vMes").setAttribute("aria-pressed", view==="mes");
+  document.getElementById("viewCheck").hidden = view!=="check";
+  document.getElementById("viewMes").hidden = view!=="mes";
+  const w = document.getElementById("warn");
+  w.hidden = !PLANS[plan].warn; w.textContent = PLANS[plan].warn;
+}
+
+function renderCheck(){
+  const k = keyOf(cur);
+  const isToday = cur.getTime()===today.getTime();
+  document.getElementById("dTitle").textContent = `${isToday?"Hoy, ":""}${DAYS_FULL[dow(cur)]} ${cur.getDate()} de ${MONTHS[cur.getMonth()]}`;
+  document.getElementById("dToday").hidden = isToday;
+  const r = pctFor(plan, cur);
+  const f = document.getElementById("dFill");
+  f.style.width = r.pct+"%"; f.classList.toggle("done", r.pct===100);
+  document.getElementById("dPct").textContent = `${r.n} de ${r.total} · ${r.pct}%`;
+  const done = new Set(load(plan)[k] || []);
+  document.getElementById("tl").innerHTML = blocksFor(plan, cur).map((b,i)=>{
+    const can = CHECKABLE.has(b[2]);
+    const id = `chk-${i}`;
+    const inner = `<div class="time"><b>${fmt(b[0])}</b>${b[2]==="sueno"?"":fmt(b[1])}</div><div class="bar" style="background:var(${CAT[b[2]].c})"></div><div><div class="what">${b[3]}${b[5]?`<span class="tag">${b[5]}</span>`:""}</div>${b[4]?`<div class="note">${b[4]}</div>`:""}</div>`;
+    return can
+      ? `<li><label class="row${done.has(i)?" checked":""}" for="${id}">${inner}<input type="checkbox" id="${id}" data-i="${i}"${done.has(i)?" checked":""}></label></li>`
+      : `<li><div class="row plain">${inner}<span></span></div></li>`;
+  }).join("");
+
+  const t = {}; SUM_KEYS.forEach(x=>t[x]=0);
+  PLANS[plan].days.forEach(d=>d.forEach(b=>{ if(b[2] in t) t[b[2]] += (mins(b[1])-mins(b[0]))/60; }));
+  document.getElementById("totals").innerHTML = SUM_KEYS.map(x =>
+    `<div class="tot"><span class="dot" style="background:var(${CAT[x].c})"></span>${CAT[x].n}<span class="n">${hrs(t[x])} h</span></div>`).join("");
+}
+
+const WAVE = `<svg class="wave" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 4 Q15 0 30 4 T60 4 T90 4 T120 4 V8 H0Z"/></svg>`;
+
+function renderMes(){
+  const y = month.getFullYear(), m = month.getMonth();
+  document.getElementById("mTitle").textContent = `${MONTHS[m]} ${y}`;
+  const first = new Date(y, m, 1), days = new Date(y, m+1, 0).getDate();
+  let html = ["L","M","M","J","V","S","D"].map(d=>`<div class="dow">${d}</div>`).join("");
+  for(let i=0;i<dow(first);i++) html += `<div></div>`;
+  let sum=0, counted=0, full=0;
+  for(let d=1; d<=days; d++){
+    const date = new Date(y, m, d);
+    const future = date > today;
+    const r = pctFor(plan, date);
+    if(!future){ sum += r.pct; counted++; if(r.pct===100) full++; }
+    const h = future ? 0 : r.pct;
+    const cls = ["cell", date.getTime()===today.getTime()?"today":"", future?"future":""].join(" ");
+    html += `<button type="button" class="${cls}" id="day-${d}" data-d="${d}" ${future?"disabled":""} aria-label="${d} de ${MONTHS[m]}: ${h}% cumplido">
+      <div class="vessel"><div class="liquid${h===100?" full":""}" style="height:${h}%">${h>0&&h<100?WAVE:""}</div><div class="pct">${future?"":(h===100?"✓":h+"%")}</div></div>
+      <span class="num">${d}</span></button>`;
+  }
+  document.getElementById("cal").innerHTML = html;
+  document.getElementById("sAvg").textContent = (counted?Math.round(sum/counted):0)+"%";
+  document.getElementById("sFull").textContent = full;
+  // racha: días seguidos al 100% terminando hoy (o ayer si hoy aún no está completo)
+  let s = 0, d = new Date(today);
+  if(pctFor(plan,d).pct!==100) d.setDate(d.getDate()-1);
+  while(pctFor(plan,d).pct===100 && s<400){ s++; d.setDate(d.getDate()-1); }
+  document.getElementById("sStreak").textContent = s;
+}
+
+function render(){ renderHeader(); if(view==="check") renderCheck(); else renderMes(); }
+
+document.getElementById("planSwitch").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return; plan = b.dataset.plan;
+  try{ history.replaceState(null,"", plan==="B" ? "#plan-b" : "#plan-a"); }catch(err){}
+  render();
+});
+document.querySelector(".views").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return; view = b.dataset.view; render();
+});
+document.getElementById("tl").addEventListener("change", e=>{
+  const i = Number(e.target.dataset.i); if(Number.isNaN(i)) return;
+  const st = load(plan), k = keyOf(cur);
+  const set = new Set(st[k] || []);
+  e.target.checked ? set.add(i) : set.delete(i);
+  st[k] = [...set].sort((a,b)=>a-b); if(!st[k].length) delete st[k];
+  save(plan); renderCheck();
+});
+const shiftDay = n => { cur = new Date(cur.getFullYear(), cur.getMonth(), cur.getDate()+n); renderCheck(); };
+document.getElementById("dPrev").onclick = ()=>shiftDay(-1);
+document.getElementById("dNext").onclick = ()=>shiftDay(1);
+document.getElementById("dToday").onclick = ()=>{ cur = new Date(today); renderCheck(); };
+document.getElementById("mPrev").onclick = ()=>{ month = new Date(month.getFullYear(), month.getMonth()-1, 1); renderMes(); };
+document.getElementById("mNext").onclick = ()=>{ month = new Date(month.getFullYear(), month.getMonth()+1, 1); renderMes(); };
+document.getElementById("cal").addEventListener("click", e=>{
+  const b = e.target.closest("button.cell"); if(!b || b.disabled) return;
+  cur = new Date(month.getFullYear(), month.getMonth(), Number(b.dataset.d)); view = "check"; render();
+});
+render();
+</script>
+</body>
+</html>

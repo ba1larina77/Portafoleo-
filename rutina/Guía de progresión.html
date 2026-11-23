@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de progresión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: header with overall week -> tabs (Semana, Datos IA, Inglés, Portafolio) -> phases as stacked cards with checklists. Phone-first. */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --ink:#18212b; --muted:#5f6b78; --line:#dde3ea; --accent:#0b6e8a;
+  --ok:#2f8f5b; --soft:#eef2f5;
+  --t-datos:#0b6e8a; --t-ingles:#7a4fd0; --t-port:#c0711b;
+  --display:"Sora",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#11161c; --surface:#1a2129; --ink:#e7edf3; --muted:#9aa7b4; --line:#2b3540; --accent:#4fb6d3;
+    --ok:#5cc08a; --soft:#222b35; --t-datos:#4fb6d3; --t-ingles:#a487e8; --t-port:#e6a050;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#11161c; --surface:#1a2129; --ink:#e7edf3; --muted:#9aa7b4; --line:#2b3540; --accent:#4fb6d3;
+  --ok:#5cc08a; --soft:#222b35; --t-datos:#4fb6d3; --t-ingles:#a487e8; --t-port:#e6a050;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+a{color:var(--accent)}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:14px}
+h1{font-family:var(--display);font-size:22px;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:2px 0 0;font-size:13.5px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.tabs button{font:600 13.5px var(--body);border:0;border-radius:9px;padding:9px 4px;background:transparent;color:var(--muted);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h2{font-family:var(--display);font-size:16px;margin:0}
+.card h3{font-size:14px;margin:12px 0 6px}
+.kick{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.weekbar{display:flex;align-items:center;gap:10px}
+.weekbar .track{flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.weekbar .fill{height:100%;background:var(--accent)}
+.weekbar span{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);white-space:nowrap}
+.tracks{display:flex;flex-direction:column;gap:10px}
+.trk{display:grid;grid-template-columns:4px 1fr auto;gap:10px;align-items:center;background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.trk .stripe{align-self:stretch;border-radius:2px}
+.trk .t{font-weight:600}
+.trk .d{font-size:13px;color:var(--muted)}
+.ring{width:46px;height:46px}
+.ring text{font:700 12px var(--body);fill:var(--ink)}
+table.blocks{width:100%;border-collapse:collapse;font-size:13.5px}
+table.blocks td{padding:6px 4px;border-top:1px solid var(--line);vertical-align:top}
+table.blocks tr:first-child td{border-top:0}
+table.blocks td:first-child{white-space:nowrap;font-weight:600;width:1%}
+table.blocks td:nth-child(2){white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums;width:1%}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:99px;color:#fff}
+.p-datos{background:var(--t-datos)} .p-ingles{background:var(--t-ingles)} .p-port{background:var(--t-port)}
+.phase{border-left:4px solid var(--line)}
+.phase.now{border-left-color:var(--accent)}
+.phase.done{border-left-color:var(--ok)}
+.phead{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.badge{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.phase.now .badge{background:var(--accent);color:#fff}
+.phase.done .badge{background:var(--ok);color:#fff}
+.goal{color:var(--muted);font-size:14px;margin:4px 0 0}
+ul.chk{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column}
+ul.chk li{border-top:1px solid var(--line)}
+ul.chk li:first-child{border-top:0}
+ul.chk label{display:grid;grid-template-columns:1fr 26px;gap:12px;align-items:center;padding:8px 0;cursor:pointer}
+ul.chk .note{display:block;font-size:12.5px;color:var(--muted)}
+ul.chk input{appearance:none;-webkit-appearance:none;width:24px;height:24px;margin:0;border:2px solid var(--line);border-radius:7px;background:var(--surface);display:grid;place-items:center;cursor:pointer}
+ul.chk input:checked{background:var(--ok);border-color:var(--ok)}
+ul.chk input:checked::after{content:"";width:6px;height:12px;border:solid #fff;border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg)}
+ul.chk input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+ul.chk label.on > span{text-decoration:line-through;color:var(--muted)}
+.exit{margin-top:10px;background:var(--soft);border-radius:9px;padding:9px 11px;font-size:13.5px}
+.exit b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.res{margin:8px 0 0;font-size:13.5px;display:flex;flex-wrap:wrap;gap:6px 12px}
+.foot{color:var(--muted);font-size:12.5px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Guía de progresión</h1>
+    <p class="sub">Datos con IA, inglés y portafolio · 24 semanas desde el lunes 23 de noviembre de 2026</p>
+  </header>
+
+  <div class="tabs" role="group" aria-label="Elegir sección">
+    <button type="button" id="tab-semana" data-tab="semana">Semana</button>
+    <button type="button" id="tab-datos" data-tab="datos">Datos IA</button>
+    <button type="button" id="tab-ingles" data-tab="ingles">Inglés</button>
+    <button type="button" id="tab-port" data-tab="port">Portafolio</button>
+  </div>
+
+  <main id="main" style="display:flex;flex-direction:column;gap:14px"></main>
+
+  <p class="foot">Las horas salen del Plan A: 16 h de preparación laboral se reparten en 8 h para Datos con IA y 8 h para Portafolio (incluye 30 min de planeación del domingo), más 6,5 h de inglés. Si vas atrasado, no saltes de fase: alarga la fase actual una semana. En vacaciones de diciembre puedes adelantar. Tus marcas se guardan en este navegador.</p>
+</div>
+
+<script>
+const START = new Date(2026, 10, 23); // lunes 23 nov 2026
+const WEEKS = 24;
+
+const L = {
+  kaggle:["Kaggle Learn","https://www.kaggle.com/learn"],
+  sqlbolt:["SQLBolt","https://sqlbolt.com/"],
+  sql50:["LeetCode SQL 50","https://leetcode.com/studyplan/top-sql-50/"],
+  mslearn:["Microsoft Learn: Power BI (PL-300)","https://learn.microsoft.com/es-es/credentials/certifications/data-analyst-associate/"],
+  datos:["datos.gov.co","https://www.datos.gov.co/"],
+  claude:["Docs de la API de Claude","https://docs.claude.com/"],
+  efset:["EF SET (test gratis)","https://www.efset.org/"],
+  bbc:["BBC Learning English","https://www.bbc.co.uk/learningenglish/"],
+  anki:["Anki","https://apps.ankiweb.net/"],
+  github:["GitHub","https://github.com/"],
+  linkedin:["LinkedIn","https://www.linkedin.com/"],
+  utp:["Portal UTP","https://www.utp.edu.co/"]
+};
+
+const TRACKS = {
+  datos:{
+    name:"Datos con IA", cls:"p-datos", color:"--t-datos", hours:"8 h por semana",
+    blocks:[
+      ["Lun","7:30–8:30 pm","Teoría corta + ejercicios"],
+      ["Mar","8:00–9:30 pm","Curso de la fase"],
+      ["Mié","11:00 am–1:00 pm","Bloque fuerte: práctica larga"],
+      ["Jue","6:30–8:30 pm","Bloque fuerte: práctica larga"],
+      ["Sáb","7:30–9:00 pm","Repaso ligero o video"]
+    ],
+    phases:[
+      {w:[1,4], t:"Python desde cero", g:"Escribir programas pequeños sin copiar y pegar.",
+        items:[
+          ["Curso de Python de Kaggle Learn completo","7 lecciones con ejercicios"],
+          ["Variables, listas, diccionarios, condicionales y bucles","Haz 30 ejercicios cortos"],
+          ["Funciones y manejo de errores"],
+          ["Leer y escribir archivos CSV con Python"],
+          ["Usar la IA como tutor","Pídele que te explique el error, no que te dé la solución"]
+        ],
+        exit:"Un script que lee un CSV de datos.gov.co y saca promedios, máximos y conteos.",
+        res:["kaggle","datos"]},
+      {w:[5,8], t:"Pandas y visualización", g:"Limpiar y explorar una tabla real y sacar conclusiones.",
+        items:[
+          ["Curso de Pandas de Kaggle Learn"],
+          ["Curso de Data Visualization de Kaggle Learn"],
+          ["Limpieza: nulos, duplicados, tipos de datos y fechas"],
+          ["Agrupar y resumir con groupby y pivot_table"],
+          ["Estadística aplicada: media, mediana, desviación, correlación","Apóyate en tu materia de Estadística"]
+        ],
+        exit:"Un notebook con 5 preguntas respondidas con gráficas. Es la base del Proyecto 1.",
+        res:["kaggle"]},
+      {w:[9,12], t:"SQL", g:"Responder preguntas de negocio con consultas.",
+        items:[
+          ["SQLBolt completo"],
+          ["Intro to SQL y Advanced SQL de Kaggle Learn"],
+          ["JOIN, GROUP BY, HAVING y subconsultas"],
+          ["Funciones de ventana: ROW_NUMBER, RANK, SUM OVER"],
+          ["20 ejercicios de LeetCode SQL 50","Primero sin ayuda, después compara con la IA"]
+        ],
+        exit:"Resolver 10 problemas de SQL nuevos sin mirar la solución.",
+        res:["sqlbolt","kaggle","sql50"]},
+      {w:[13,16], t:"Power BI", g:"Construir un dashboard que un jefe entienda en 1 minuto.",
+        items:[
+          ["Ruta de Power BI en Microsoft Learn (PL-300)","Es gratis; el examen es opcional"],
+          ["Cargar y transformar datos con Power Query"],
+          ["Modelo de datos: tablas de hechos y dimensiones"],
+          ["DAX básico: SUM, CALCULATE, medidas de tiempo"],
+          ["Diseñar un dashboard de una sola página"]
+        ],
+        exit:"Un dashboard terminado con tus propios datos. Es la base del Proyecto 2.",
+        res:["mslearn"]},
+      {w:[17,21], t:"IA aplicada a datos", g:"Usar modelos de IA desde Python para resolver tareas reales.",
+        items:[
+          ["Llamar una API de IA desde Python","Claude, OpenAI o Gemini: elige una"],
+          ["Diseñar prompts para clasificar y resumir texto"],
+          ["Extraer datos estructurados (JSON) de textos o PDFs"],
+          ["RAG básico: preguntas sobre tus propios documentos"],
+          ["Automatizar un reporte que la IA redacta a partir de tus datos"]
+        ],
+        exit:"Una app pequeña con IA funcionando. Es la base del Proyecto 3.",
+        res:["claude"]},
+      {w:[22,24], t:"Listo para entrevistas", g:"Pasar una prueba técnica de analista junior.",
+        items:[
+          ["Repasar SQL tipo entrevista","10 problemas de dificultad media"],
+          ["Simulacro de prueba técnica","Un caso de análisis en 2 horas, con tiempo"],
+          ["Repasar conceptos clave","Tipos de JOIN, métricas, sesgos, qué es un LLM"],
+          ["Explicar en voz alta tus 3 proyectos","5 minutos cada uno"]
+        ],
+        exit:"Hacer el simulacro completo y explicar tus decisiones sin leer.",
+        res:["sql50"]}
+    ]
+  },
+  ingles:{
+    name:"Inglés", cls:"p-ingles", color:"--t-ingles", hours:"6,5 h por semana",
+    blocks:[
+      ["Lun","1:30–2:30 pm","Gramática + lectura"],
+      ["Mar","5:30–6:30 am","Escucha + vocabulario"],
+      ["Mié","2:00–3:00 pm","Gramática + lectura"],
+      ["Jue","5:30–6:30 am","Escucha + vocabulario"],
+      ["Vie","9:30–11:00 am","Hablar y escribir"],
+      ["Dom","7:30–8:30 pm","Serie o conversación"]
+    ],
+    phases:[
+      {w:[1,1], t:"Medir tu nivel", g:"Saber desde dónde arrancas.",
+        items:[
+          ["Hacer el test EF SET de 50 minutos","Anota tu nivel (A1–C2)"],
+          ["Instalar Anki y crear un mazo","Inglés general + inglés técnico"],
+          ["Escoger una serie o canal en inglés para los domingos"]
+        ],
+        exit:"Tu nivel anotado y las herramientas listas.",
+        res:["efset","anki"]},
+      {w:[2,8], t:"Base sólida", g:"Entender conversaciones lentas y armar frases sin traducir.",
+        items:[
+          ["10 palabras nuevas al día en Anki","Incluye palabras de datos: dataset, query, insight…"],
+          ["Tiempos verbales: presente, pasado, futuro y presente perfecto"],
+          ["6 Minute English de la BBC, dos episodios por semana"],
+          ["Shadowing 10 minutos","Repite en voz alta justo después del audio"],
+          ["Escribir 5 frases sobre tu día cada viernes"]
+        ],
+        exit:"Hablar 2 minutos sobre ti sin detenerte. Grábate.",
+        res:["bbc","anki"]},
+      {w:[9,16], t:"Inglés técnico", g:"Aprender y trabajar con material en inglés.",
+        items:[
+          ["Leer la documentación de pandas o Power BI en inglés"],
+          ["Ver tutoriales técnicos en inglés","Con subtítulos en inglés, nunca en español"],
+          ["Escribir los README de tus proyectos en inglés"],
+          ["Grabarte 5 minutos explicando lo que aprendiste esa semana"],
+          ["Conversar 20 minutos por semana","Con la IA en modo voz o un intercambio de idiomas"]
+        ],
+        exit:"Un README en inglés claro y un video corto explicando un proyecto.",
+        res:["bbc"]},
+      {w:[17,24], t:"Inglés para entrevistas", g:"Pasar una entrevista en inglés con calma.",
+        items:[
+          ["Preparar tu \"Tell me about yourself\"","60–90 segundos"],
+          ["Explicar tus 3 proyectos en inglés"],
+          ["Preguntas de comportamiento con el método STAR","Prepara 5 historias"],
+          ["CV y perfil de LinkedIn en inglés"],
+          ["Simulacro de entrevista de 20 minutos","Con la IA en modo voz o con un amigo"],
+          ["Repetir el test EF SET","Compara con tu primer resultado"]
+        ],
+        exit:"Un simulacro completo de entrevista en inglés.",
+        res:["efset"]}
+    ]
+  },
+  port:{
+    name:"Portafolio y postulaciones", cls:"p-port", color:"--t-port", hours:"8 h por semana",
+    blocks:[
+      ["Lun","9:30 am–12:30 pm","Proyecto (bloque más largo)"],
+      ["Mié","8:15–9:15 pm","Proyecto: avances pequeños"],
+      ["Vie","7:00–9:00 pm","Postular + LinkedIn"],
+      ["Dom","8:00–9:30 am","Postular"],
+      ["Dom","8:30–9:00 pm","Planear la semana"]
+    ],
+    phases:[
+      {w:[1,4], t:"Tu vitrina", g:"Que un reclutador te encuentre y entienda qué buscas.",
+        items:[
+          ["GitHub con foto y README de perfil"],
+          ["LinkedIn completo","Titular: Estudiante de Ing. de Sistemas | Datos e IA"],
+          ["CV de una página, simple y legible por ATS"],
+          ["Lista de 30 empresas o convocatorias de prácticas","Incluye la oficina de prácticas de la UTP"],
+          ["Hoja de control de postulaciones","Empresa, fecha, cargo, estado"]
+        ],
+        exit:"Perfil, CV y lista de empresas listos para postular.",
+        res:["github","linkedin","utp"]},
+      {w:[5,10], t:"Proyecto 1: análisis de datos abiertos", g:"Un análisis real con Python y pandas.",
+        items:[
+          ["Escoger un dataset de datos.gov.co","Ej.: accidentes de tránsito o movilidad en Pereira"],
+          ["Limpiar los datos y documentar qué hiciste"],
+          ["Responder 5 preguntas con gráficas"],
+          ["README con contexto, hallazgos y cómo correrlo"],
+          ["Publicar un post corto en LinkedIn con 1 gráfica"]
+        ],
+        exit:"Repositorio público que se entiende sin que tú lo expliques.",
+        res:["datos","github"]},
+      {w:[11,16], t:"Proyecto 2: SQL + dashboard", g:"Mostrar que sabes consultar y presentar datos.",
+        items:[
+          ["Cargar un dataset en una base de datos (SQLite o PostgreSQL)"],
+          ["Escribir 10 consultas que respondan preguntas de negocio"],
+          ["Dashboard en Power BI conectado a esos datos"],
+          ["Capturas y explicación en el README"],
+          ["Post en LinkedIn mostrando el dashboard"]
+        ],
+        exit:"Dashboard publicado con su repositorio de consultas.",
+        res:["github"]},
+      {w:[17,22], t:"Proyecto 3: app con IA", g:"Tu proyecto diferenciador.",
+        items:[
+          ["Definir el problema","Ej.: asistente que responde sobre el reglamento estudiantil, o resumidor de PDFs"],
+          ["Versión mínima que funcione de punta a punta"],
+          ["Interfaz sencilla (Streamlit o Gradio)"],
+          ["Video de 1 minuto mostrando cómo funciona"],
+          ["README en inglés"]
+        ],
+        exit:"App con demo en video y código público.",
+        res:["claude","github"]},
+      {w:[23,24], t:"Pulir y salir a buscar", g:"Dejar todo presentable y apretar las postulaciones.",
+        items:[
+          ["Revisar los 3 README y fijar los proyectos en GitHub"],
+          ["Actualizar CV y LinkedIn con los 3 proyectos"],
+          ["Pedir 2 recomendaciones (profesores o compañeros)"],
+          ["Escribir a 10 personas del área en LinkedIn"]
+        ],
+        exit:"Portafolio completo y al menos 60 postulaciones acumuladas.",
+        res:["linkedin"]}
+    ],
+    weekly:["Postular a 5 ofertas","Actualizar la hoja de control"]
+  }
+};
+
+// semana actual
+const today = new Date(); today.setHours(0,0,0,0);
+const WEEK = Math.max(1, Math.min(WEEKS, Math.floor((today - START) / (7*864e5)) + 1));
+const before = today < START;
+
+let tab = "semana";
+try{ const h = location.hash.slice(1); if(["semana","datos","ingles","port"].includes(h)) tab = h; }catch(e){}
+
+let state = {};
+try{ state = JSON.parse(localStorage.getItem("guia-progresion") || "{}") || {}; }catch(e){ state = {}; }
+const save = () => { try{ localStorage.setItem("guia-progresion", JSON.stringify(state)); }catch(e){} };
+
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const phaseKey = (tk, pi, ii) => `${tk}-${pi}-${ii}`;
+function trackPct(tk){
+  let n=0, d=0;
+  TRACKS[tk].phases.forEach((p,pi)=>p.items.forEach((_,ii)=>{ n++; if(state[phaseKey(tk,pi,ii)]) d++; }));
+  return {d, n, pct: n ? Math.round(d*100/n) : 0};
+}
+function phaseNow(tk){ return TRACKS[tk].phases.findIndex(p => WEEK>=p.w[0] && WEEK<=p.w[1]); }
+function phaseDone(tk, pi){ return TRACKS[tk].phases[pi].items.every((_,ii)=>state[phaseKey(tk,pi,ii)]); }
+
+function ring(pct, colorVar){
+  const r=18, c=2*Math.PI*r, off=c*(1-pct/100);
+  return `<svg class="ring" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="${r}" fill="none" stroke="var(--line)" stroke-width="5"/><circle cx="23" cy="23" r="${r}" fill="none" stroke="var(${colorVar})" stroke-width="5" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 23 23)"/><text x="23" y="27" text-anchor="middle">${pct}%</text></svg>`;
+}
+
+function weekly(){
+  const items = [
+    ["port","Postular a 5 ofertas"],
+    ["port","Actualizar la hoja de control de postulaciones"],
+    ["ingles","Anki todos los días (7 de 7)"],
+    ["datos","Cumplir los 5 bloques de Datos con IA"]
+  ];
+  return items.map(([tk,t],i)=>{
+    const k = `w${WEEK}-${i}`, on = !!state[k];
+    return `<li><label class="${on?"on":""}" for="wk-${i}"><span><span class="pill ${TRACKS[tk].cls}" style="margin-right:6px">${tk==="port"?"Portafolio":TRACKS[tk].name}</span>${esc(t)}</span><input type="checkbox" id="wk-${i}" data-k="${k}"${on?" checked":""}></label></li>`;
+  }).join("");
+}
+
+function renderSemana(){
+  const days = ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+  const all = [];
+  Object.entries(TRACKS).forEach(([tk,t])=>t.blocks.forEach(b=>all.push([tk,...b])));
+  all.sort((a,b)=>days.indexOf(a[1])-days.indexOf(b[1]));
+  return `
+  <section class="card">
+    <div class="kick">${before ? "Empiezas el lunes 23 de noviembre" : `Semana ${WEEK} de ${WEEKS}`}</div>
+    <div class="weekbar" style="margin-top:8px"><div class="track"><div class="fill" style="width:${WEEK/WEEKS*100}%"></div></div><span>${WEEKS-WEEK} semanas restantes</span></div>
+  </section>
+  <section class="card">
+    <h2>Dónde vas</h2>
+    <div class="tracks" style="margin-top:12px">
+      ${Object.entries(TRACKS).map(([tk,t])=>{
+        const p = trackPct(tk), pi = phaseNow(tk), ph = t.phases[pi];
+        return `<button type="button" class="trk" id="go-${tk}" data-go="${tk}"><span class="stripe" style="background:var(${t.color})"></span><span><span class="t">${t.name}</span><span class="d" style="display:block">Ahora: ${esc(ph.t)} · ${p.d} de ${p.n} tareas</span></span>${ring(p.pct,t.color)}</button>`;
+      }).join("")}
+    </div>
+  </section>
+  <section class="card">
+    <h2>Esta semana</h2>
+    <ul class="chk">${weekly()}</ul>
+  </section>
+  <section class="card">
+    <h2>Qué hacer en cada bloque</h2>
+    <p class="goal" style="margin-bottom:8px">Así encajan las tres rutas en tu horario.</p>
+    <table class="blocks">${all.map(b=>`<tr><td>${b[1]}</td><td>${b[2]}</td><td><span class="pill ${TRACKS[b[0]].cls}">${b[0]==="port"?"Portafolio":TRACKS[b[0]].name}</span> ${esc(b[3])}</td></tr>`).join("")}</table>
+  </section>`;
+}
+
+function renderTrack(tk){
+  const t = TRACKS[tk], p = trackPct(tk), now = phaseNow(tk);
+  return `
+  <section class="card">
+    <div class="phead"><h2>${t.name}</h2>${ring(p.pct,t.color)}</div>
+    <p class="goal">${t.hours} · ${p.d} de ${p.n} tareas completas</p>
+    <table class="blocks" style="margin-top:10px">${t.blocks.map(b=>`<tr><td>${b[0]}</td><td>${b[1]}</td><td>${esc(b[2])}</td></tr>`).join("")}</table>
+  </section>
+  ${t.phases.map((ph,pi)=>{
+    const done = phaseDone(tk,pi), isNow = pi===now;
+    const badge = done ? "Completada" : isNow ? "Fase actual" : (WEEK>ph.w[1] ? "Atrasada" : "Próxima");
+    const wk = ph.w[0]===ph.w[1] ? `Semana ${ph.w[0]}` : `Semanas ${ph.w[0]}–${ph.w[1]}`;
+    return `<section class="card phase${done?" done":isNow?" now":""}">
+      <div class="phead"><div><div class="kick">Fase ${pi+1} · ${wk}</div><h2>${esc(ph.t)}</h2></div><span class="badge">${badge}</span></div>
+      <p class="goal">${esc(ph.g)}</p>
+      <ul class="chk">${ph.items.map((it,ii)=>{
+        const k = phaseKey(tk,pi,ii), on = !!state[k];
+        return `<li><label class="${on?"on":""}" for="c-${k}"><span>${esc(it[0])}${it[1]?`<span class="note">${esc(it[1])}</span>`:""}</span><input type="checkbox" id="c-${k}" data-k="${k}"${on?" checked":""}></label></li>`;
+      }).join("")}</ul>
+      <div class="exit"><b>Prueba para pasar de fase</b>${esc(ph.exit)}</div>
+      <div class="res">${ph.res.map(r=>`<a href="${L[r][1]}" target="_blank" rel="noopener">${L[r][0]}</a>`).join("")}</div>
+    </section>`;
+  }).join("")}`;
+}
+
+function render(){
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.tab===tab));
+  document.getElementById("main").innerHTML = tab==="semana" ? renderSemana() : renderTrack(tab);
+}
+
+document.querySelector(".tabs").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  tab = b.dataset.tab; try{ history.replaceState(null,"","#"+tab); }catch(err){}
+  render(); window.scrollTo(0,0);
+});
+document.getElementById("main").addEventListener("change", e=>{
+  const k = e.target.dataset.k; if(!k) return;
+  if(e.target.checked) state[k] = 1; else delete state[k];
+  save(); const y = window.scrollY; render(); window.scrollTo(0,y);
+});
+document.getElementById("main").addEventListener("click", e=>{
+  const b = e.target.closest("[data-go]"); if(!b) return;
+  tab = b.dataset.go; render(); window.scrollTo(0,0);
+});
+render();
+</script>
+</body>
+</html>
